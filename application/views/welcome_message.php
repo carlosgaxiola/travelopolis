@@ -1,12 +1,12 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 ?><!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
 	<meta charset="utf-8">
-	<title>Welcome to CodeIgniter</title>
-	<link rel="stylesheet" href="<?php echo base_url("assets/css/font-awesome.min.css")?>">
-	<style type="text/css">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>Welcome to CodeIgniter</title>	
+	<!-- <style type="text/css">
 
 	::selection { background-color: #E13300; color: white; }
 	::-moz-selection { background-color: #E13300; color: white; }
@@ -63,7 +63,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		border: 1px solid #D0D0D0;
 		box-shadow: 0 0 8px #D0D0D0;
 	}
-	</style>
+	</style> -->		
+	<link rel="stylesheet" href="<?php echo base_url("assets/css/bootstrap/bootstrap-4.min.css")?>">
+	<link rel="stylesheet" href="<?php echo base_url("assets/css/fontawesome/fontawesome.package.min.css")?>">
+	
 </head>
 <body>
 
@@ -84,6 +87,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 	<p class="footer">Page rendered in <strong>{elapsed_time}</strong> seconds. <?php echo  (ENVIRONMENT === 'development') ?  'CodeIgniter Version <strong>' . CI_VERSION . '</strong>' : '' ?></p>
 </div>
-
+<div class="row">
+	<div class="col-md-6">
+		<button class="btn btn-primary" type="button"><i class="fas fa-plus"></i></button>
+	</div>
+</div>
 </body>
 </html>
