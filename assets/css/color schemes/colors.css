@@ -1,0 +1,30 @@
+.bg-blue {
+	background-color: rgba(60, 178, 247, 1);	
+}
+.text-blue {
+	color: rgba(60, 178, 247, 1);
+}
+.bg-gray-blue {
+	background-color: rgba(88, 114, 145, 1);
+}
+.text-gray-blue {
+	color: rgba(88, 114, 145, 1);
+}
+.bg-light-blue {
+	background-color: rgba(47, 151, 193, 1);
+}
+.text-light-blue {
+	color: rgba(47, 151, 193, 1);
+}
+.bg-muted-blue {
+	background-color: rgba(48, 102, 190, 1);
+}
+.text-muted-blue {
+	color: rgba(48, 102, 190, 1);
+}
+.bg-dark-blue {
+	background-color: rgba(10, 54, 157, 1);
+}
+.text-dark-blue {
+	color: rgba(10, 54, 157, 1);
+}
