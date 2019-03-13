@@ -7,52 +7,49 @@ class Modelo extends CI_Model {
 		parent::__construct();
 	}
 
-	public function listar ($tabla, $status = -1) {
+	public function listar ($tabla, $extras = null, $status = -1) {				
+		if ($extras != null)
+			$this->db->select(implode(",", $extras));
 		if ($status != -1)
 			$this->db->where($tabla.".status", $status);
+		$this->db->select($tabla.".*");
 		$res = $this->db->get($tabla);		
 		if ($res->num_rows() > 0)
-			return $res->result();
+			return $res->result_array();
 		return false;
 	}
 
 	public function insertar ($tabla, $data) {
-		$this->db->insert($tabla, $data);
-		if ($this->db->affected_rows() > 0) {
-			$id = $this->db->insert_id();
-			$fecha = new datetime();
-			$this->db->insert("movimientos", array(
-				'fecha' => $fecha->format("Y-m-d"),
-				'tipo' => 0,
-				'tabla' => $tabla,
-				"id_usuario" => $this->session->userdata("id_usuario")
-			));
-			return $id;
-		}
-		return false;		
+		$this->db->insert($tabla, $data);		
+		if ($this->db->affected_rows() > 0)
+			return $this->db->insert_id();
+		return false;
 	}
 
 	public function actualizar ($tabla, $id, $data) {
 		$this->db->where("id", $id);
 		$this->db->update($tabla, $data);
-		$res = ($this->db->affected_rows() > 0);
-		if ($res) {
-			$fecha = new datetime();
-			$this->db->insert("movimientos", array(
-				'fecha' => $fecha->format("Y-m-d"),
-				'tipo' => 1,
-				'tabla' => $tabla,
-				'id_usuario' => $this->session->userdata("id_usuario")
-			));			
-		}
-		return $res;
+		return ($this->db->affected_rows() > 0);		
 	}
 
-	public function buscar ($tabla, $id) {
-		$this->db->where("id", $id);
-		$res = $this->db->get($tabla);
+	public function buscar ($tabla, $valor, $campo = 'id') {		
+		$this->db->where($campo, $valor);			
+		$res = $this->db->get($tabla);		
 		if ($res->num_rows() > 0)
-			return $res->row();
+			return $res->row_array();
 		return false;
+	}
+
+	public function alternar ($tabla, $id, $status) {
+		$this->db->where("id", $id);
+		$this->db->set("status", $status != 1);
+		$this->db->update($tabla);
+		return ($this->db->affected_rows() > 0);
+	}
+
+	public function join ($tabla, $join, $tipo = 0) {
+		if ($tipo != 0)	$this->db->join($tabla, $join, $tipo);
+		else $this->db->join($tabla, $join);
+		return $this;
 	}
 }
