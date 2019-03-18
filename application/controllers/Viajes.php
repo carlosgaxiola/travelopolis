@@ -12,23 +12,17 @@ class Viajes extends CI_Controller {
 	}
 
 	public function index () {
-		$data = array(
-			'titulo' => ucfirst($this->modulo),
-			'viaje' => $this->Modelo->buscar($this->modulo, $this->input->get("buscar"), "nombre"),			
-		);
-		$dias = $this->Modelo->buscar($this->secundario, $data['viaje']['id'], 'id_viaje');
-		if (is_array($dias))
-			$data['dias'] = $dias;
-		$this->load->view("Viajes/viaje_vista", $data);
+		$viaje = $this->Modelo->buscar($this->modulo, $this->input->get("buscar"), "nombre");
+		$data['titulo'] = ucfirst($this->modulo);
+		if ($viaje) {
+			$data['viaje'] = $this->Modelo->buscar($this->modulo, $this->input->get("buscar"), "nombre");
+			$dias = $this->Modelo->buscar($this->secundario, $data['viaje']['id'], 'id_viaje');
+			if (is_array($dias))
+				$data['dias'] = $dias;
+			$this->load->view("Viajes/viaje_vista", $data);
+		}
+		else 
+			$this->load->view("Viajes/viaje_no_encontrado", $data);
 	}
-
-	// public function _remap ($method, $params = array()) {    
-	//     if(!method_exists($this, $method)) {
-	//        $this->index($method, $params);
-	//     }
-	//     else{
-	//       return call_user_func_array(array($this, $method), $params);
-	//     }
- //  	}
 
 }
