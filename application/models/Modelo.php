@@ -35,8 +35,10 @@ class Modelo extends CI_Model {
 	public function buscar ($tabla, $valor, $campo = 'id') {		
 		$this->db->where($campo, $valor);			
 		$res = $this->db->get($tabla);		
-		if ($res->num_rows() > 0)
+		if ($res->num_rows() == 1)
 			return $res->row_array();
+		else if ($res->num_rows() > 1)
+			return $res->result_array();
 		return false;
 	}
 
