@@ -12,4 +12,7 @@
 		</div>			
 		<button type="button" class="btn btn-primary" id="btn-login">Entrar</button>
 	</form>
+	<div class="row">
+		<a href="<?php echo base_url("inicio/registro") ?>">Crear una cuenta</a>		
+	</div>
 </div>
