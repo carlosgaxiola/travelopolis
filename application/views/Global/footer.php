@@ -1,3 +1,9 @@
+	<!-- <footer class="main-footer">
+	    <div class="pull-right hidden-xs">
+	      	<b>Version</b> 0.4
+	    </div>
+	    <strong>Copyright &copy; 2019 <a href="https://adminlte.io">Carlos Gaxiola</a>.</strong> All rights reserved.
+	</footer> -->
 </div>
 <!-- ./wrapper -->
 <!-- JQuery 3 -->
