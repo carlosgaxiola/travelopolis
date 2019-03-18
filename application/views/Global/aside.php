@@ -11,10 +11,10 @@
         </div>
         <ul class="sidebar-menu" data-widget="tree">
             <li class="header">Menu</li>
-            <?php
-                $idPerfil = $this->session->userdata("id_perfil");                
+            <?php                
+                $idPerfil = $this->session->userdata("id_perfil");
                 $modulos = modulos($idPerfil);
-                menu($modulos, $idModuloActual);
+                menu($modulos, $actual['id']);
             ?>
         </ul>
     </section>
