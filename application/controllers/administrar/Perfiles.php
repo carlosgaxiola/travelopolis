@@ -1,43 +1,60 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
-class Perfiles extends CI_Controller {
-	
-	private $tabla = "perfiles";
-	private $titulo = "Perfiles";
-	private $id = 11;
+include "ControladorAdministrar.php";
+class Perfiles extends ControladorAdministrar {	
 
 	public function __construct () {
+		$this->modulo = "perfiles";
+		$this->indices = array(
+			0 => array(
+				'name' => '#',
+				'db' => 'id',
+				'frm' => 'idModulo',
+				'data' => 'id',
+				'ignore' => true
+			),
+			1 => array(
+				'name' => 'Nombre',
+				'db' => 'nombre',
+				'frm' => 'txtNombre',
+				'data' => 'nombre',
+				'validation' => array(					
+					'required' => true,
+					'unique' => true
+				)
+			),
+			2 => array(
+				'name' => 'Descripcion',
+				'db' => 'descripcion',
+				'frm' => 'txtDescripcion',
+				'validation' => array(					
+					'required' => true
+				)
+			)
+		);		
+		$this->extras = array("modulos" => "modulos");
 		parent::__construct();
-		$this->load->model("Modelo");
-		$this->load->helper("global_functions_helper");
 		$this->load->model("PerfilesModulosModelo");
 	}
 
-	public function index () {	
-	
-		echo "hola";
-		// if (hasAccess($this->session->userdata("id_perfil"), $this->id)) {
-		// 	$data = array(
-		// 		'titulo' => $this->titulo,
-		// 		'registros' => $this->Modelo->listar($this->tabla),
-		// 		'lista' => $this->titulo,
-		// 		'indices' => array(							
-		// 			"Nombre" => 'nombre',				
-		// 			"Descripcion" => 'descripcion',				
-		// 			"Registro" => 'f_registro',
-		// 			"Estado" => 'status'
-		// 		),
-		// 		'actual' => $this->Modelo->buscar("modulos", $this->id),
-		// 		'modulos' => $this->Modelo->listar("modulos"),
-		// 		'script' => "assets/js/app/".$this->tabla,
-		// 		'formulario' => "administrar/".$this->tabla."_vista"
-		// 	);
-		// 	$this->load->view("administrar/listar_vista", $data);
-		// }
-		// else
-		// 	show_404();
-	}	
+	// public function index () {
+	// 	if (hasAccess($this->session->userdata("id_perfil"), $this->id)) {
+	// 		$data = array(
+	// 			'titulo' => ucfirst($this->modulo),
+	// 			'registros' => $this->Modelo->listar($this->modulo),				
+	// 			'indices' => array(							
+					
+	// 			),
+	// 			'actual' => $this->actual,
+	// 			'modulos' => $this->Modelo->listar("modulos"),
+	// 			'script' => "app/".$this->modulo,
+	// 			'formulario' => "administrar/".$this->modulo."_vista"
+	// 		);
+	// 		$this->load->view("administrar/listar_vista", $data);
+	// 	}
+	// 	else
+	// 		show_404();
+	// }	
 
 	public function add () {
 		if ($this->input->is_ajax_request()) {
@@ -53,7 +70,7 @@ class Perfiles extends CI_Controller {
 					'f_registro' => $fecha->format("Y-d-m"),					
 					'status' => 1
 				);
-				$idPerfil = $this->Modelo->insertar($this->tabla, $data);				
+				$idPerfil = $this->Modelo->insertar($this->modulo, $data);				
 				if ($idPerfil && !empty($modulos))
 					foreach ($modulos as &$idModulo)
 						$idModulo = ($this->PerfilesModulosModelo->add($idPerfil, $idModulo))? true: $idModulo;
@@ -78,7 +95,7 @@ class Perfiles extends CI_Controller {
 					'nombre' => $this->input->post("txtNombre"),
 					'descripcion' => $this->input->post("txtDescripcion")
 				);
-				$perfil = $this->Modelo->actualizar($this->tabla, $idPerfil, $data);
+				$perfil = $this->Modelo->actualizar($this->modulo, $idPerfil, $data);
 				$modulo = false;
 				$this->PerfilesModulosModelo->del($idPerfil);
 				if (!empty($modulos))
@@ -97,9 +114,9 @@ class Perfiles extends CI_Controller {
 	}
 
 	private function validacion ($idPerfil = 0) {
-		$uNombre = "|is_unique[".$this->tabla.".nombre]";		
+		$uNombre = "|is_unique[".$this->modulo.".nombre]";		
 		if ($idPerfil != 0) {					
-			$modulo = $this->Modelo->buscar($this->tabla, $idPerfil);			
+			$modulo = $this->Modelo->buscar($this->modulo, $idPerfil);			
 			if ($modulo['nombre'] == $this->input->post("txtNombre"))
 				$uNombre = "";			
 		}
@@ -110,15 +127,7 @@ class Perfiles extends CI_Controller {
 		return $this->form_validation->run();
 	}
 
-	public function toggle () {
-		if ($this->input->is_ajax_request()) {
-			$idModulo = $this->input->post("idPerfil");
-			$status = $this->input->post("status");
-			echo $this->Modelo->alternar($this->tabla, $idModulo, $status);
-		}	
-		else
-			show_404();
-	}
+	
 
 	public function modulos () {
 		if ($this->input->is_ajax_request()) {
