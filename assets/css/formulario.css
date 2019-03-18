@@ -23,6 +23,7 @@ form .fieldset {
 
 form .fieldset input[type="text"],
 form .fieldset input[type="email"],
+form .fieldset input[type="number"],
 form .fieldset input[type="password"] {
     font-family: "Roboto", Arial !important;
     font-size: 130% !important;
@@ -37,6 +38,7 @@ form .fieldset input[type="password"] {
 
 form .fieldset input[type="text"]:focus, form .fieldset input[type="text"]:active,
 form .fieldset input[type="email"]:focus, form .fieldset input[type="email"]:active,
+form .fieldset input[type="number"]:focus, form .fieldset input[type="number"]:active,
 form .fieldset input[type="password"]:focus, form .fieldset input[type="password"]:active {
     border: none !important;
     outline: none !important;
@@ -47,12 +49,14 @@ form .fieldset input[type="password"]:focus, form .fieldset input[type="password
 
 form .fieldset input[type="text"].error,
 form .fieldset input[type="email"].error,
+form .fieldset input[type="number"].error,
 form .fieldset input[type="password"].error {
     border-bottom: 2px solid #D32F2F !important;
 }
 
 form .fieldset input[type="text"].error + label,
 form .fieldset input[type="email"].error + label,
+form .fieldset input[type="number"].error + label,
 form .fieldset input[type="password"].error + label {
     color: #D32F2F !important;
 }
