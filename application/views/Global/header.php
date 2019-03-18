@@ -23,28 +23,32 @@
     <![endif]-->
     <link rel="stylesheet" href="<?php echo base_url("assets/css/formulario.css") ?>">
     <!-- Google Font -->
-    <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic"> -->      
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">      
+    <!-- Colors -->
+    <link rel="stylesheet" href="<?php echo base_url("assets/css/color_schemes/colors.css") ?>">
+    <style>
+        .height-100 {
+            height: 100% !important;
+        }        
+    </style>
 </head>
-<body class="hold-transition skin-blue-light sidebar-mini sidebar-collapse">
-<div class="wrapper">
-  <div class="row">       
-      <div class="col-xs-1" style="margin-top: 1%">
-        <img class="img-fluid" style="width: 100px; height: 100px;" src="<?php echo base_url("assets/images/logo.png")?>" alt="Insertar Imagen Aqui">
-      </div>      
-      <div class="col-xs-6">
-        <h1 style="margin-bottom: 0; "><img src="<?php echo base_url("assets/images/banner_2.png")?>" alt="Travelopolis"></h1>
-        <h5 style="margin-top: -3%; margin-left: 5%;" class="text-primary">La capital del viaje</h5>
-      </div>
-    </div>
+<body class="hold-transition skin-blue-light sidebar-mini" style="margin: 0">
+<div class="wrapper height-100">
+    <div class="row">       
+        <div class="col-xs-1" style="margin-top: 1%">
+            <img class="img-fluid" style="width: 100px; height: 100px;" src="<?php echo base_url("assets/images/logo.png")?>" alt="Insertar Imagen Aqui">
+        </div>      
+        <div class="col-xs-6">
+            <h1 style="margin-bottom: 0; "><img src="<?php echo base_url("assets/images/banner_2.png")?>" alt="Travelopolis"></h1>
+            <h5 style="margin-top: -3%; margin-left: 5%;" class="text-primary">La capital del viaje</h5>
+        </div>
+    </div>    
     <header class="main-header">    
-        <?php if ($this->session->userdata("login") != null): ?>
-            <a href="<?php echo base_url() ?>" class="logo">      
+        <?php if ($this->session->userdata("id_perfil") != 3 && $this->session->userdata("id_perfil") != 5 && $this->session->userdata("admin_active")): ?>
+            <a href="<?php echo base_url() ?>" class="logo bg-blue">      
                 <span class="logo-mini"><b>TVL</b></span>      
                 <span class="logo-lg"><b>Travelopolis</b></span>
             </a>
         <?php endif; ?>
         <?php $this->load->view("Global/navbar") ?>
-    </header> 
-    <?php if ($this->session->userdata("login") != null): ?>
-        <?php $this->load->view("Global/aside", array("idModuloActual" => isset($idModuloActual)? $idModuloActual: 0)) ?>        
-    <?php endif; ?>  
+    </header>      
