@@ -13,7 +13,7 @@
         </li>
         <?php if ($this->session->userdata("login")): ?>
             <li class="nav-item user user-menu">
-                <a href="<?php echo base_url("perfil/user=?".$this->session->userdata("usuario")) ?>">
+                <a href="<?php echo base_url("perfil/".$this->session->userdata("usuario")) ?>">
                     <img src="<?php echo base_url("assets/images/users/".$this->session->userdata("url_foto_perfil")."/profile_60x60.jpg") ?>" class="user-image" alt="User Image">
                     <span class="hidden-xs"><?php echo $this->session->userdata("usuario") ?></span>
                 </a>

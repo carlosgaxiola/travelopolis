@@ -6,7 +6,7 @@
 	$noMargin = "";
 	$userLogin = $this->session->userdata("id_perfil") == 3 || $this->session->userdata("id_perfil") == 5;
 	if (!$userLogin)
-		$this->load->view("Global/aside", array("actual" => $actual));	
+		$this->load->view("Global/aside", array("actual" => $modulo));	
 ?>
 <?php if (!$userLogin): ?>
 	<main class="content-wrapper">

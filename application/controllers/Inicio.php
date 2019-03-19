@@ -43,7 +43,7 @@ class Inicio extends CI_Controller {
 						'usu_f_registro' => $usuario['f_registro'],
 						'usu_status' => $usuario['status'],
 						'url_foto_perfil' => $persona['url_foto'],
-						'nombre' => $person['nombre'],
+						'nombre' => $persona['nombre'],
 						'apaterno' => $persona['a_paterno'],
 						'amaterno' => $persona['a_materno'],
 						'completo' => $persona['nombre']." ".$persona['a_paterno']." ".$persona['a_materno'],
@@ -54,7 +54,7 @@ class Inicio extends CI_Controller {
 						'admin_active' => false,
 						'login' => true
 					);
-					if ($usuario['id_perfi'] != 3) {
+					if ($usuario['id_perfil'] != 3) {
 						$data['rfc'] = $persona['rfc'];
 						$data['nss'] = $persona['nss'];						
 					}

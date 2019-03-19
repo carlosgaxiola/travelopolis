@@ -34,17 +34,19 @@
 </head>
 <body class="hold-transition skin-blue-light sidebar-mini" style="margin: 0">
 <div class="wrapper height-100">
-    <div class="row">       
-        <div class="col-xs-1" style="margin-top: 1%">
-            <img class="img-fluid" style="width: 100px; height: 100px;" src="<?php echo base_url("assets/images/logo.png")?>" alt="Insertar Imagen Aqui">
-        </div>      
-        <div class="col-xs-6">
-            <h1 style="margin-bottom: 0; "><img src="<?php echo base_url("assets/images/banner_2.png")?>" alt="Travelopolis"></h1>
-            <h5 style="margin-top: -3%; margin-left: 5%;" class="text-primary">La capital del viaje</h5>
+    <?php if (!$this->session->userdata("admin_active")): ?>
+        <div class="row">       
+            <div class="col-xs-1" style="margin-top: 1%">
+                <img class="img-fluid" style="width: 100px; height: 100px;" src="<?php echo base_url("assets/images/logo.png")?>" alt="Insertar Imagen Aqui">
+            </div>      
+            <div class="col-xs-6">
+                <h1 style="margin-bottom: 0; "><img src="<?php echo base_url("assets/images/banner_2.png")?>" alt="Travelopolis"></h1>
+                <h5 style="margin-top: -3%; margin-left: 5%;" class="text-primary">La capital del viaje</h5>
+            </div>
         </div>
-    </div>    
+    <?php endif; ?>
     <header class="main-header">    
-        <?php if ($this->session->userdata("id_perfil") != 3 && $this->session->userdata("id_perfil") != 5 && $this->session->userdata("admin_active")): ?>
+        <?php if ($this->session->userdata("admin_active") != null && $this->session->userdata("admin_active") == true): ?>
             <a href="<?php echo base_url() ?>" class="logo bg-blue">      
                 <span class="logo-mini"><b>TVL</b></span>      
                 <span class="logo-lg"><b>Travelopolis</b></span>
