@@ -2,8 +2,7 @@
 	$this->load->view("Global/header");
 	$this->load->view("Global/aside", array('actual' => $actual));		
 ?>
-<main class="content-wrapper">
-	<?php echo isset($actual)? "hola": "puto" ?>
+<main class="content-wrapper">	
 	<div class="content" id="tabla">
 		<div class="container-fluid">
 			<div class="row">
