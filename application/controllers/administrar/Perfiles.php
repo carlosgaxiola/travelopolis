@@ -1,60 +1,35 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-include "ControladorAdministrar.php";
-class Perfiles extends ControladorAdministrar {	
 
-	public function __construct () {
-		$this->modulo = "perfiles";
-		$this->indices = array(
-			0 => array(
-				'name' => '#',
-				'db' => 'id',
-				'frm' => 'idModulo',
-				'data' => 'id',
-				'ignore' => true
-			),
-			1 => array(
-				'name' => 'Nombre',
-				'db' => 'nombre',
-				'frm' => 'txtNombre',
-				'data' => 'nombre',
-				'validation' => array(					
-					'required' => true,
-					'unique' => true
-				)
-			),
-			2 => array(
-				'name' => 'Descripcion',
-				'db' => 'descripcion',
-				'frm' => 'txtDescripcion',
-				'validation' => array(					
-					'required' => true
-				)
-			)
-		);		
-		$this->extras = array("modulos" => "modulos");
+class Perfiles extends CI_Controller {	
+
+	private $nombre = "perfiles";
+	private $modulo;
+
+	public function __construct () {		
 		parent::__construct();
 		$this->load->model("PerfilesModulosModelo");
+		$this->load->model("Modelo");
+		$this->modulo = $this->Modelo->buscar("modulos", $this->nombre, "nombre");
 	}
 
-	// public function index () {
-	// 	if (hasAccess($this->session->userdata("id_perfil"), $this->id)) {
-	// 		$data = array(
-	// 			'titulo' => ucfirst($this->modulo),
-	// 			'registros' => $this->Modelo->listar($this->modulo),				
-	// 			'indices' => array(							
-					
-	// 			),
-	// 			'actual' => $this->actual,
-	// 			'modulos' => $this->Modelo->listar("modulos"),
-	// 			'script' => "app/".$this->modulo,
-	// 			'formulario' => "administrar/".$this->modulo."_vista"
-	// 		);
-	// 		$this->load->view("administrar/listar_vista", $data);
-	// 	}
-	// 	else
-	// 		show_404();
-	// }	
+	public function index () {
+		if ($this->input->is_ajax_request()) {
+			if (hasAccess($this->session->userdata("id_perfil"), $this->modulo['id'])) {
+				$data = array(				
+					'perfiles' => $this->Modelo->listar($this->modulo),
+					'extras' => array(
+						'modulos' => $this->Modelo->listar("modulos")
+					)
+				);
+				$this->load->view("administrar/listar_vista", $data);
+			}
+			else
+				show_404();
+		}
+		else
+			show_404();	
+	}	
 
 	public function add () {
 		if ($this->input->is_ajax_request()) {
