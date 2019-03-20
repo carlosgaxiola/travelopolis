@@ -39,7 +39,7 @@
                         </li>
                     <?php else: ?>
                         <li class="nav-item">
-                            <a href="<?php echo base_url("administrar/inicio") ?>">
+                            <a href="<?php echo base_url("administrar") ?>">
                                 <i class="fas fa-cogs"></i>
                                 <span> Administrar</span>
                             </a>
