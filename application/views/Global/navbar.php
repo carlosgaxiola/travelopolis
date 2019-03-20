@@ -4,6 +4,12 @@
         $noMargin = "style='margin-left: 0px !important;'";  
 ?>
 <nav class="navbar navbar-static-top bg-blue" <?php echo $noMargin ?>> 
+    <?php if ($this->session->userdata("admin_active") == true): ?>     
+        <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+            <i class="fas fa-bars"></i>
+            <span class="sr-only">Conmutar menu lateral</span>
+        </a>        
+    <?php endif; ?>
     <ul class="nav navbar-nav nav-left-side">
         <li class="nav-item">
             <a href="<?php echo base_url() ?>" class="nav-link">
@@ -19,13 +25,7 @@
                 </a>
             </li>
         <?php endif; ?>
-    </ul>    
-    <?php if ($this->session->userdata("admin_active") == true): ?>     
-        <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
-            <i class="fas fa-bars"></i>
-            <span class="sr-only">Conmutar menu lateral</span>
-        </a>        
-    <?php endif; ?>
+    </ul>        
     <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">            
             <?php if ($this->session->userdata("login") != null): ?>                
@@ -39,7 +39,7 @@
                         </li>
                     <?php else: ?>
                         <li class="nav-item">
-                            <a href="<?php echo base_url("administrar") ?>">
+                            <a href="<?php echo base_url("administrar/inicio") ?>">
                                 <i class="fas fa-cogs"></i>
                                 <span> Administrar</span>
                             </a>
