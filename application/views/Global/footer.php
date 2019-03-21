@@ -1,4 +1,9 @@
-	<footer class="main-footer">
+	<?php 
+		$noMargin = "style='margin-left: 0px;'";
+		if ($this->session->userdata("admin_acivte"))
+			$noMargin = "";
+	?>
+	<footer class="main-footer" <?php echo $noMargin ?>>
 	    <div class="pull-right hidden-xs">
 	      	<b>Version</b> 0.4
 	    </div>
@@ -85,8 +90,10 @@
 	})
 </script>
 <!-- App -->
-<?php if (strcmp($modulo['nombre'], "Inicio Administrar") != 0): ?>
-	<script src="<?php echo base_url("assets/js/app/".lcfirst($modulo['nombre'])).".js" ?>"></script>
+<?php if (isset($modulo)): ?>
+	<?php if (strcmp($modulo['nombre'], "Inicio Administrar") != 0): ?>
+		<script src="<?php echo base_url("assets/js/app/".lcfirst($modulo['nombre'])).".js" ?>"></script>
+	<?php endif; ?>
 <?php endif; ?>
 </body>
 </html>

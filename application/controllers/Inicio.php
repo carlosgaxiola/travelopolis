@@ -72,13 +72,8 @@ class Inicio extends CI_Controller {
 	}
 	
 	public function ingresar () {
-		$data = array(
-			'contenidos' => array('id' => 'formulario', 'url' => 'inicio/login'),
-			'titulo' => 'Login',
-			'scripts' => array('app/login', 'app/formulario'),
-			'actual' => $this->modulo
-		);
-		$this->load->view("administrar_vista", $data);
+		$data = array( 'titulo' => 'Login' );
+		$this->load->view("inicio/login_vista", $data);
 	}
 
 	public function logout () {
@@ -93,7 +88,7 @@ class Inicio extends CI_Controller {
 			'scripts' => array('app/formulario'),
 			'actual' => $this->modulo
 		);
-		$this->load->view("administrar_vista", $data);
+		$this->load->view("inicio/registro_vista", $data);
 	}
 
 	public function crear () {
