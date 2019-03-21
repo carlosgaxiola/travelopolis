@@ -11,13 +11,15 @@
         </a>        
     <?php endif; ?>
     <ul class="nav navbar-nav nav-left-side">
-        <li class="nav-item">
-            <a href="<?php echo base_url() ?>" class="nav-link">
-                <i class="fas fa-home"></i>
-                <span>Inicio</span>
-            </a>   
-        </li>
-        <?php if ($this->session->userdata("login")): ?>
+        <?php if ($this->session->userdata("admin_active") != true): ?>
+            <li class="nav-item">
+                <a href="<?php echo base_url() ?>" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>Inicio</span>
+                </a>   
+            </li>
+        <?php endif; ?>
+        <?php if ($this->session->userdata("login") and $this->session->userdata("admin_active") != true): ?>
             <li class="nav-item user user-menu">
                 <a href="<?php echo base_url("perfil/".$this->session->userdata("usuario")) ?>">
                     <img src="<?php echo base_url("assets/images/users/".$this->session->userdata("url_foto_perfil")."/profile_60x60.jpg") ?>" class="user-image" alt="User Image">
