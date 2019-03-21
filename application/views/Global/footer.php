@@ -1,9 +1,9 @@
-	<!-- <footer class="main-footer">
+	<footer class="main-footer">
 	    <div class="pull-right hidden-xs">
 	      	<b>Version</b> 0.4
 	    </div>
-	    <strong>Copyright &copy; 2019 <a href="https://adminlte.io">Carlos Gaxiola</a>.</strong> All rights reserved.
-	</footer> -->
+	    <strong>Copyright &copy; 2019 <a href="https://adminlte.io">Travelopolis</a>.</strong> All rights reserved.
+	</footer>
 </div>
 <!-- ./wrapper -->
 <!-- JQuery 3 -->
@@ -80,18 +80,13 @@
 						window.location.href = base_url + "inicio/logout"				
 				}
 			})
-		})		
+		})	
+		$(".dataTables_filter").parent().removeClass().addClass("col-sm-3 col-sm-offset-3")
 	})
 </script>
 <!-- App -->
-<?php if (isset($scripts)): ?>
-	<?php if (is_array($scripts)): ?>			
-		<?php foreach ($scripts as $script): ?>
-			<script src="<?php echo base_url("assets/js/".$script.".js") ?>"></script>
-		<?php endforeach; ?>
-	<?php else: ?>
-		<script src="<?php echo base_url("assets/js/".$scripts.".js") ?>"></script>
-	<?php endif; ?>
+<?php if (strcmp($modulo['nombre'], "Inicio Administrar") != 0): ?>
+	<script src="<?php echo base_url("assets/js/app/".lcfirst($modulo['nombre'])).".js" ?>"></script>
 <?php endif; ?>
 </body>
 </html>
