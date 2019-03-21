@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Administrar extends CI_Controller {	
 
-	private $nombre = "administrar";
+	private $nombre = "inicio administrar";
 	private $modulo;
 
 	public function __construct () {
@@ -16,7 +16,10 @@ class Administrar extends CI_Controller {
 	public function index () {
 		if (hasAccess($this->session->userdata("id_perfil"), $this->modulo['id'])) {
 			$this->session->set_userdata("admin_active", true);
-			$this->load->view("administrar/main_vista");
+			$data = array(
+				'modulo' => $this->modulo
+			);
+			$this->load->view("administrar/main_vista", $data);
 		}
 		else
 			show_404();		
