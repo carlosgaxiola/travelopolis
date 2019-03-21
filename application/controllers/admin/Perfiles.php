@@ -8,6 +8,7 @@ class Perfiles extends CI_Controller {
 
 	public function __construct () {		
 		parent::__construct();
+		$this->load->helper("global_functions_helper");
 		$this->load->model("PerfilesModulosModelo");
 		$this->load->model("Modelo");
 		$this->modulo = $this->Modelo->buscar("modulos", $this->nombre, "nombre");
@@ -17,7 +18,7 @@ class Perfiles extends CI_Controller {
 		if (hasAccess($this->session->userdata("id_perfil"), $this->modulo['id'])) {
 			$data = array(				
 				'modulo' => $this->modulo,
-				'perfiles' => $this->Modelo->listar($this->modulo),
+				'registros' => $this->Modelo->listar($this->nombre),				
 				'extras' => array(
 					'modulos' => $this->Modelo->listar("modulos")
 				)
