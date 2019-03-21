@@ -1,8 +1,8 @@
 <?php 
 	$this->load->view("Global/header", array("titulo" => "Administrar"));
-	$this->load->view("Global/aside", array("actual" => $modulo));	
-	if (strcmp($modulo['nombre'], "Administar") != 1)
-		$nombre = $modulo['nombre'];		
+	$this->load->view("Global/aside", array("actual" => $modulo));		
+	if (strcmp($modulo['nombre'], "Inicio Administrar") != 0)
+		$nombre = $modulo['nombre'];
 ?>
 <main class="content-wrapper">	
 	<?php if (isset($nombre)): ?>
@@ -28,7 +28,7 @@
 		                </div>
 		                <div class="box-body">
 		                	<div class="table-responsive">
-		                		<?php $this->load->view("administar/".$nombre."/".$nombre."_tabla_vista", $registros) ?>
+		                		<?php $this->load->view("administrar/".lcfirst($nombre)."/tabla", $registros) ?>
 		                	</div>
 		                </div>                
 					</div>
@@ -36,7 +36,7 @@
 			</div>
 		</div>	
 		<div class="content" id="formulario" hidden>
-			<?php $this->load->view("administar/".$nombre."/".$nombre."_formulario_vista", $extras) ?>
+			<?php $this->load->view("administrar/".lcfirst($nombre)."/formulario", $extras) ?>
 		</div>
 	<?php endif; ?>
 </main>
