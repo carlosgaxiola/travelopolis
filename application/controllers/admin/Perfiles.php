@@ -13,22 +13,19 @@ class Perfiles extends CI_Controller {
 		$this->modulo = $this->Modelo->buscar("modulos", $this->nombre, "nombre");
 	}
 
-	public function index () {
-		if ($this->input->is_ajax_request()) {
-			if (hasAccess($this->session->userdata("id_perfil"), $this->modulo['id'])) {
-				$data = array(				
-					'perfiles' => $this->Modelo->listar($this->modulo),
-					'extras' => array(
-						'modulos' => $this->Modelo->listar("modulos")
-					)
-				);
-				$this->load->view("administrar/listar_vista", $data);
-			}
-			else
-				show_404();
+	public function index () {		
+		if (hasAccess($this->session->userdata("id_perfil"), $this->modulo['id'])) {
+			$data = array(				
+				'modulo' => $this->modulo,
+				'perfiles' => $this->Modelo->listar($this->modulo),
+				'extras' => array(
+					'modulos' => $this->Modelo->listar("modulos")
+				)
+			);
+			$this->load->view("administrar/main_vista", $data);
 		}
 		else
-			show_404();	
+			show_404();		
 	}	
 
 	public function add () {
