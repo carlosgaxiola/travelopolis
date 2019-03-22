@@ -17,6 +17,8 @@
     <link rel="stylesheet" href="<?php echo base_url("assets/css/bootstrap-3.min.css") ?>">    
     <!-- BootstrapDialog -->
     <link rel="stylesheet" href="<?php echo base_url("assets/css/bootstrap-dialog.min.css") ?>">
+    <!-- DataTable Styles -->
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url("assets/css/dataTables.bootstrap.min.css") ?>">
     <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
