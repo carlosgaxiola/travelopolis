@@ -1,7 +1,7 @@
 <?php 
 	$this->load->view("Global/header", array("titulo" => "Administrar"));
 	$this->load->view("Global/aside", array("actual" => $modulo));		
-	if (strcmp($modulo['nombre'], "Inicio Administrar") != 0)
+	if (strcmp($modulo['nombre'], "Inicio Administrador") != 0)
 		$nombre = $modulo['nombre'];
 ?>
 <main class="content-wrapper">	
@@ -11,9 +11,8 @@
 				<div class="row">
 					<blockquote style=" border-left: 5px solid #264d78;">
 						<?php if (isset($allowAdd)): ?>
-							<button title="<?php $allosAdd['btn-title'] ?>" id="<?php echo $allowAdd['btn-id'] ?>" class="btn btn-primary"><i class="fas fa-plus"></i></button>
-						<?php endif; ?>
-						<i class="fas fa-plus"></i></button> 							
+							<button type="button" class="btn btn-primary pull-right" id="btn-add" title="Nuevo registro"><i class="fas fa-plus"></i></button> 								
+						<?php endif; ?>											
 						<h1 class="text-justify"><?php echo $nombre ?></h1>
 						<small><?php echo $modulo['descripcion'] ?></small>
 					</blockquote>
@@ -36,7 +35,13 @@
 			</div>
 		</div>	
 		<div class="content" id="formulario" hidden>
-			<?php $this->load->view("administrar/".lcfirst($nombre)."/formulario", $extras) ?>
+			<?php 
+				if (isset($extras))
+					$this->load->view("administrar/".lcfirst($nombre)."/formulario", $extras);
+				else
+					$this->load->view("administrar/".lcfirst($nombre)."/formulario");
+				
+			?>
 		</div>
 	<?php endif; ?>
 </main>
