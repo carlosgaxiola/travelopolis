@@ -1,7 +1,8 @@
 	<?php 
-		$noMargin = "style='margin-left: 0px;'";
-		if ($this->session->userdata("admin_acivte"))
+		$noMargin = "style='margin-left: 0px;'";		
+		if ($this->session->userdata("admin_active")) {		
 			$noMargin = "";
+		}
 	?>
 	<footer class="main-footer" <?php echo $noMargin ?>>
 	    <div class="pull-right hidden-xs">
@@ -85,13 +86,16 @@
 						window.location.href = base_url + "inicio/logout"				
 				}
 			})
-		})	
-		$(".dataTables_filter").parent().removeClass().addClass("col-sm-3 col-sm-offset-3")
+		})		
 	})
+	var tablaId = $(".table").prop("id");
 </script>
 <!-- App -->
+<?php if ($this->session->userdata("admin_active")): ?>
+	<script src="<?php echo base_url("assets/js/app/listar.js") ?>"></script>
+<?php endif; ?>
 <?php if (isset($modulo)): ?>
-	<?php if (strcmp($modulo['nombre'], "Inicio Administrar") != 0): ?>
+	<?php if (strcmp($modulo['nombre'], "Inicio Administrador") != 0): ?>
 		<script src="<?php echo base_url("assets/js/app/".lcfirst($modulo['nombre'])).".js" ?>"></script>
 	<?php endif; ?>
 <?php endif; ?>
