@@ -1,5 +1,5 @@
-$(document).ready( function () {			
-	
+$(document).ready( function () {				
+
 	//Necesarias
 	$("#btn-save").click( function () {
 		if ($("#idPerfil").val() === "") {
@@ -57,7 +57,7 @@ $(document).ready( function () {
 
 	function edit (callback) {
 		$.ajax({
-			url: base_url + "administrar/perfiles/edit",
+			url: base_url + "admin/perfiles/edit",
 			type: "POST",
 			data: $("#frmPerfil").serialize(),
 			success: function (res) {				
@@ -251,7 +251,7 @@ function setModulos (modulos) {
 
 function getModulos (idPerfil, callback) {	
 	$.ajax({
-		url: base_url + "administrar/perfiles/modulos",
+		url: base_url + "admin/perfiles/modulos",
 		type: "POST",
 		data: "idPerfil=" + idPerfil,
 		success: function (modulos) {

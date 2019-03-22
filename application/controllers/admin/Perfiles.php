@@ -14,7 +14,7 @@ class Perfiles extends CI_Controller {
 		$this->modulo = $this->Modelo->buscar("modulos", $this->nombre, "nombre");
 	}
 
-	public function index () {		
+	public function index () {
 		if (hasAccess($this->session->userdata("id_perfil"), $this->modulo['id'])) {
 			$data = array(				
 				'modulo' => $this->modulo,
@@ -27,34 +27,7 @@ class Perfiles extends CI_Controller {
 		}
 		else
 			show_404();		
-	}	
-
-	public function add () {
-		if ($this->input->is_ajax_request()) {
-			$modulos = array();
-			foreach ($this->input->post() as $index => $post)
-				if (is_int(strpos($index, "cbx")))
-					$modulos[] = $post;
-			if ($this->validacion()) {
-				$fecha = new datetime($this->input->post("fecha"));
-				$data = array(
-					'nombre' => $this->input->post("txtNombre"),
-					'descripcion' => $this->input->post("txtDescripcion"),					
-					'f_registro' => $fecha->format("Y-d-m"),					
-					'status' => 1
-				);
-				$idPerfil = $this->Modelo->insertar($this->modulo, $data);				
-				if ($idPerfil && !empty($modulos))
-					foreach ($modulos as &$idModulo)
-						$idModulo = ($this->PerfilesModulosModelo->add($idPerfil, $idModulo))? true: $idModulo;
-				echo $idPerfil;
-			}	
-			else
-				echo validation_errors("<li>", "</li>");
-		}
-		else
-			show_404();
-	}
+	}		
 
 	public function edit () {
 		if ($this->input->is_ajax_request()) {
@@ -68,7 +41,7 @@ class Perfiles extends CI_Controller {
 					'nombre' => $this->input->post("txtNombre"),
 					'descripcion' => $this->input->post("txtDescripcion")
 				);
-				$perfil = $this->Modelo->actualizar($this->modulo, $idPerfil, $data);
+				$perfil = $this->Modelo->actualizar($this->nombre, $idPerfil, $data);
 				$modulo = false;
 				$this->PerfilesModulosModelo->del($idPerfil);
 				if (!empty($modulos))
@@ -87,10 +60,10 @@ class Perfiles extends CI_Controller {
 	}
 
 	private function validacion ($idPerfil = 0) {
-		$uNombre = "|is_unique[".$this->modulo.".nombre]";		
+		$uNombre = "|is_unique[".$this->nombre.".nombre]";		
 		if ($idPerfil != 0) {					
-			$modulo = $this->Modelo->buscar($this->modulo, $idPerfil);			
-			if ($modulo['nombre'] == $this->input->post("txtNombre"))
+			$perfil = $this->Modelo->buscar($this->nombre, $idPerfil);
+			if ($perfil['nombre'] == $this->input->post("txtNombre"))
 				$uNombre = "";			
 		}
 		$this->form_validation->set_rules("txtNombre", "Nombre", "trim|required".$uNombre);		
@@ -99,8 +72,6 @@ class Perfiles extends CI_Controller {
 		$this->form_validation->set_message("is_unique", "El campo %s ya existe");
 		return $this->form_validation->run();
 	}
-
-	
 
 	public function modulos () {
 		if ($this->input->is_ajax_request()) {
