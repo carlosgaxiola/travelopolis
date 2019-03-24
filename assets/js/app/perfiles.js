@@ -22,38 +22,6 @@ $(document).ready( function () {
 		}
 	})
 
-	function add (callback) {
-		$.ajax({
-			url: base_url + "administrar/perfiles/add",
-			type: "POST",
-			data: $("#frmPerfil").serialize() + "&fecha=" + getDate(),
-			success: function (res) {				
-				try  {
-					if (!isNaN(parseInt(res)))
-						switch (res) {
-							case 0:
-								console.log("error");								
-								break
-							default:
-								let perfil = getFormLog(res);
-								addTableLog(perfil);
-								callback();								
-								break
-						}
-					else {
-						$("#msg-error").show();
-						$("#list-error").html(res);
-					}
-				}
-				catch (e) {
-					console.error(e);
-				}				
-			},
-			error: function (jqXHR, textStatus, errorThrown) {
-				console.error("Error::" + errorThrown);
-			}
-		})
-	}
 
 	function edit (callback) {
 		$.ajax({
@@ -138,21 +106,6 @@ function getFormLog (idPerfil) {
 	};	
 }
 
-function addTableLog (perfil) {	
-	let row = tabla.row.add([
-		tabla.rows().count() + 1,
-		perfil.nombre,
-		perfil.descripcion,
-		getDate(),
-		'<label class="label label-success">Activo</label>',
-		'<button type="button" class="btn btn-warning btn-sm btn-edit-log" data-id="' + perfil.id + '" title="Editar registro"><i class="fas fa-edit"></i></button>&nbsp;' +
-		'<button type="button" class="btn btn-danger btn-sm btn-toggle-log" data-id="' + perfil.id  + '" title="Desactivar registro" data-status="1"><i class="fas fa-toggle-off"></i></button>'
-	]).draw();
-	$(row).data("id", perfil.id);	
-	$(row).data("modulos", perfil.modulos.join(","));
-	clearFormData();
-}
-
 function editTableLog (perfil) {
 	let Break = {};
 	try {		
@@ -169,71 +122,6 @@ function editTableLog (perfil) {
 	} catch (e) {
 		// console.error(e)
 	}	
-}
-
-function toggleLog (that) {
-	let $tr = $(that).parent().parent(),
-		nombre = $("td:eq(1)", $tr).text(),
-		idPerfil = $(that).data("id"),
-		status = $(that).data("status")
-		accion = 'desactivar el perfil',
-		tipo = BootstrapDialog.TYPE_DANGER,
-		okClass = "btn-danger",
-		cancelClass = "btn-default";
-	if (status == 0) {
-		tipo = BootstrapDialog.TYPE_SUCCESS;
-		okClass = "btn-success";
-		cancelClass = "btn-default";
-		accion = "activar el perfil";
-	}		
-	BootstrapDialog.confirm({
-		title: "Cambiar estado",
-		message: "¿Desea " + accion + " de " + nombre + "?",
-		type: tipo,
-		size: BootstrapDialog.SIZE_SMALL,
-		btnOKLabel: "Sí",
-		btnOKClass: okClass,
-		btnCancelLabel: "No",
-		btnCancelClass: cancelClass,
-		callback: function (res) {
-			if (res) {
-				$.ajax({
-					url: base_url + "administrar/perfiles/toggle",
-					type: "POST",
-					data: {
-						idPerfil: idPerfil,
-						status: status
-					},
-					success: function (res) {						
-						try {
-							res = JSON.parse(res);
-							let iconClass = "fas fa-toggle-off",
-								labelClass = "label label-success",
-								labelText = "Activo",
-								btnTitle = "Desactivar registro";
-							if (res) {
-								if (status == 1) {
-									labelClass = "label label-danger";
-									labelText = "Inactivo";
-									iconClass = "fas fa-toggle-on";
-									btnTitle = "Activar registro";
-								}
-								$(that).data("status", status? 0 : 1);
-							}							
-							$(".btn-toggle-log", $tr).prop("title", btnTitle);
-							$("label", $tr).removeClass().addClass(labelClass).text(labelText);
-							$(".btn-toggle-log i", $tr).removeClass().addClass(iconClass);
-						} catch (e) {
-							console.error(e);
-						}
-					},
-					error: function (jqXHR, textStatus, errorThrown) {
-						console.error("Error::" + errorThrown);
-					}
-				});
-			}
-		}
-	});
 }
 
 function clearFormData () {
