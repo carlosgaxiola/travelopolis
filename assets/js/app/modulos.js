@@ -123,7 +123,7 @@ function editTableLog (modulo) {
 				tabla.row(tr).data()[2] = modulo.descripcion;
 				$("td:eq(3)", tr).text(modulo.ruta);
 				tabla.row(tr).data()[3] = modulo.ruta;
-				tabla.row(tr).data()[4] = modulo.iconoClass;				
+				tabla.row(tr).data()[4] = modulo.iconoClass;
 				throw Break;
 			}
 		})		
