@@ -4,6 +4,12 @@
             }
         });
 
+        $('.email').on('input', function (e) {
+            if (!/^[ a-z0-9áéíóúüñ@_\-.]*$/i.test(this.value)) {
+                this.value = this.value.replace(/[^ a-z0-9áéíóúüñ@_\-.]+/ig,"");
+            }
+        });
+
         $('.Letras').on('input', function (e) {
             //console.log("entro num");
             if (!/^[ a-záéíóúüñ]*$/i.test(this.value)) {
