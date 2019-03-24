@@ -21,8 +21,12 @@
         <?php endif; ?>
         <?php if ($this->session->userdata("login") and $this->session->userdata("admin_active") != true): ?>
             <li class="nav-item user user-menu">
-                <a href="<?php echo base_url("perfil/".$this->session->userdata("usuario")) ?>">
-                    <img src="<?php echo base_url("assets/images/users/".$this->session->userdata("url_foto_perfil")."/profile_60x60.jpg") ?>" class="user-image" alt="User Image">
+                <a href="<?php echo base_url("perfil/?usuario=".$this->session->userdata("usuario")) ?>">
+                    <?php if (empty($this->session->userdata("url_foto_perfil"))): ?>
+                        <i class="fas fa-user"></i>
+                    <?php else: ?>
+                        <img src="<?php echo base_url("assets/images/users/".$this->session->userdata("url_foto_perfil")."/profile_60x60.jpg") ?>" class="user-image" alt="User Image">
+                    <?php endif; ?>
                     <span class="hidden-xs"><?php echo $this->session->userdata("usuario") ?></span>
                 </a>
             </li>
