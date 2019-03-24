@@ -97,6 +97,7 @@
 <?php if (isset($modulo)): ?>
 	<?php if (strcmp($modulo['nombre'], "Inicio Administrador") != 0): ?>
 		<script src="<?php echo base_url("assets/js/app/".lcfirst($modulo['nombre'])).".js" ?>"></script>
+		<script src="<?php echo base_url("assets/js/app/validaciones.js") ?>"></script>
 	<?php endif; ?>
 <?php endif; ?>
 </body>
