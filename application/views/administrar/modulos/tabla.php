@@ -1,4 +1,4 @@
-<table id="tblModulos" class="table no-margin table-striped" style="width:100%">
+<table id="tblModulos" class="table no-margin table-striped" style="width:100%" data-table="true">
 	<thead>
         <th>#</th>    					                
         <th>Nombre</th>

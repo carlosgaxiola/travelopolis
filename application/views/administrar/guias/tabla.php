@@ -1,4 +1,4 @@
-<table id="tblGuias" class="table no-margin table-striped table-hover" style="width:100%">
+<table id="tblGuias" class="table no-margin table-striped table-hover" style="width:100%" data-table="true">
 	<thead>        
         <th>#</th>    					                
         <th>Nombre</th>
