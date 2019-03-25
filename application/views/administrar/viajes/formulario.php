@@ -93,6 +93,7 @@
 					<thead>
 						<th>#</th>
 						<th>Nombre</th>
+						<th>Fecha</th>
 						<th style="min-width: 300px">Descripción</th>
 						<th style="max-width: 50px">Eliminar</th>
 					</thead>
