@@ -44,14 +44,15 @@ class Inicio extends CI_Controller {
 						'usu_status' => $usuario['status'],
 						'url_foto_perfil' => $persona['url_foto'],
 						'nombre' => $persona['nombre'],
-						'apaterno' => $persona['a_paterno'],
-						'amaterno' => $persona['a_materno'],
+						'a_paterno' => $persona['a_paterno'],
+						'a_materno' => $persona['a_materno'],
 						'completo' => $persona['nombre']." ".$persona['a_paterno']." ".$persona['a_materno'],
 						'correo' => $persona['correo'],
 						'per_f_registro' => $persona['f_registro'],
 						'per_status' => $persona['status'],
 						'telefono' => $persona['telefono'],						
 						'admin_active' => false,
+						'descripcion' => $persona['descripcion'],
 						'login' => true
 					);
 					if ($usuario['id_perfil'] != 3) {
