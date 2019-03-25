@@ -6,7 +6,7 @@ $(document).ready( function () {
 			add( function () {
 				BootstrapDialog.alert({
 					title: "Guia registrado",
-					message: "Se registro el modulo correctamente",
+					message: "Se registro el guia correctamente",
 					type: BootstrapDialog.TYPE_SUCCESS,					
 				});
 				toggleMain();
