@@ -28,6 +28,11 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">      
     <!-- Colors -->
     <link rel="stylesheet" href="<?php echo base_url("assets/css/color_schemes/colors.css") ?>">
+    <?php if (isset($styles) and is_array($styles)): ?>
+        <?php foreach ($styles as $style): ?>
+            <link rel="stylesheet" href="<?php echo base_url("assets/css/".$style.".css") ?>">
+        <?php endforeach;; ?>
+    <?php endif; ?>
     <style>
         .height-100 {
             height: 100% !important;
