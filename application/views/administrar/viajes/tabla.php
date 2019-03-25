@@ -11,12 +11,27 @@
     <tbody id="contenidoTabla">        
     	<?php if (isset($registros) and !empty($registros) and is_array($registros)): ?>
     		<?php foreach ($registros as $index => $viaje): ?>
-    			<tr data-descripcion="<?php echo $viaje['descripcion'] ?>">
+                <tr data-id="<?php echo $viaje['id'] ?>"
+                    data-f-inicio="<?php echo $viaje['f_inicio'] ?>"
+                    data-f-fin="<?php echo $viaje['f_fin'] ?>"                    
+                    data-url-foto="<?php echo $viaje['url_imagen'] ?>">
                     <td><?php echo $index + 1 ?></td>
-    				<td><?php echo $viaje['nombre'] ?></td>    				
-                    <td><?php echo $viaje['precio'] ?></td>
-                    <td><?php echo $viaje['dias_duracion'] ?></td>
-                    <td><?php echo $viaje['minimo']." - ".$viaje['maximo'] ?></td>
+    				<td data-nombre="<?php echo $viaje['nombre'] ?>"
+                        data-descripcion="<?php echo $viaje['descripcion'] ?>" >
+                        <?php echo $viaje['nombre'] ?>                    
+                    </td>
+                    <td data-precio="<?php echo $viaje['precio'] ?>">
+                        <?php echo $viaje['precio'] ?>                            
+                    </td>
+                    <td data-dias="<?php echo $viaje['dias_duracion'] ?>" 
+                        data-noches="<?php echo $viaje['noches_duracion'] ?>"
+                        data-devolucion="<?php echo $viaje['dias_espera_devolucion'] ?>">
+                        <?php echo $viaje['dias_duracion'] ?>
+                    </td>
+                    <td data-minimo="<?php echo $viaje['minimo'] ?>" 
+                        data-maximo="<?php echo $viaje['maximo'] ?>">
+                        <?php echo $viaje['minimo']." - ".$viaje['maximo'] ?>
+                    </td>
                     <td>
                         <?php if ($viaje['status'] == 0): ?>
                             <?php 
