@@ -37,14 +37,9 @@
 		return dia + "/" + mes + "/" + año;			
 	}
 
-	function logout () {
-		console.log("hola")
-		return false;
-	}
-
 	$(document).ready( function () {
 		base_url = '<?php echo base_url() ?>';
-		tabla = $(".table").DataTable({
+		tabla = $("table[data-table]").DataTable({
 		    'paging'			: true,
 		    'lengthChange' 		: false,
 		    'searching'    		: true,
@@ -93,6 +88,11 @@
 <!-- App -->
 <?php if ($this->session->userdata("admin_active")): ?>
 	<script src="<?php echo base_url("assets/js/app/listar.js") ?>"></script>
+<?php endif; ?>
+<?php if (isset($scripts) and is_array($scripts)): ?>
+	<?php foreach ($scripts as $script): ?>
+		<script src="<?php echo base_url("assets/js/".$script.".js") ?>"></script>
+	<?php endforeach; ?>
 <?php endif; ?>
 <?php if (isset($modulo)): ?>
 	<?php if (strcmp($modulo['nombre'], "Inicio Administrador") != 0): ?>
