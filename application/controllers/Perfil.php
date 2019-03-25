@@ -12,6 +12,7 @@ class Perfil extends CI_Controller {
 		parent::__construct();
 		$this->load->helper("global_functions_helper");
 		$this->load->model("Modelo");
+		$this->load->model("ViajeroModelo");
 	}	
 
 	public function index () {
@@ -19,16 +20,15 @@ class Perfil extends CI_Controller {
 		if (empty($usuario))
 			show_404();
 		else {
-			$usuario = $this->Modelo->buscar($this->tbl_usuarios, $usuario, "usuario");
-			if ($usuario['id_perfil'] == 1 || $usuario['id_perfil']) { //Administrador o guia
-				$persona = $this->Modelo->buscar($this->tbl_empleados, $usuario['id'], "id_usuario");
-			} else if ($usuario['id_perfil'] == 3)  { //Viajero
-				$persona = $this->Modelo->buscar($this->tbl_viajeros, $usuario['id'], "id_usuario");
-			}
+			if (strcmp($usuario, $this->session->userdata("nombre")) == 0)
+				$usuario = $this->session->userdata();
+			else
+				$usuario = $this->ViajeroModelo->buscar($usuario);
+			$viajes = $this->ViajeroModelo->viajes($this->session->userdata("id_usuario"));
 			$perfil = array(
 				'titulo' => 'Perfil',
-				'usuario' => $usuario,
-				'persona' => $persona
+				'viajes' => $viajes,
+				'usuario' => $usuario
 			);
 			$this->load->view("perfil/perfil_vista", $perfil);
 		}
