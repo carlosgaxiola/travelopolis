@@ -53,32 +53,44 @@ $(document).ready( function () {
 	
 	//Necesarias
 	$("#btn-save").click( function () {
-		console.log(getFormLog());
-		// if ($("#idViaje").val() === "") {
-		// 	add( function () {
-		// 		BootstrapDialog.alert({
-		// 			title: "Viaje registrado",
-		// 			message: "Se registro el viaje correctamente",
-		// 			type: BootstrapDialog.TYPE_SUCCESS,					
-		// 		});
-		// 		toggleMain();
-		// 		$("#msg-error").hide();
-		// 	})
-		// }
-		// else {
-		// 	edit( function () {				
-		// 		toggleMain();
-		// 		$("#msg-error").hide();
-		// 		tabla.draw()
-		// 	});
-		// }
+		// console.log(getFormLog());
+		if ($("#tblDias tbody tr").length == 0) {
+			BootstrapDialog.alert({
+				title: "Registra un día",
+				message: "Debe registrar al menos un 1 del viaje",
+				type: BootstrapDialog.TYPE_WARNING,
+				size: BootstrapDialog.SIZE_SMALL
+			})
+		}
+		else {
+			if ($("#idViaje").val() === "") {
+				add( function () {
+					BootstrapDialog.alert({
+						title: "Viaje registrado",
+						message: "Se registro el viaje correctamente",
+						type: BootstrapDialog.TYPE_SUCCESS,					
+					});
+					toggleMain();
+					$("#msg-error").hide();
+				})
+			}
+			else {
+				edit( function () {				
+					toggleMain();
+					$("#msg-error").hide();
+					tabla.draw()
+				});
+			}	
+		}
+		
 	})
 
 	function add ( callback ) {
+		let data = new FormData($("#frmViaje")[0]) + "&fecha=" + getDate()
 		$.ajax({
 			url: base_url + "admin/viajes/add",
 			type: "POST",
-			data: $("#frmViaje").serialize() + "&fecha=" + getDate(),
+			data: $("#frmViaje").serialize()  + "&fecha=" + getDate(),
 			success: function ( res ) {
 				try {
 					if ( !isNaN( parseInt( res ) ) ) {
@@ -450,6 +462,9 @@ function setTableDias (viaje) {
 	$.ajax({
 		url: base_url + "admin/viajes/diasviaje",
 		type: "POST",
+		data: {
+			idViaje: viaje.id
+		},
 		success: function (res) {
 			try {
 				res = JSON.parse(res);

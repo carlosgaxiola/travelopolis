@@ -77,7 +77,7 @@
 		<div class="row">
 			<div class="form-group col-md-3">
 				<label for="txtNombreDia">Nombre día:</label>
-				<input type="text" class="form-control Letras" id="txtNombreDia" name="txtNombreDia">				
+				<input type="text" class="form-control LetrasNumeros" id="txtNombreDia" name="txtNombreDia">				
 			</div>
 			<div class="form-group col-md-7">
 				<label for="txtDescripcionDia">Descripción Día:</label>

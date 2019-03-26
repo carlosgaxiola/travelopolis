@@ -11,6 +11,7 @@ class Viajes extends CI_Controller {
 		parent::__construct();
 		$this->load->model("Modelo");
 		$this->load->helper("global_functions_helper");
+		$this->load->model("ViajesModelo");
 		$this->modulo = $this->Modelo->buscar("modulos", $this->tbl_viajes, "nombre");
 	}
 
@@ -24,6 +25,32 @@ class Viajes extends CI_Controller {
 				'scripts' => array("moment", "daterangepicker"),
 			);
 			$this->load->view("administrar/main_vista", $data);
+		}
+		else
+			show_404();
+	}
+
+	public function add () {
+		if ($this->input->is_ajax_request()) {
+			var_dump($this->input->post());
+			$imagen = $_FILES['txtImagen'];
+			echo "<br>".$imagen['name'];
+		}
+		else
+			show_404();
+	}
+
+	public function edit () {
+
+	}
+
+	public function diasViaje () {
+		if ($this->input->is_ajax_request()) {
+			$idViaje = $this->input->post("idViaje");
+			if ($idViaje == null or empty($idViaje))
+				echo "false";
+			else
+				echo json_encode($this->ViajesModelo->listarDias($idViaje));
 		}
 		else
 			show_404();
