@@ -49,11 +49,18 @@
                             <span class="label label-primary">Abierto</span>
                         <?php elseif ($viaje['status'] == 2): ?>
                             <?php 
-                                $title = "Terminar";
+                                $title = "Empezar";
                                 $icon = "fa-check";
                                 $btnToggleClass = "btn-default";
                             ?>
                             <span class="label label-success">Listo</span>
+                        <?php elseif ($viaje['status'] == 4): ?>}
+                            <?php 
+                                $title = "Terminar";
+                                $icon = "fa-check";
+                                $btnToggleClass = "btn-default";
+                            ?>
+                            <span class="label label-primary">En curso</span>
                         <?php else: ?>
                             <span class="label label-success">Terminado</span>
                         <?php endif; ?>

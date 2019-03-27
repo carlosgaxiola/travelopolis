@@ -32,9 +32,7 @@ class Viajes extends CI_Controller {
 
 	public function add () {
 		if ($this->input->is_ajax_request()) {
-			var_dump($this->input->post());
-			$imagen = $_FILES['txtImagen'];
-			echo "<br>".$imagen['name'];
+						
 		}
 		else
 			show_404();

@@ -53,26 +53,12 @@
 			</div>
 		</div>	
 		<div class="row">
-			<div class="col-md-6">
+			<div class="col-md-12">
 				<div class="form-group">
-					<label for="txtDescripcion">Descripcion:</label>
-					<textarea type="text" class="form-control Letras" name="txtDescripcion" id="txtDescripcion" maxlength="255" rows="5"></textarea>
+					<label for="txtDescripcion">Descripción:</label>
+					<textarea style="resize: none;" type="text" class="form-control Letras" name="txtDescripcion" id="txtDescripcion" maxlength="255" rows="2"></textarea>
 				</div>
 			</div>
-			<div class="col-md-6">
-				<div class="row">
-					<div class="form-group">
-						<label for="txtImagen">Imagen del viaje</label>
-						<input type="file" name="txtImagen" id="txtImagen">
-					</div>
-				</div>
-				<div class="row">
-					<div class="form-group">
-						<label>Vista Previa</label>
-						<div id="txtPreview">Ninguna imagen seleccionada</div>
-					</div>
-				</div>				
-			</div>			
 		</div>
 		<div class="row">
 			<div class="form-group col-md-3">
@@ -84,7 +70,7 @@
 				<input type="text" class="form-control LetrasNumeros" id="txtDescripcionDia" name="txtDescripcionDia">
 			</div>
 			<div class="form-group col-md-2">				
-				<button id="btn-add-dia" style="margin-top: 18%;" type="button" class="btn btn-success">Agregar</button>
+				<button id="btn-add-dia" style="margin-top: 13%;" type="button" class="btn btn-success">Agregar</button>
 			</div>
 		</div>
 		<div class="row">

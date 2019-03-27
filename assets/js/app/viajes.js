@@ -6,11 +6,6 @@ $(document).ready( function () {
 		}
 	});
 
-	$("#txtImagen").change(function () {
-	    filePreview(this);
-	    console.log("hola")
-	});
-
 	$(".daterangepicker .fa-calendar").removeClass().addClass("fas fa-calendar");
 	
 	function actualizarFechas () {
@@ -41,8 +36,9 @@ $(document).ready( function () {
 			'year': fin.año
 		})
 	}
+
 	actualizarFechas()
-	$("#txtFecha").change( function () {		
+	$("#txtFecha").change( function () {
 		actualizarFechas()
 		$("#txtFechaInicio").val(inicio.string)
 		$("#txtFechaFin").val(fin.string)		
@@ -82,15 +78,16 @@ $(document).ready( function () {
 				});
 			}	
 		}
-		
 	})
 
 	function add ( callback ) {
-		let data = new FormData($("#frmViaje")[0]) + "&fecha=" + getDate()
+		let viaje = getFormLog()
 		$.ajax({
 			url: base_url + "admin/viajes/add",
 			type: "POST",
-			data: $("#frmViaje").serialize()  + "&fecha=" + getDate(),
+			data: {
+				viaje: viaje
+			},
 			success: function ( res ) {
 				try {
 					if ( !isNaN( parseInt( res ) ) ) {
@@ -99,7 +96,7 @@ $(document).ready( function () {
 								console.error( "Error::" + res )
 								break
 							default:
-								let viaje = getFormLog( res )
+								viaje.idViaje = res;
 								addTableLog ( viaje )
 								callback()
 								break
@@ -254,11 +251,10 @@ function getTableLog (that) {
 		noches: $tr.children("td:eq(3)").data("noches"),
 		devolucion: $tr.children("td:eq(3)").data("devolucion")
 	};
-	console.log(viaje)
 	return viaje;
 }
 
-function getFormLog (idViaje) {
+function getFormLog (idViaje = 0) {
 	viaje = {
 		id: idViaje,		
 		nombre: $("#txtNombre").val(),
@@ -302,36 +298,13 @@ function editTableLog (viaje) {
 				$(tr).child("td:eq(4)").data("maximo", viaje.maximo);
 				$(tr).child("td:eq(4)").data("minimo", viaje.minimo);
 				$(tr).data("f-inicio", viaje.inicio);
-				$(tr).data("f-fin", viaje.fin);
-				actualizarUrlFoto(tr, viaje);
+				$(tr).data("f-fin", viaje.fin);				
 				throw Break;
 			}
 		});
 	} catch (e) {
 		// console.error(e)
 	}	
-}
-
-function actualizarUrlFoto (tr, viaje) {
-	$.ajax({
-		url: base_url + "admin/viajes/geturlfoto",
-		type: "POST",
-		data: {
-			idViaje: viaje.id
-		},
-		success: function (res) {
-			try {
-				if (res)
-					$(tr).data("url-foto", res);
-			}
-			catch (e) {
-				console.error(e)
-			}			
-		},
-		error: function (jqXHR, textStatus, errorThrown) {
-			console.error("Error::" + errorThrown);
-		}
-	})
 }
 
 function addTableLog (viaje) {
@@ -356,8 +329,7 @@ function addTableLog (viaje) {
 	$("#tblViajes tbody tr:last td:(3)").data("devolucion", viaje.devolucion);
 	$("#tblViajes tbody tr:last td:(4)").data("minimo", viaje.minimo);	
 	$("#tblViajes tbody tr:last td:(4)").data("maximo", viaje.maximo);
-	$("#tblViajes tbody tr:last").data("dias-descripcion", viaje.diasDescripcion);
-	actualizarUrlFoto($("#tblViajes tbody tr:last"), viaje);
+	$("#tblViajes tbody tr:last").data("dias-descripcion", viaje.diasDescripcion);	
 	clearFormData();
 }
 
@@ -381,7 +353,7 @@ function toggleLog (that) {
 	let $tr = $(that).parent().parent(),
 		nombre = $("td:eq(1)", $tr).text(),
 		idGuia = $(that).data("id"),
-		status = $(that).data("status")
+		status = $(that).data("status"),
 		accion = 'dar de baja al guia',
 		tipo = BootstrapDialog.TYPE_DANGER,
 		okClass = "btn-danger",
@@ -445,17 +417,6 @@ function toggleLog (that) {
 			}
 		}
 	});
-}
-
-function filePreview (input) {
-    if (input.files && input.files[0]) {
-        var reader = new FileReader();
-        reader.onload = function (e) {
-            $('#txtPreview').empty();
-            $('#txtPreview').append('<img class="img-responsive img-thumbnail" src="'+e.target.result+'"/>');            
-        }
-        reader.readAsDataURL(input.files[0]);
-    }
 }
 
 function setTableDias (viaje) {
