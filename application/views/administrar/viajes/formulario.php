@@ -1,7 +1,14 @@
 <div class="row">
-	<button type="button" id="btn-close" class="btn btn-danger col-md-offset-11" title="Cerrar formulario"><i class="fas fa-times"></i></button>
+	<div class="col-md-10">
+		<div id="msg-error" class="alert alert-error" hidden>
+			<div id="list-error"></div>
+		</div>		
+	</div>
+	<div class="col-md-2">		
+		<button type="button" id="btn-close" class="btn btn-danger col-md-offset-1" title="Cerrar formulario"><i class="fas fa-times"></i></button>
+	</div>
 </div>
-<form id="frmViaje" class="form" enctype="multipart/form-data">	
+<form id="frmViaje" class="form">	
 	<input type="hidden" name="idViaje" id="idViaje">	
 	<div class="container-fluid">
 		<div class="row">
@@ -9,26 +16,36 @@
 				<label for="txtNombre">Nombre:</label>
 				<input type="text" class="form-control Letras" name="txtNombre" id="txtNombre" maxlength="45">
 			</div>
-			<div class="form-group col-md-6">
-				<label style="margin-top: -5%;">Viajeros:</label>
+			<div class="form-group col-md-4">				
 				<div class="row">
 					<div class="form-group col-md-6">
+						<label style="margin-top: -5%;">Viajeros:</label>
 						<label for="txtMinimo">Mínimo</label>
 						<input type="text" class="form-control Numeros" name="txtMinimo" id="txtMinimo" maxlength="10">
 					</div>
 					<div class="form-group col-md-6">
+						<label style="margin-top: -5%;">Viajeros:</label>
 						<label for="txtMaximo">Máximo</label>
 						<input type="text" class="form-control Numeros" name="txtMaximo" id="txtMaximo" maxlength="10">
 					</div>
 				</div>
 			</div>
-			<div class="form-group col-md-3">				
+			<div class="form-group col-md-2">				
 				<label for="txtPrecio">Precio:</label>
 				<input type="text" class="form-control NumerosDecimales" name="txtPrecio" id="txtPrecio" maxlength="10">
+			</div>
+			<div class="form-group col-md-3">
+				<label for="cmbTipoViaje">Tipo de viaje:</label>
+				<select name="cmbTipoViaje" class="form-control" id="cmbTipoViaje">
+					<option value="0">Selecciona un tipo de viaje</option>
+					<?php foreach ($tiposViaje as $tipoViaje): ?>
+						<option value="<?php echo $tipoViaje['id'] ?>"><?php echo $tipoViaje['nombre'] ?></option>
+					<?php endforeach; ?>
+				</select>
 			</div>		
 		</div>		
 		<div class="row">
-			<div class="form-group col-md-5">
+			<div class="form-group col-md-4">
 	            <label>Fecha de inicio y fin:</label>
 	            <div class="input-group">
 		            <div class="input-group-addon">
@@ -47,8 +64,8 @@
 				<label for="txtNoches"><i class="fas fa-moon"></i> Noches:</label>
 				<input type="text" id="txtNoches" name="txtNoches" class="form-control" maxlength="3" disabled>
 			</div>
-			<div class="form-group col-md-3">
-				<label for="txtDiasDevolucion">Dias para devolucion de pago:</label>
+			<div class="form-group col-md-4">
+				<label for="txtDiasDevolucion">Días para devolucion de pago:</label>
 				<input type="text" class="form-control Numeros" id="txtDiasDevolucion" name="txtDiasDevolucion">				
 			</div>
 		</div>	
@@ -65,16 +82,24 @@
 				<label for="txtNombreDia">Nombre día:</label>
 				<input type="text" class="form-control LetrasNumeros" id="txtNombreDia" name="txtNombreDia">				
 			</div>
-			<div class="form-group col-md-7">
-				<label for="txtDescripcionDia">Descripción Día:</label>
-				<input type="text" class="form-control LetrasNumeros" id="txtDescripcionDia" name="txtDescripcionDia">
-			</div>
-			<div class="form-group col-md-2">				
-				<button id="btn-add-dia" style="margin-top: 13%;" type="button" class="btn btn-success">Agregar</button>
-			</div>
+			<div class="form-group col-md-9">
+				<div class="row">
+					<div class="col-md-10">						
+						<label for="txtDescripcionDia">Descripción Día:</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-10">						
+						<input type="text" class="form-control LetrasNumeros" id="txtDescripcionDia" name="txtDescripcionDia">
+					</div>	
+					<div class="col-md-2">						
+						<button id="btn-add-dia" type="button" class="btn btn-success">Agregar</button>
+					</div>
+				</div>				
+			</div>			
 		</div>
 		<div class="row">
-			<div class="col-md-11">				
+			<div class="col-md-12">				
 				<table id="tblDias" class="table table-striped table-bordered table-hover" style="background-color: white;">
 					<thead>
 						<th>#</th>
@@ -100,6 +125,3 @@
 	</div>
 </form>
 <br>
-<div id="msg-error" class="alert alert-error" hidden>
-	<div id="list-error"></div>
-</div>

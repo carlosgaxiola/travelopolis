@@ -85,9 +85,7 @@ $(document).ready( function () {
 		$.ajax({
 			url: base_url + "admin/viajes/add",
 			type: "POST",
-			data: {
-				viaje: viaje
-			},
+			data: $("#frmViaje").serialize(),
 			success: function ( res ) {
 				try {
 					if ( !isNaN( parseInt( res ) ) ) {
@@ -119,8 +117,8 @@ $(document).ready( function () {
 		$.ajax({
 			url: base_url + "admin/viajes/edit",
 			type: "POST",
-			data: $("#frmViaje").serialize(),
-			success: function (res) {				
+			data: $("#frmViaje").serialize() + "&txtDias=" + $("#txtDias").val() + "&txtNoches=" + $("#txtNoches").val(),
+			success: function (res) {
 				try  {					
 					if (!isNaN(parseInt(res)))
 						switch (res) {
@@ -128,9 +126,8 @@ $(document).ready( function () {
 								console.error("error: "  + res);
 								break
 							default:
-								let viaje = getFormLog(res);								
-								editTableLog(guia);
-								callback();
+								viaje.idViaje = res;		
+								editDiasDescripcion(viaje);								
 								break
 						}
 					else {
@@ -213,6 +210,7 @@ $(document).ready( function () {
 
 //Genericas
 function setFormLog (viaje) {
+	console.log(viaje)
 	if (viaje != null && viaje != undefined) {
 		$("#idViaje").val(viaje.id)
 		$("#txtNombre").val(viaje.nombre)
@@ -220,8 +218,14 @@ function setFormLog (viaje) {
 		$("#txtMinimo").val(viaje.minimo)
 		$("#txtMaximo").val(viaje.maximo)
 		$("#txtPrecio").val(viaje.precio)
+		$("#txtFechaInicio").val(viaje.inicio)
+		$("#txtFechaFin").val(viaje.fin)
+		$("#txtFecha").val(viaje.inicio + " - " + viaje.fin)
+		$("#txtDias").val(viaje.dias)
+		$("#txtNoches").val(viaje.noches)
 		$("#txtDiasDevolucion").val(viaje.devolucion)
-		setTableDias(viaje);		
+		$("#cmbTipoViaje").val(viaje.tipo)
+		setTableDias(viaje)
 		return true;
 	}
 	else {
@@ -238,7 +242,7 @@ function setFormLog (viaje) {
 function getTableLog (that) {
 	let $tr = $(that).parent().parent();	
 	viaje = {
-		id: $tr.data("id"),
+		idViaje: $tr.data("id"),
 		nombre: $tr.children("td:eq(1)").data("nombre"),
 		minimo: $tr.children("td:eq(4)").data("minimo"),
 		maximo: $tr.children("td:eq(4)").data("maximo") ,
@@ -246,11 +250,15 @@ function getTableLog (that) {
 		precio: $tr.children("td:eq(2)").data("precio") ,
 		inicio: $tr.data("f-inicio"),
 		fin: $tr.data("f-fin"),
-		urlFoto: $tr.data("url-foto"),
+		tipo: $tr.data("id-tipo"),
 		dias: $tr.children("td:eq(3)").data("dias"),
 		noches: $tr.children("td:eq(3)").data("noches"),
-		devolucion: $tr.children("td:eq(3)").data("devolucion")
+		devolucion: $tr.children("td:eq(3)").data("devolucion"),
+		tipo: $tr.data("id-tipo")
 	};
+	if ($tr.data("dias-descripcion")) {
+		viaje.diasDescripcion = $tr.data("dias-descripcion");
+	}
 	return viaje;
 }
 
@@ -266,7 +274,8 @@ function getFormLog (idViaje = 0) {
 		fin: $("#txtFechaFin").val(),
 		dias: $("#txtDias").val(),
 		noches: $("#txtNoches").val(),
-		diasDevolucion: $("#txtDiasDevolucion").val(),		
+		diasDevolucion: $("#txtDiasDevolucion").val(),
+		tipo: $("#cmbTipoViaje").val()	
 	};	
 	let dias = [];
 	$.each($("#tblDias tbody tr"), function (index, tr) {			
@@ -298,7 +307,9 @@ function editTableLog (viaje) {
 				$(tr).child("td:eq(4)").data("maximo", viaje.maximo);
 				$(tr).child("td:eq(4)").data("minimo", viaje.minimo);
 				$(tr).data("f-inicio", viaje.inicio);
-				$(tr).data("f-fin", viaje.fin);				
+				$(tr).data("f-fin", viaje.fin);
+				$(tr).data("id-tipo", viaje.tipo);
+				$(tr).data("dias", viaje.diasDescripcion);
 				throw Break;
 			}
 		});
@@ -329,7 +340,7 @@ function addTableLog (viaje) {
 	$("#tblViajes tbody tr:last td:(3)").data("devolucion", viaje.devolucion);
 	$("#tblViajes tbody tr:last td:(4)").data("minimo", viaje.minimo);	
 	$("#tblViajes tbody tr:last td:(4)").data("maximo", viaje.maximo);
-	$("#tblViajes tbody tr:last").data("dias-descripcion", viaje.diasDescripcion);	
+	$("#tblViajes tbody tr:last").data("dias-descripcion", viaje.diasDescripcion);
 	clearFormData();
 }
 
@@ -340,13 +351,14 @@ function clearFormData () {
 	$("#txtPrecio").val("")
 	let fechaHoy = moment(new Date());
 	$("#txtFecha").val(fechaHoy.format("DD/MM/YYY") + " - " + fechaHoy.format("DD/MM/YYYY"))
-	$("#tblDias").empty()
+	$("#tblDias tbody").empty()
 	$("#txtDescripcion").val("")
 	$("#txtImagen").val("")
 	$("#txtPreview").empty()
 	$("#txtDias").val("1")
 	$("#txtNoches").val("0")	
 	$("#idViaje").val("")
+	$("#cmbTipoViaje").val("0")
 }
 
 function toggleLog (that) {
@@ -420,29 +432,75 @@ function toggleLog (that) {
 }
 
 function setTableDias (viaje) {
+	if (viaje.diasDescripcion != undefined && viaje.diasDescripcion.length != 0) {
+		console.log("hola")
+		console.log(viaje.diasDescripcion)
+	}
+	else {
+		$.ajax({
+			url: base_url + "admin/viajes/diasviaje",
+			type: "POST",
+			data: {
+				idViaje: viaje.id
+			},
+			success: function (res) {
+				try {
+					res = JSON.parse(res);
+					if (res) {
+						$("#tblDias tbody").html("");
+						let btnEliminarDia = "<button class='bnt bnt-sm bnt-danger btn-del-dia'><i class='fas fa-times'></i></button>";
+						$.each(res, function (index, dia) {
+							$("#tblDias tbody").append("<tr><td>" + (index + 1) + "</td><td>" + dia.nombre + "</td><td>" + dia.fecha + "</td><td>" + dia.descripcion + "</td><td>" + btnEliminarDia + "</td></tr>");
+						})
+					}
+				} 
+				catch ( e ) {
+					console.error(e)
+				}
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+				console.error("Error::" + errorThrown)
+			}
+		})
+	}
+} 
+
+function editDiasDescripcion (viaje, callback) {
+	if (viaje == undefined || viaje == null)
+		throw "Viaje no esta definido";
 	$.ajax({
-		url: base_url + "admin/viajes/diasviaje",
+		url: base_url + "admin/viajes/editdias",
 		type: "POST",
 		data: {
-			idViaje: viaje.id
+			idViaje: viaje.idViaje,
+			dias: viaje.diasDescripcion,
+			fecha: getDate()
 		},
 		success: function (res) {
 			try {
-				res = JSON.parse(res);
-				if (res) {
-					$("#tblDias tbody").empty();
-					let btnEliminarDia = "<button class='bnt bnt-sm bnt-danger btn-del-dia'><i class='fas fa-times'></i></button>";
-					$.each(res, function (index, dia) {
-						$("#tblDias tbody").append("<tr><td>" + (index + 1) + "</td><td>" + dia.nombre + "</td><td>" + dia.fecha + "</td><td>" + dia.descripcion + "</td><td>" + btnEliminarDia + "</td></tr>");
-					})
+				if (!isNaN(parseInt(res))) {
+					switch (res) {
+						case 0:
+							console.error("error: "  + res);
+							break
+						default:
+							let viaje = getFormLog(res);							
+							editTableLog(viaje);
+							callback();
+							break
+					}
 				}
-			} 
-			catch ( e ) {
-				console.error(e)
+				else {
+					$("#msg-error").show();
+					$("#list-error").html(res);
+				}
+			}
+			catch (e) {
+				console.error("Error::" + e)	
 			}
 		},
-		error: function (jqXHR, textStatus, errorThrown) {
+		erorr: function (jqXHR, textStatus, errorThrown) {
 			console.error("Error::" + errorThrown)
 		}
-	})
-} 
+	})	
+}

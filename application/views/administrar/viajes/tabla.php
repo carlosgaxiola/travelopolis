@@ -8,13 +8,17 @@
         <th>Estado</th>
         <th>Opciones</th>        
     </thead>
-    <tbody id="contenidoTabla">        
+    <tbody id="contenidoTabla">     
     	<?php if (isset($registros) and !empty($registros) and is_array($registros)): ?>
     		<?php foreach ($registros as $index => $viaje): ?>
+                <?php 
+                    $fechaInicio = new datetime($viaje['f_inicio']);
+                    $fechaFin = new DateTime($viaje['f_fin']);
+                ?>
                 <tr data-id="<?php echo $viaje['id'] ?>"
-                    data-f-inicio="<?php echo $viaje['f_inicio'] ?>"
-                    data-f-fin="<?php echo $viaje['f_fin'] ?>"                    
-                    data-url-foto="<?php echo $viaje['url_imagen'] ?>">
+                    data-f-inicio="<?php echo $fechaInicio->format("d/m/Y") ?>"
+                    data-f-fin="<?php echo $fechaFin->format("d/m/Y") ?>"                    
+                    data-id-tipo="<?php echo $viaje['id_tipo_viaje']?>">
                     <td><?php echo $index + 1 ?></td>
     				<td data-nombre="<?php echo $viaje['nombre'] ?>"
                         data-descripcion="<?php echo $viaje['descripcion'] ?>" >
