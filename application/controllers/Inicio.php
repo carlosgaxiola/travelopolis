@@ -29,12 +29,13 @@ class Inicio extends CI_Controller {
 			$this->form_validation->set_rules("txtContra", "Contraseña", "required");
 			$this->form_validation->set_message("required", "El campo %s es obligatoro");
 			if ($this->form_validation->run()) {
-				$usuario = $this->InicioModelo->login($this->input->post("txtUsuario"), $this->input->post("txtContra"));
+				$usuario = $this->InicioModelo->login($this->input->post("txtUsuario"), $this->input->post("txtContra"));				
 				if ($usuario) {
 					if ($usuario['id_perfil'] != 3)
 						$persona = $this->Modelo->buscar("empleados", $usuario["id"], "id_usuario");
 					else
-						$persona = $this->Modelo->buscar("viajeros", $usuario['id'], 'id_usuario');			
+						$persona = $this->Modelo->buscar("viajeros", $usuario['id'], 'id_usuario');
+					$descripcion = isset($persona['descripcion'])? $persona['descripcion']: '';	
 					$data = array(
 						'usuario' => $usuario["usuario"],
 						'id_usuario' => $usuario["id"],
@@ -52,7 +53,7 @@ class Inicio extends CI_Controller {
 						'per_status' => $persona['status'],
 						'telefono' => $persona['telefono'],						
 						'admin_active' => false,
-						'descripcion' => $persona['descripcion'],
+						'descripcion' => $descripcion,
 						'login' => true
 					);
 					if ($usuario['id_perfil'] != 3) {
