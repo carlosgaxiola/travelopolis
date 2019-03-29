@@ -8,7 +8,7 @@
 	    <div class="pull-right hidden-xs">
 	      	<b>Version</b> 0.4
 	    </div>
-	    <strong>Copyright &copy; 2019 <a href="https://adminlte.io">Travelopolis</a>.</strong> All rights reserved.
+	    <strong>Copyright &copy; 2019 <a href="<?php echo base_url() ?>">Travelopolis</a>.</strong> All rights reserved.
 	</footer>
 </div>
 <!-- ./wrapper -->
