@@ -54,4 +54,10 @@ class Modelo extends CI_Model {
 		else $this->db->join($tabla, $join);
 		return $this;
 	}
+
+	public function borrar ($tabla, $valor, $campo = 'id') {
+		$this->db->where($campo, $valor);
+		$this->db->delete($tabla);
+		return ($this->db->affected_rows() > 0);
+	}
 }

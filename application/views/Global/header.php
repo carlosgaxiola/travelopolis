@@ -17,6 +17,8 @@
     <link rel="stylesheet" href="<?php echo base_url("assets/css/bootstrap-3.min.css") ?>">    
     <!-- BootstrapDialog -->
     <link rel="stylesheet" href="<?php echo base_url("assets/css/bootstrap-dialog.min.css") ?>">
+    <!-- DataTable Styles -->
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url("assets/css/dataTables.bootstrap.min.css") ?>">
     <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -26,6 +28,11 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">      
     <!-- Colors -->
     <link rel="stylesheet" href="<?php echo base_url("assets/css/color_schemes/colors.css") ?>">
+    <?php if (isset($styles) and is_array($styles)): ?>
+        <?php foreach ($styles as $style): ?>
+            <link rel="stylesheet" href="<?php echo base_url("assets/css/".$style.".css") ?>">
+        <?php endforeach;; ?>
+    <?php endif; ?>
     <style>
         .height-100 {
             height: 100% !important;

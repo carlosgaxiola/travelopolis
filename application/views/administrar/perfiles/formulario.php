@@ -1,4 +1,7 @@
-<form id="frmPerfil" class="form">
+<div class="row">
+	<button type="button" id="btn-close" class="btn btn-danger col-md-offset-11" title="Cerrar formulario"><i class="fas fa-times"></i></button>
+</div>
+<form id="frmPerfil" class="form">	
 	<input type="hidden" name="idPerfil" id="idPerfil">
 	<div class="container-fluid">
 		<div class="row">

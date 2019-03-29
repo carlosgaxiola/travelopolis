@@ -22,63 +22,17 @@ $(document).ready( function () {
 	})	
 
 	//Generico
-	$("#btn-save").click( function () {
-		if ($("#idModulo").val() === "") {
-			add( function () {
-				BootstrapDialog.alert({
-					title: "Modulo agregado",
-					message: "Se registro el modulo correctamente",
-					type: BootstrapDialog.TYPE_SUCCESS,					
-				});
-				toggleMain();
-				$("#msg-error").hide();
-			})			
-		}
-		else {
-			edit( function () {				
-				toggleMain();
-				$("#msg-error").hide();
-				tabla.draw()
-			});
-		}
+	$("#btn-save").click( function () {		
+		edit( function () {
+			toggleMain();
+			$("#msg-error").hide();
+			tabla.draw()
+		});		
 	})
-
-	function add (callback) {
-		$.ajax({
-			url: base_url + "administrar/modulos/add",
-			type: "POST",
-			data: $("#frmModulo").serialize() + "&fecha=" + getDate(),
-			success: function (res) {				
-				try  {
-					if (!isNaN(parseInt(res)))
-						switch (res) {
-							case 0:
-								console.log("error");								
-								break
-							default:
-								let modulo = getFormLog(res);
-								addTableLog(modulo);
-								callback();
-								break
-						}
-					else {
-						$("#msg-error").show();
-						$("#list-error").html(res);
-					}
-				}
-				catch (e) {
-					console.error(e);
-				}				
-			},
-			error: function (jqXHR, textStatus, errorThrown) {
-				console.error("Error::" + errorThrown);
-			}
-		})
-	}
 
 	function edit (callback) {
 		$.ajax({
-			url: base_url + "administrar/modulos/edit",
+			url: base_url + "admin/modulos/edit",
 			type: "POST",
 			data: $("#frmModulo").serialize(),
 			success: function (res) {				
@@ -111,7 +65,7 @@ $(document).ready( function () {
 });
 
 //Generico
-function setFormLog (modulo) {
+function setFormLog (modulo) {	
 	if (modulo != null && modulo != undefined) {
 		$("#idModulo").val(modulo.id);
 		$("#txtNombre").val(modulo.nombre);
@@ -120,8 +74,7 @@ function setFormLog (modulo) {
 		if (modulo.iconoClass === "0")
 			$(".icon-target #icon").text(modulo.nombre[0]).removeClass();
 		else
-			$(".icon-target #icon").text("").addClass(modulo.iconoClass);
-		$("#cmbPadre").val(modulo.padre);
+			$(".icon-target #icon").text("").addClass(modulo.iconoClass);		
 		$("#txtDescripcion").val(modulo.descripcion);
 		return true;
 	}
@@ -138,70 +91,42 @@ function setFormLog (modulo) {
 
 function getTableLog (that) {
 	let $tr = $(that).parent().parent();
-	return {
+	modulo =  {
 		id: $(that).data("id"),
 		nombre: tabla.row($tr).data()[1],
-		ruta: tabla.row($tr).data()[2],
-		descripcion: tabla.row($tr).data()[3],
-		iconoClass: tabla.row($tr).data()[4],
-		padre: tabla.row($tr).data()[5]
+		descripcion: tabla.row($tr).data()[2],
+		ruta: tabla.row($tr).data()[3],
+		iconoClass: tabla.row($tr).data()[4]		
 	};
+	return modulo;
 }
 
 function getFormLog (idModulo) {
-	let padre = $("#cmbPadre").val(),
-		padreNombre = $("#cmbPadre option:selected").text();
-	if (padre == "0")
-		padreNombre = "N/A";
 	modulo = {
 		id: idModulo,
 		nombre: $("#txtNombre").val(),
 		descripcion: $("#txtDescripcion").val(),
 		ruta: $("#txtRuta").val(),
-		iconoClass: $("#cmbIcono").val(),
-		padre: padre,
-		padreNombre: padreNombre
+		iconoClass: $("#cmbIcono").val()
 	}	
 	return modulo;
 }
 
-function addTableLog (modulo) {
-	if (modulo.padre == "0")
-		modulo.padreNombre = "N/A";
-	let row = tabla.row.add([
-		tabla.rows().count() + 1,
-		modulo.nombre,
-		modulo.ruta,
-		modulo.descripcion,
-		modulo.iconoClass,
-		modulo.padreNombre,
-		getDate(),
-		'<label class="label label-success">Activo</label>',
-		'<button type="button" class="btn btn-warning btn-sm btn-edit-log" data-id="' + modulo.id + '" title="Editar registro"><i class="fas fa-edit"></i></button>&nbsp;' +
-		'<button type="button" class="btn btn-danger btn-sm btn-toggle-log" data-id="' + modulo.id  + '" title="Desactivar registro" data-status="1"><i class="fas fa-toggle-off"></i></button>'
-	]).draw();
-	$(row).data("id", modulo.id);	
-	initTabla();
-	clearFormData();
-}
-
-function editTableLog (modulo) {
+function editTableLog (modulo) {	
 	let Break = {};
 	try {		
-		$.each($("#tblModulos tbody tr"), function (index, tr) {				
+		$.each($("#tblModulos tbody tr"), function (index, tr) {			
 			if ($(tr).data("id") == modulo.id) {
 				$("td:eq(1)", tr).text(modulo.nombre);
 				tabla.row(tr).data()[1] = modulo.nombre;
-				$("td:eq(2)". tr).text(modulo.ruta);
-				tabla.row(tr).data()[2] = modulo.ruta;
-				$("td:eq(3)", tr).text(modulo.descripcion);
-				tabla.row(tr).data()[3] = modulo.descripcion;				
+				$("td:eq(2)", tr).text(modulo.descripcion);
+				tabla.row(tr).data()[2] = modulo.descripcion;
+				$("td:eq(3)", tr).text(modulo.ruta);
+				tabla.row(tr).data()[3] = modulo.ruta;
 				tabla.row(tr).data()[4] = modulo.iconoClass;
-				$("td:eq(5)", tr).text(modulo.padreNombre);
-				tabla.row(tr).data()[5] = modulo.padre;				
 				throw Break;
 			}
-		})
+		})		
 	} catch (e) {
 		// console.error(e)
 	}	
@@ -289,7 +214,6 @@ function initTabla () {
 		if (tabla.cell(tdIcon).data() == "0")
 			tdIcon.empty().append("<i class='fas'>" + $("td:eq(1)", tr).text()[0] + "</i>");
 		else
-			tdIcon.empty().append("<i class='" + tabla.cell(tdIcon).data() + "'></i>");
-		$("td:eq(5)", tr).empty().text("N/A");
+			tdIcon.empty().append("<i class='" + tabla.cell(tdIcon).data() + "'></i>");		
 	});
 }

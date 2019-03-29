@@ -5,12 +5,9 @@ $(document).ready( function () {
 
 	$("#btn-close").click( function () {
 		toggleMain()
-	})
+	})	
 
-	var tablaId = $("table:eq(0)").prop("id")
-
-	$("#" + tablaId).delegate(".btn-edit-log", "click", function () {
-		console.log("Hola")
+	$("#" + tablaId).delegate(".btn-edit-log", "click", function () {		
 		let modulo = getTableLog(this)		
 		if (modulo != undefined) {			
 			toggleMain()

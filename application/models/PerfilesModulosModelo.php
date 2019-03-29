@@ -15,7 +15,7 @@ class PerfilesModulosModelo extends CI_Model {
 		$this->db->select("mods.*");
 		$this->db->where("pm.id_perfil", $idPerfil);
 		$this->db->join($this->union." pm", "pm.id_modulo = mods.id");
-		$this->db->order_by("mods.id");
+		$this->db->order_by("mods.nombre");
 		$modulos = $this->db->get($this->modulos." mods");
 		if ($modulos->num_rows() > 0)
 			return $modulos->result_array();

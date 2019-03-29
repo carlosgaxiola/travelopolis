@@ -36,7 +36,11 @@
         return res;
     }   
 
-    $("form").on("submit", function (e) {        
+    $("form").on("submit", function (e) {
+        console.log("sumbit")
+        console.log(!validarCheckboxes())
+        console.log(!validarRadios())
+        console.log(!validarInputs())
         if (!validarInputs() || !validarRadios() || !validarCheckboxes()) {            
             e.preventDefault()
         }
