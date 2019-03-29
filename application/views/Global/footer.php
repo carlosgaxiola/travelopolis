@@ -27,6 +27,10 @@
 <script>
 	var tabla, base_url;
 
+	function fechaJS($fecha) {
+		return $fecha.replace(/^(\d{4})-(\d{2})-(\d{2})$/g,'$3/$2/$1');
+	}
+		
 	function getDate () {
 		let fecha = new Date();				
 		dia = fecha.getDate();

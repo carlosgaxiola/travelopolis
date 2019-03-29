@@ -23,7 +23,7 @@ class Viajes extends CI_Controller {
 			$data = array(
 				'allowAdd' => true,
 				'modulo' => $this->modulo,
-				'registros' => $this->Modelo->listar($this->tbl_viajes),
+				'registros' => $this->ViajesModelo->viajes(),
 				'styles' => array("daterangepicker"),
 				'scripts' => array("moment", "daterangepicker"),
 				'extras' => array('tiposViaje' => $tiposViaje)
@@ -52,8 +52,23 @@ class Viajes extends CI_Controller {
 					'id_tipo_viaje' => $this->input->post("cmbTipoViaje"),
 					'f_registro' => $fecha->format("Y-m-d"),
 					'status' => 0 //Estado inactivo
-				);
-				echo $this->Modelo->insertar($this->tbl_viajes, $viaje);
+				);				
+				$idViaje = $this->Modelo->insertar($this->tbl_viajes, $viaje);
+				if ($idViaje) {
+					foreach ($this->input->post("dias") as $index => $dia) {
+						$f_dia = DateTime::createFromFormat('d/m/Y', $dia['fecha']);;
+						$dia_data = array(
+							'nombre' => $dia['nombre'],
+							'f_dia' => $f_dia->format("Y-m-d"),
+							'descripcion' => $dia['descripcion'],
+							'id_viaje' => $idViaje,
+							'f_registro' => $fecha->format("Y-m-d"),
+							'indice' => "dia".$index."viaje".$idViaje
+						);
+						$this->Modelo->insertar($this->tbl_dias_viaje, $dia_data);
+					}
+					echo $idViaje;
+				}					
 			}
 			else
 				echo validation_errors("<li>", "</li>");		
@@ -81,10 +96,8 @@ class Viajes extends CI_Controller {
 					'f_fin' => $fechaFin->format("Y-m-d"),
 					'id_tipo_viaje' => $this->input->post("cmbTipoViaje")					
 				);
-				if ($this->Modelo->actualizar($this->tbl_viajes, $idViaje, $viaje))
-					echo $idViaje;
-				else
-					echo "0";
+				$this->Modelo->actualizar($this->tbl_viajes, $idViaje, $viaje);
+				echo $idViaje;
 			}
 			else				
 				echo validation_errors("<li>", "</li>");		
@@ -106,7 +119,7 @@ class Viajes extends CI_Controller {
 	}
 
 	public function validar ($idViaje = 0) {
-		$uNombre = "|is_unique[viaje.nombre]";
+		$uNombre = "|is_unique[".$this->tbl_viajes.".nombre]";
 		if ($idViaje != 0) {
 			$viaje = $this->Modelo->buscar($this->tbl_viajes, $idViaje);
 			if ($this->input->post("txtNombre") == $viaje['nombre']) {
@@ -124,6 +137,7 @@ class Viajes extends CI_Controller {
 		$this->form_validation->set_rules("txtFechaInicio", "Fecha Inicio", "trim|required");
 		$this->form_validation->set_rules("txtFechaFin", "Fecha Inicio", "trim|required");
 		$this->form_validation->set_rules("cmbTipoViaje", "Tipo de viaje", "required|is_natural_no_zero");
+
 		$this->form_validation->set_message("is_natural_no_zero", "Seleccione un %s");
 		$this->form_validation->set_message("less_than", "El campo %s debe ser menor a 100");		
 		$this->form_validation->set_message("required", "El campo %s es obligatorio");
@@ -153,6 +167,22 @@ class Viajes extends CI_Controller {
 			}
 			else
 				echo "Los días no pueden estar vacios";
+		}
+		else
+			show_404();
+	}
+
+	public function data () {
+		if ($this->input->is_ajax_request()) {
+			echo json_encode($this->Modelo->listar($this->tbl_viajes));
+		}
+		else
+			show_404();
+	}
+
+	public function dias () {
+		if ($this->input->is_ajax_request()) {
+			echo json_encode($this->ViajesModelo->listarDias());
 		}
 		else
 			show_404();

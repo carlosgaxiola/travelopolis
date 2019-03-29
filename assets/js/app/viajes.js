@@ -85,7 +85,21 @@ $(document).ready( function () {
 		$.ajax({
 			url: base_url + "admin/viajes/add",
 			type: "POST",
-			data: $("#frmViaje").serialize(),
+			data: {
+				txtNombre: $("#txtNombre").val(),
+				txtDescripcion: $("#txtDescripcion").val(),
+				txtMinimo: $("#txtMinimo").val(),
+				txtMaximo: $("#txtMaximo").val(),
+				txtPrecio: $("#txtPrecio").val(),
+				txtFechaInicio: $("#txtFechaInicio").val(),
+				txtFechaFin: $("#txtFechaFin").val(),
+				txtDias: $("#txtDias").val(),
+				txtNoches: $("#txtNoches").val(),
+				txtDiasDevolucion: $("#txtDiasDevolucion").val(),
+				cmbTipoViaje: $("#cmbTipoViaje").val(),
+				dias: getTableDias(),
+				fecha: getDate()
+			},			
 			success: function ( res ) {
 				try {
 					if ( !isNaN( parseInt( res ) ) ) {
@@ -117,7 +131,9 @@ $(document).ready( function () {
 		$.ajax({
 			url: base_url + "admin/viajes/edit",
 			type: "POST",
-			data: $("#frmViaje").serialize() + "&txtDias=" + $("#txtDias").val() + "&txtNoches=" + $("#txtNoches").val(),
+			data: $("#frmViaje").serialize() + 
+				"&txtDias=" + $("#txtDias").val() +
+				"&txtNoches=" + $("#txtNoches").val(),
 			success: function (res) {
 				try  {					
 					if (!isNaN(parseInt(res)))
@@ -126,7 +142,7 @@ $(document).ready( function () {
 								console.error("error: "  + res);
 								break
 							default:
-								viaje.idViaje = res;		
+								viaje.id = res;		
 								editDiasDescripcion(viaje);								
 								break
 						}
@@ -206,11 +222,12 @@ $(document).ready( function () {
 
 		})
 	})
+	
+	init()
 });
 
 //Genericas
 function setFormLog (viaje) {
-	console.log(viaje)
 	if (viaje != null && viaje != undefined) {
 		$("#idViaje").val(viaje.id)
 		$("#txtNombre").val(viaje.nombre)
@@ -241,24 +258,9 @@ function setFormLog (viaje) {
 
 function getTableLog (that) {
 	let $tr = $(that).parent().parent();	
-	viaje = {
-		idViaje: $tr.data("id"),
-		nombre: $tr.children("td:eq(1)").data("nombre"),
-		minimo: $tr.children("td:eq(4)").data("minimo"),
-		maximo: $tr.children("td:eq(4)").data("maximo") ,
-		descripcion: $tr.children("td:eq(1)").data("descripcion"),
-		precio: $tr.children("td:eq(2)").data("precio") ,
-		inicio: $tr.data("f-inicio"),
-		fin: $tr.data("f-fin"),
-		tipo: $tr.data("id-tipo"),
-		dias: $tr.children("td:eq(3)").data("dias"),
-		noches: $tr.children("td:eq(3)").data("noches"),
-		devolucion: $tr.children("td:eq(3)").data("devolucion"),
-		tipo: $tr.data("id-tipo")
-	};
-	if ($tr.data("dias-descripcion")) {
-		viaje.diasDescripcion = $tr.data("dias-descripcion");
-	}
+	let viaje = $tr.data("viaje");
+	let dias = $tr.data("dias");
+	viaje.diasDescripcion = dias;	
 	return viaje;
 }
 
@@ -274,18 +276,10 @@ function getFormLog (idViaje = 0) {
 		fin: $("#txtFechaFin").val(),
 		dias: $("#txtDias").val(),
 		noches: $("#txtNoches").val(),
-		diasDevolucion: $("#txtDiasDevolucion").val(),
+		devolucion: $("#txtDiasDevolucion").val(),
 		tipo: $("#cmbTipoViaje").val()	
-	};	
-	let dias = [];
-	$.each($("#tblDias tbody tr"), function (index, tr) {			
-		dias.push({
-			nombre: $(tr).data("nombre"),
-			descripcion: $(tr).data("descripcion"),
-			fecha: $(tr).data("fecha")			
-		})
-	})
-	viaje.diasDescripcion = dias;
+	};
+	viaje.diasDescripcion = getTableDias();
 	return viaje;
 }
 
@@ -294,22 +288,12 @@ function editTableLog (viaje) {
 	try {		
 		$.each($("#tblViajes tbody tr"), function (index, tr) {			
 			if ($(tr).data("id") == viaje.id) {
-				$("td:eq(1)", tr).text(viaje.nombre);
-				$(tr).child("td:eq(1)").data("nombre", viaje.nombre);
-				$(tr).child("td:eq(1)").data("descripcion", viaje.descripcion);
-				$("td:eq(2)", tr).text(viaje.precio);
-				$(tr).child("td:eq(3)").data("precio", viaje.precio);
-				$("td:eq(3)", tr).text(viaje.dias);
-				$(tr).child("td:eq(4)").data("dias", viaje.dias);
-				$(tr).child("td:eq(4)").data("noches", viaje.noches);
-				$(tr).child("td:eq(4)").data("devolucion", viaje.devolucion);
-				$("td:eq(4)", tr).text(viaje.minimo + " - " + viaje.maximo);				
-				$(tr).child("td:eq(4)").data("maximo", viaje.maximo);
-				$(tr).child("td:eq(4)").data("minimo", viaje.minimo);
-				$(tr).data("f-inicio", viaje.inicio);
-				$(tr).data("f-fin", viaje.fin);
-				$(tr).data("id-tipo", viaje.tipo);
-				$(tr).data("dias", viaje.diasDescripcion);
+				$("td:eq(1)", tr).text(viaje.nombre);				
+				$("td:eq(2)", tr).text(viaje.precio);				
+				$("td:eq(3)", tr).text(viaje.dias);				
+				$("td:eq(4)", tr).text(viaje.minimo + " - " + viaje.maximo);
+				$(tr).data("viaje", viaje);
+				$(tr).data("dias", viaje.dias);
 				throw Break;
 			}
 		});
@@ -329,18 +313,8 @@ function addTableLog (viaje) {
 		'<button type="button" class="btn btn-warning btn-edit-log" data-id="' + viaje.id + '" title="Editar registro"><i class="fas fa-edit"></i></button>&nbsp;' +
 		'<button type="button" class="btn btn-danger btn-toggle-log" data-id="' + viaje.id  + '" title="Desactivar registro" data-status="1"><i class="fas fa-toggle-off"></i></button>'
 	]).draw();	
-	$("#tblViajes tbody tr:last").data("id", viaje.id);
-	$("#tblViajes tbody tr:last").data("f-inicio", viaje.inicio);
-	$("#tblViajes tbody tr:last").data("f-fin", viaje.fin);	
-	$("#tblViajes tbody tr:last td:(1)").data("nombre", viaje.nombre);
-	$("#tblViajes tbody tr:last td:(1)").data("descripcion", viaje.descripcion);
-	$("#tblViajes tbody tr:last td:(2)").data("precio", viaje.precio);
-	$("#tblViajes tbody tr:last td:(3)").data("dias", viaje.dias);
-	$("#tblViajes tbody tr:last td:(3)").data("noches", viaje.noches);
-	$("#tblViajes tbody tr:last td:(3)").data("devolucion", viaje.devolucion);
-	$("#tblViajes tbody tr:last td:(4)").data("minimo", viaje.minimo);	
-	$("#tblViajes tbody tr:last td:(4)").data("maximo", viaje.maximo);
-	$("#tblViajes tbody tr:last").data("dias-descripcion", viaje.diasDescripcion);
+	$("#contenidoTabla").find("[data-id='" + viaje.id + "']").data("viaje", viaje);
+	$("#contenidoTabla").find("[data-id='" + viaje.id + "']").data("dias", viaje.diasDescripcion);
 	clearFormData();
 }
 
@@ -361,146 +335,71 @@ function clearFormData () {
 	$("#cmbTipoViaje").val("0")
 }
 
-function toggleLog (that) {
-	let $tr = $(that).parent().parent(),
-		nombre = $("td:eq(1)", $tr).text(),
-		idGuia = $(that).data("id"),
-		status = $(that).data("status"),
-		accion = 'dar de baja al guia',
-		tipo = BootstrapDialog.TYPE_DANGER,
-		okClass = "btn-danger",
-		cancelClass = "btn-default";
-	if (status == 0) {
-		tipo = BootstrapDialog.TYPE_SUCCESS;
-		okClass = "btn-success";
-		cancelClass = "btn-default";
-		accion = "dar de alta al guia";
-	}		
-	BootstrapDialog.confirm({
-		title: "Cambiar estado",
-		message: "¿Desea " + accion + " de " + nombre + "?",
-		type: tipo,
-		size: BootstrapDialog.SIZE_SMALL,
-		btnOKLabel: "Sí",
-		btnOKClass: okClass,
-		btnCancelLabel: "No",
-		btnCancelClass: cancelClass,
-		callback: function (res) {
-			if (res) {
-				$.ajax({
-					url: base_url + "admin/guias/toggle",
-					type: "POST",
-					data: {
-						idGuia: idGuia,
-						status: status
-					},
-					success: function (res) {						
-						try {
-							res = JSON.parse(res);
-							let iconClass = "fas fa-toggle-off",
-								labelClass = "label label-success",
-								labelText = "Activo",
-								btnTitle = "Desactivar registro";								
-							if (res) {
-
-								if (status == 1) {
-									labelClass = "label label-danger";
-									labelText = "Inactivo";
-									iconClass = "fas fa-toggle-on";
-									btnTitle = "Activar registro";
-									btnClass = "btn-success";
-									$(".btn-toggle-log", $tr).removeClass("btn-danger").addClass("btn-success");
-								}
-								else if (status == 0)
-									$(".btn-toggle-log", $tr).removeClass("btn-success").addClass("btn-danger");
-								$(that).data("status", status? 0 : 1);
-							}							
-							$(".btn-toggle-log", $tr).prop("title", btnTitle);
-							$("span", $tr).removeClass().addClass(labelClass).text(labelText);
-							$(".btn-toggle-log i", $tr).removeClass().addClass(iconClass);
-						} catch (e) {
-							console.error(e);
-						}
-					},
-					error: function (jqXHR, textStatus, errorThrown) {
-						console.error("Error::" + errorThrown);
-					}
-				});
-			}
-		}
-	});
+function setTableDias (viaje) {	
+	$.each(viaje.diasDescripcion, function (index, dia) {
+		let nombre = "<td>" + dia.nombre + "</td>";
+		let descripcion = "<td>" + dia.descripcion + "</td>";
+		let fecha = "<td>" + dia.fecha + "</td>";
+		let btnEliminar = "<td>" +
+			"<button type='button' class='btn btn-sm btn-danger btn-del-dia' title='Eliminar día'>" + 
+				"<i class='fas fa-times'></i>" +
+			"</button>" +
+		"</td>";
+		$("#tblDias tbody").append("<tr>" + (index + 1) + nombre + fecha + descripcion + btnEliminar + "</tr>")
+	})
 }
 
-function setTableDias (viaje) {
-	if (viaje.diasDescripcion != undefined && viaje.diasDescripcion.length != 0) {
-		console.log("hola")
-		console.log(viaje.diasDescripcion)
-	}
-	else {
-		$.ajax({
-			url: base_url + "admin/viajes/diasviaje",
-			type: "POST",
-			data: {
-				idViaje: viaje.id
-			},
-			success: function (res) {
-				try {
-					res = JSON.parse(res);
-					if (res) {
-						$("#tblDias tbody").html("");
-						let btnEliminarDia = "<button class='bnt bnt-sm bnt-danger btn-del-dia'><i class='fas fa-times'></i></button>";
-						$.each(res, function (index, dia) {
-							$("#tblDias tbody").append("<tr><td>" + (index + 1) + "</td><td>" + dia.nombre + "</td><td>" + dia.fecha + "</td><td>" + dia.descripcion + "</td><td>" + btnEliminarDia + "</td></tr>");
-						})
-					}
-				} 
-				catch ( e ) {
-					console.error(e)
-				}
-			},
-			error: function (jqXHR, textStatus, errorThrown) {
-				console.error("Error::" + errorThrown)
-			}
+function getTableDias () {
+	let dias = [];
+	$.each($("#tblDias tbody tr"), function (index, tr) {
+		dias.push({
+			nombre: $(tr).data("nombre"),
+			descripcion: $(tr).data("descripcion"),
+			fecha: $(tr).data("fecha")
 		})
-	}
-} 
+	})
+	return dias;
+}
 
-function editDiasDescripcion (viaje, callback) {
-	if (viaje == undefined || viaje == null)
-		throw "Viaje no esta definido";
+function init () {
 	$.ajax({
-		url: base_url + "admin/viajes/editdias",
-		type: "POST",
-		data: {
-			idViaje: viaje.idViaje,
-			dias: viaje.diasDescripcion,
-			fecha: getDate()
-		},
+		url: base_url + "admin/viajes/data",
 		success: function (res) {
 			try {
-				if (!isNaN(parseInt(res))) {
-					switch (res) {
-						case 0:
-							console.error("error: "  + res);
-							break
-						default:
-							let viaje = getFormLog(res);							
-							editTableLog(viaje);
-							callback();
-							break
-					}
-				}
-				else {
-					$("#msg-error").show();
-					$("#list-error").html(res);
-				}
+				$.each(JSON.parse(res), function (index, data) {
+					let viaje = {
+						id: data.id,
+						nombre: data.nombre,
+						descripcion: data.descripcion,
+						minimo: data.minimo,
+						maximo: data.maximo,
+						precio: data.precio,
+						dias: data.dias_duracion,
+						noches: data.noches_duracion,
+						devolucion: data.dias_espera_devolucion,
+						inicio: moment(data.f_inicio).format("DD/MM/YYYY"),
+						fin: moment(data.f_fin).format("DD/MM/YYYY"),
+						tipo: data.id_tipo_viaje							
+					};										
+					$("#contenidoTabla").find("[data-id='" + data.id + "']").data("viaje", viaje);					
+				})
 			}
 			catch (e) {
-				console.error("Error::" + e)	
+				console.error(e)
 			}
-		},
-		erorr: function (jqXHR, textStatus, errorThrown) {
-			console.error("Error::" + errorThrown)
 		}
-	})	
+	})
+	$.ajax({
+		url: base_url + "admin/viajes/dias",
+		success: function (data) {
+			try {
+				$.each(JSON.parse(data), function (index, viaje) {					
+					$("#contenidoTabla").find("[data-id='" + viaje.id + "']").data("dias", viaje.dias);					
+				})
+			}
+			catch (e) {
+				console.error(e)
+			}				
+		}
+	})
 }

@@ -9,31 +9,24 @@
         <th>Opciones</th>        
     </thead>
     <tbody id="contenidoTabla">     
-    	<?php if (isset($registros) and !empty($registros) and is_array($registros)): ?>
+    	<?php if (isset($registros) and !empty($registros) and is_array($registros)): ?>            
     		<?php foreach ($registros as $index => $viaje): ?>
                 <?php 
                     $fechaInicio = new datetime($viaje['f_inicio']);
-                    $fechaFin = new DateTime($viaje['f_fin']);
+                    $fechaFin = new DateTime($viaje['f_fin']);                    
                 ?>
-                <tr data-id="<?php echo $viaje['id'] ?>"
-                    data-f-inicio="<?php echo $fechaInicio->format("d/m/Y") ?>"
-                    data-f-fin="<?php echo $fechaFin->format("d/m/Y") ?>"                    
-                    data-id-tipo="<?php echo $viaje['id_tipo_viaje']?>">
+                <tr data-id="<?php echo $viaje['id'] ?>">
                     <td><?php echo $index + 1 ?></td>
-    				<td data-nombre="<?php echo $viaje['nombre'] ?>"
-                        data-descripcion="<?php echo $viaje['descripcion'] ?>" >
+    				<td>
                         <?php echo $viaje['nombre'] ?>                    
                     </td>
-                    <td data-precio="<?php echo $viaje['precio'] ?>">
+                    <td>
                         <?php echo $viaje['precio'] ?>                            
                     </td>
-                    <td data-dias="<?php echo $viaje['dias_duracion'] ?>" 
-                        data-noches="<?php echo $viaje['noches_duracion'] ?>"
-                        data-devolucion="<?php echo $viaje['dias_espera_devolucion'] ?>">
+                    <td>
                         <?php echo $viaje['dias_duracion'] ?>
                     </td>
-                    <td data-minimo="<?php echo $viaje['minimo'] ?>" 
-                        data-maximo="<?php echo $viaje['maximo'] ?>">
+                    <td>
                         <?php echo $viaje['minimo']." - ".$viaje['maximo'] ?>
                     </td>
                     <td>
@@ -70,14 +63,10 @@
                         <?php endif; ?>
                     </td>
     				<td>
-    					<button title="Editar viaje" type="button" class="btn-edit-log btn btn-warning" 
-                            data-id="<?php echo $viaje['id'] ?>">
+    					<button title="Editar viaje" type="button" class="btn-edit-log btn btn-warning" data-id="<?php echo $viaje['id'] ?>">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button title="<?php echo $title ?>" type="button" 
-                            class="btn-toggle-status btn <?php echo $btnToggleClass ?>" 
-                            data-id="<?php echo $viaje['id'] ?>"
-                            data-status="<?php echo $viaje['status'] ?>">
+                        <button title="<?php echo $title ?>" type="button" class="btn-toggle-status btn <?php echo $btnToggleClass ?>" data-id="<?php echo $viaje['id'] ?>" data-status="<?php echo $viaje['status'] ?>">
                             <i class="fas <?php echo $icon?>"></i>
                         </button>
     				</td>
