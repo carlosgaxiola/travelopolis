@@ -3,19 +3,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class ViajeroModelo extends CI_Model {
 
-	const PERFIL_GUIA = 2;
-	const PERFIL_ADMIN = 1;
-	const PERFIL_VIAJERO = 3;
+	private $PERFIL_GUIA = 2;
+	private $PERFIL_ADMIN = 1;
+	private $PERFIL_VIAJERO = 3;
 
 	public function __construct() {
 		parent::__construct();
 	}
 
 	public function viajes ($idUsuario) {
-		$this->db->select("vias.*");
-		$this->db->join("detalle_viajes det", "det.id_viaje = vias.id");
+		$this->db->select("via.*");
+		$this->db->join("detalle_viajes det", "det.id_viaje = via.id");
 		$this->db->where("det.id_viajero", $idUsuario);
-		$viajes = $this->db->get("viajes vias");
+		$viajes = $this->db->get("viajes via");
 		$total = $viajes->num_rows();
 		if ($total > 0) {
 			$viajes = $viajes->result_array();
@@ -26,23 +26,25 @@ class ViajeroModelo extends CI_Model {
 	}
 
 	public function buscar ($usuario) {				
-		$this->db->where("usuario", $usuario);		
-		$usuario = $this->db->get("usuarios");
+		$this->db->select("usuarios.*, perfiles.nombre as perfil");
+		$this->db->where("usuario", $usuario);
+		$this->db->join("perfiles", "perfiles.id = usuarios.id_perfil");		
+		$usuario = $this->db->get("usuarios");		
 		if ($usuario->num_rows() > 0) {
-			$usuario = $usuario->result_array();
+			$usuario = $usuario->row_array();
 			$this->db->where("id_usuario", $usuario['id']);
 			switch ($usuario['id_perfil']) {
-				case PERFIL_ADMIN:
-				case PERFIL_GUIA:
+				case $this->PERFIL_ADMIN:
+				case $this->PERFIL_GUIA:
 					$persona = $this->db->get("empleados");
 					break;
-				case PERFIL_VIAJERO:
+				case $this->PERFIL_VIAJERO:
 					$persona = $this->db->get("viajeros");
 					break;
 			}
 			if ($persona->num_rows() > 0) {
 				$persona = $persona->result_array();
-				return array_merge($persona, $usuario);
+				return array("usuario" => $usuario, "persona" => $persona);
 			}
 			return false;
 		}

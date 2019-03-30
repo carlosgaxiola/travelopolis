@@ -19,11 +19,8 @@ class Perfil extends CI_Controller {
 		$usuario = $this->input->get("usuario");		
 		if (empty($usuario))
 			show_404();
-		else {
-			if (strcmp($usuario, $this->session->userdata("nombre")) == 0)
-				$usuario = $this->session->userdata();
-			else
-				$usuario = $this->ViajeroModelo->buscar($usuario);
+		else {			
+			$usuario = $this->ViajeroModelo->buscar($usuario);
 			$viajes = $this->ViajeroModelo->viajes($this->session->userdata("id_usuario"));
 			$perfil = array(
 				'titulo' => 'Perfil',
