@@ -114,13 +114,18 @@
 								<div class="form-group row">
 									<label for="txtDescripcion" class="col-sm-2" style="padding-left: 0px; margin-right: 0px; padding-right: 0px; width: 10%; margin-left: 6.5%;">Descripción</label>
 									<div class="col-sm-10">
-										<textarea type="text" name="txtDescripcion" class="form-control" id="txtDescripcion">
+										<textarea style="resize: none;" type="text" name="txtDescripcion" class="form-control" id="txtDescripcion">
 											<?php echo $persona['informacion'] ?>
 										</textarea>
 									</div>
 								</div>
-								<div class="form-group">
-									<button type="button" class="btn btn-default" id="btn-cambiar">Cambiar usuario y/o contraseña</button>
+								<div class="form-group row">
+									<div class="col-md-6 col-md-offset-2">
+										<button type="button" class="btn btn-primary" id="btn-guardar">Guardar cambios</button>
+									</div>
+									<div class="col-md-3" style="margin-left: 5%;">										
+										<button type="button" class="btn btn-default" id="btn-cambiar">Cambiar usuario y/o contraseña</button>
+									</div>
 								</div>
 							</form>
 						</div>		
