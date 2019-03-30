@@ -10,10 +10,20 @@
         <span class="text-muted"><?php echo $viaje['noches_duracion'] ?></span>
 
         &nbsp;&nbsp;&nbsp;<strong><i class="fas fa-calendar margin-r-5"></i>Inicio</strong>
-        <span class="text-muted"><?php echo $viaje['f_inicio'] ?></span>
+        <span class="text-muted">
+            <?php 
+                $inicio = new datetime($viaje['f_inicio']);
+                echo $inicio->format("d/m/Y");
+            ?>                
+        </span>
 
         &nbsp;&nbsp;&nbsp;<strong><i class="fas fa-calendar margin-r-5"></i>Fin</strong>
-        <span class="text-muted"><?php echo $viaje['f_fin'] ?></span>
+        <span class="text-muted">
+            <?php 
+                $fin = new datetime($viaje['f_fin']);
+                echo $fin->format("d/m/Y");
+            ?>                
+        </span>
 
         &nbsp;&nbsp;&nbsp;<strong><i class="fas fa-calendar-times margin-r-5"></i>Dias para cancelar</strong>
         <span class="text-muted"><?php echo $viaje['dias_espera_devolucion'] ?></span>
