@@ -39,7 +39,7 @@
 					<input type="password" class="required contra" id="txtConfirmar" name="txtConfirmar">
 					<label for="txtConfirmar">Confirmar Contraseña *</label>			
 				</div>
-				<button type="button" class="btn btn-primary bg-blue" id="btn-registrar">
+				<button type="submit" class="btn btn-primary bg-blue" id="btn-registrar">
 					Registrarse
 				</button>
 				&nbsp;&nbsp;&nbsp;&nbsp;Ó&nbsp;&nbsp;&nbsp;&nbsp;

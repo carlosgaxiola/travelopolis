@@ -19,6 +19,9 @@ class Inicio extends CI_Controller {
 			$sessionData = array('id_perfil' => 5);
 			$this->session->set_userdata($sessionData);
 		}
+		else {
+			$this->session->set_userdata("admin_active", false);
+		}
 		$data = array('viajes' => $this->Modelo->listar("viajes", null, 1));
 		$this->load->view("index", $data);
 	}
@@ -35,7 +38,7 @@ class Inicio extends CI_Controller {
 						$persona = $this->Modelo->buscar("empleados", $usuario["id"], "id_usuario");
 					else
 						$persona = $this->Modelo->buscar("viajeros", $usuario['id'], 'id_usuario');
-					$descripcion = isset($persona['descripcion'])? $persona['descripcion']: '';	
+					$descripcion = isset($persona['informacion'])? $persona['informacion']: '';	
 					$data = array(
 						'usuario' => $usuario["usuario"],
 						'id_usuario' => $usuario["id"],

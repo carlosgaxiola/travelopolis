@@ -1,6 +1,6 @@
 <?php if (isset($viaje)): ?> 
     <?php $ancla = base_url("viajes?buscar=".str_replace(" ", "+", ($viaje['nombre'])))?>
-    <div class="box box-widget widget-user-2" style="margin: 5% 10%; box-shadow: 5px 5px 20px;">
+    <div class="box box-widget widget-user-2" style="margin-left: 3%; margin-top: 3%; width: 90%; box-shadow: 5px 5px 20px;">
         <?php 
             $imagen = '';
             if (isset($viaje['url_imagen']))

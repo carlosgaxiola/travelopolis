@@ -14,7 +14,7 @@
 		<div class="row">
 			<div class="form-group col-md-3">
 				<label for="txtNombre">Nombre:</label>
-				<input type="text" class="form-control Letras" name="txtNombre" id="txtNombre" maxlength="45">
+				<input type="text" class="form-control LetrasNumeros" name="txtNombre" id="txtNombre" maxlength="45">
 			</div>
 			<div class="form-group col-md-4">				
 				<div class="row">

@@ -35,6 +35,8 @@ class ViajesModelo extends CI_Model {
 	public function viajes ($status = -1) {
 		if ($status != -1)
 			$this->db->where("status", $status);
+		$this->db->select("viajes.*, tipo.nombre as tipo");
+		$this->db->join("tipos_viaje tipo", "tipo.id = viajes.id_tipo_viaje");
 		$viajes = $this->db->get("viajes");
 		if ($viajes->num_rows() > 0)
 			return $viajes->result_array();

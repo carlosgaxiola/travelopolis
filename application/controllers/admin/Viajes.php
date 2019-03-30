@@ -9,6 +9,12 @@ class Viajes extends CI_Controller {
 	private $tbl_tipos_viaje = "tipos_viaje";
 	private $tbl_dias_viaje = "dias_viajes";
 
+	private $ABRIR_REGITRO = 1;
+	private $CERRAR_REGISTRO = 2;
+	private $INACTIVO = 0;
+	private $EN_CURSO = 4;
+	private $REALIZADO = 3;
+
 	public function __construct () {
 		parent::__construct();
 		$this->load->model("Modelo");
@@ -18,7 +24,7 @@ class Viajes extends CI_Controller {
 	}
 
 	public function index () {
-		if (hasAccess($this->session->userdata("id_perfil"), $this->modulo['id'])) {
+		if ($this->session->userdata("admin_active") && hasAccess($this->session->userdata("id_perfil"), $this->modulo['id'])) {
 			$tiposViaje = $this->Modelo->listar($this->tbl_tipos_viaje);
 			$data = array(
 				'allowAdd' => true,
@@ -38,6 +44,8 @@ class Viajes extends CI_Controller {
 		if ($this->input->is_ajax_request()) {
 			if ($this->validar()) {
 				$fecha = DateTime::createFromFormat('d/m/Y', $this->input->post("fecha"));
+				$fechaInicio = DateTime::createFromFormat("d/m/Y", $this->input->post("txtFechaInicio"));
+				$fechaFin = DateTime::createFromFormat("d/m/Y", $this->input->post("txtFechaFin"));
 				$viaje = array(
 					'nombre' => $this->input->post("txtNombre"),
 					'descripcion' => $this->input->post("txtDescripcion"),
@@ -47,8 +55,8 @@ class Viajes extends CI_Controller {
 					'noches_duracion' => $this->input->post("txtNoches"),
 					'dias_espera_devolucion' => $this->input->post("txtDiasDevolucion"),
 					'precio' => $this->input->post("txtPrecio"),
-					'f_inicio' => $this->input->post("txtFechaInicio"),
-					'f_fin' => $this->input->post("txtFechaFin"),
+					'f_inicio' => $fechaInicio->format("Y-m-d"),
+					'f_fin' => $fechaFin->format("Y-m-d"),
 					'id_tipo_viaje' => $this->input->post("cmbTipoViaje"),
 					'f_registro' => $fecha->format("Y-m-d"),
 					'status' => 0 //Estado inactivo
@@ -78,11 +86,11 @@ class Viajes extends CI_Controller {
 	}
 
 	public function edit () {
-		if ($this->input->is_ajax_request()) {			
+		if ($this->input->is_ajax_request()) {
 			$idViaje = $this->input->post("idViaje");
 			$fechaInicio = DateTime::createFromFormat('d/m/Y', $this->input->post("txtFechaInicio"));
 			$fechaFin = DateTime::createFromFormat('d/m/Y', $this->input->post("txtFechaFin"));
-			if ($this->validar($idViaje)) {				
+			if ($this->validar($idViaje)) {
 				$viaje = array(
 					'nombre' => $this->input->post("txtNombre"),
 					'descripcion' => $this->input->post("txtDescripcion"),
@@ -96,8 +104,25 @@ class Viajes extends CI_Controller {
 					'f_fin' => $fechaFin->format("Y-m-d"),
 					'id_tipo_viaje' => $this->input->post("cmbTipoViaje")					
 				);
-				$this->Modelo->actualizar($this->tbl_viajes, $idViaje, $viaje);
-				echo $idViaje;
+				$dias = $this->input->post("dias");
+				if (is_array($dias) and !empty($dias)) {
+					$this->Modelo->actualizar($this->tbl_viajes, $idViaje, $viaje);
+					$this->Modelo->borrar($this->tbl_dias_viaje, "id_viaje", $idViaje);
+					foreach ($dias as $index => $dia) {
+						$fechaDia = DateTime::createFromFormat('d/m/Y', $dia['fecha']);
+						$dataDia = array(
+							'id_viaje' => $idViaje,
+							'nombre' => $dia['nombre'],
+							'descripcion' => $dia['descripcion'],
+							'f_dia' => $fechaDia->format("Y-m-d"),
+							'indice' => 'dia'.($index + 1).'viaje'.$idViaje
+						);
+						$this->Modelo->insertar($this->tbl_dias_viaje, $dataDia);
+					}
+					echo $idViaje;					
+				}
+				else
+					echo "Los días no pueden estar vacios";
 			}
 			else				
 				echo validation_errors("<li>", "</li>");		
@@ -183,6 +208,24 @@ class Viajes extends CI_Controller {
 	public function dias () {
 		if ($this->input->is_ajax_request()) {
 			echo json_encode($this->ViajesModelo->listarDias());
+		}
+		else
+			show_404();
+	}
+
+	public function abrir ($idViaje) {
+		if ($this->input->is_ajax_request()) {			
+			$data = array("status" => $this->ABRIR_REGITRO);
+			echo $this->Modelo->actualizar($this->tbl_viajes, $idViaje, $data);
+		}
+		else
+			show_404();
+	}
+
+	public function cerrar ($idViaje) {
+		if ($this->input->is_ajax_request()) {
+			$data = array("status" => $this->CERRAR_REGISTRO);
+			echo $this->Modelo->actualizar($this->tbl_viajes, $idViaje, $data);
 		}
 		else
 			show_404();
