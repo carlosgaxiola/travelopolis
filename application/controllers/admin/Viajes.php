@@ -88,6 +88,7 @@ class Viajes extends CI_Controller {
 	public function edit () {
 		if ($this->input->is_ajax_request()) {
 			$idViaje = $this->input->post("idViaje");
+			$fecha = DateTime::createFromFormat("d/m/Y", $this->input->post("fecha"));
 			$fechaInicio = DateTime::createFromFormat('d/m/Y', $this->input->post("txtFechaInicio"));
 			$fechaFin = DateTime::createFromFormat('d/m/Y', $this->input->post("txtFechaFin"));
 			if ($this->validar($idViaje)) {
@@ -225,6 +226,24 @@ class Viajes extends CI_Controller {
 	public function cerrar ($idViaje) {
 		if ($this->input->is_ajax_request()) {
 			$data = array("status" => $this->CERRAR_REGISTRO);
+			echo $this->Modelo->actualizar($this->tbl_viajes, $idViaje, $data);
+		}
+		else
+			show_404();
+	}
+
+	public function empezar ($idViaje) {
+		if ($this->input->is_ajax_request()) {
+			$data = array("status" => $this->EN_CURSO);
+			echo $this->Modelo->actualizar($this->tbl_viajes, $idViaje, $data);
+		}
+		else
+			show_404();
+	}
+
+	public function terminar ($idViaje) {
+		if ($this->input->is_ajax_request()) {
+			$data = array("status" => $this->REALIZADO);
 			echo $this->Modelo->actualizar($this->tbl_viajes, $idViaje, $data);
 		}
 		else

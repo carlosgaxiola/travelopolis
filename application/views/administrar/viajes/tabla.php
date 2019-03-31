@@ -1,13 +1,15 @@
 <table id="tblViajes" class="table no-margin table-striped" style="width:100%" data-table>
-	<thead>        
-        <th>#</th>    					                
-        <th>Nombre</th>        
+	<thead>
+        <th>#</th>
+        <th>Nombre</th>
         <th>Precio</th>
         <th>Duración</th>
         <th>Tipo</th>
+        <th>Inicio</th>
+        <th>Fin</th>
         <th>Viajeros</th>
         <th>Estado</th>
-        <th>Opciones</th>        
+        <th>Opciones</th>
     </thead>
     <tbody id="contenidoTabla">     
     	<?php if (isset($registros) and !empty($registros) and is_array($registros)): ?>            
@@ -19,31 +21,43 @@
                 <tr data-id="<?php echo $viaje['id'] ?>">
                     <td><?php echo $index + 1 ?></td>
     				<td>
-                        <?php echo trim($viaje['nombre'], " ") ?>
+                        <?php echo $viaje['nombre'] ?>
                     </td>
                     <td>
-                        <?php echo trim($viaje['precio'], " ") ?>
+                        <?php echo $viaje['precio'] ?>
                     </td>
                     <td>
-                        <?php echo trim($viaje['dias_duracion'], " ") ?>
+                        <?php echo $viaje['dias_duracion'] ?>
                     </td>
                     <td>
-                        <?php echo trim($viaje['tipo'], " ") ?>
+                        <?php echo $viaje['tipo'] ?>
                     </td>
                     <td>
-                        <?php echo trim($viaje['minimo'], " ")." - ".trim($viaje['maximo'], " ") ?>
+                        <?php 
+                            $inicio = new datetime($viaje['f_inicio']);
+                            echo $inicio->format("d/m/Y");
+                        ?>
+                    </td>
+                    <td>
+                        <?php 
+                            $fin = new datetime($viaje['f_fin']);
+                            echo $fin->format("d/m/Y");
+                        ?>
+                    </td>
+                    <td>
+                        <?php echo $viaje['minimo']." - ".$viaje['maximo'] ?>
                     </td>
                     <td>
                         <?php if ($viaje['status'] == 0): ?>
-                            <?php 
-                                $title = "Abrir registro"; 
+                            <?php
+                                $title = "Abrir registro";
                                 $icon = "fa-door-closed";
                                 $btnToggleClass = "btn-primary btn-abrir-registro";
                             ?>
                             <span class="label label-danger">Inactivo</span>
                         <?php elseif ($viaje['status'] == 1): ?>
                             <?php
-                                $title = "Cerrar registro"; 
+                                $title = "Cerrar registro";
                                 $icon = "fa-door-open";
                                 $btnToggleClass = "btn-success btn-cerrar-registro";
                             ?>
@@ -55,10 +69,10 @@
                                 $btnToggleClass = "btn-default btn-empezar";
                             ?>
                             <span class="label label-success">Listo</span>
-                        <?php elseif ($viaje['status'] == 4): ?>}
+                        <?php elseif ($viaje['status'] == 4): ?>
                             <?php 
                                 $title = "Terminar";
-                                $icon = "fa-check";
+                                $icon = "fa-times";
                                 $btnToggleClass = "btn-default btn-terminar";
                             ?>
                             <span class="label label-primary">En curso</span>
