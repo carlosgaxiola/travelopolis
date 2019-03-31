@@ -111,7 +111,9 @@ class Guias extends CI_Controller {
 		$uNSS = "|is_unique[".$this->tabla.".".$this->guia_nss."]";
 		$uCorreo = "|is_unique[".$this->tabla.".".$this->guia_correo."]";
 		$uNombre = "|is_unique[".$this->sndTable.".".$this->usu_nombre."]";
-
+		$rContra = ($this->input->post("txtContra"))? "|required": '';
+		$rConfirm = ($this->input->post("txtConfirmar"))? "|required|matches[txtContra]": '';
+		
 		if ($idGuia != 0) {					
 			$guia = $this->Modelo->buscar($this->tabla, $idGuia);
 			if ($guia[$this->guia_telefono] == $this->input->post("txtTelefono"))
@@ -127,9 +129,7 @@ class Guias extends CI_Controller {
 		if ($idUsuario != 0) {
 			$usuario = $this->Modelo->buscar($this->sndTable, $idUsuario);
 			if ($usuario[$this->usu_nombre] == $this->input->post("txtUsuario"))
-				$uNombre = "";
-			$rContra = ($this->input->post("txtContra"))? "|required": '';
-			$rConfirm = ($this->input->post("txtConfirmar"))? "|required|matches[txtContra]": '';
+				$uNombre = "";			
 		}
 		
 		//Validaciones de usuario
