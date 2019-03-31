@@ -2,7 +2,7 @@
 	if (isset($usuario['persona'])) {
 		$persona = $usuario['persona'][0];
 		$usuario = $usuario['usuario'];
-	}
+	}	
 ?>
 <?php $this->load->view("Global/header") ?>
 <section class="content">
@@ -80,7 +80,9 @@
 					</div>
 					<?php if (strcmp($usuario['usuario'], $this->session->userdata("usuario")) == 0): ?>
 						<div class="tab-pane" id="settings">
-							<form class="form-horizontal" id="frmPerfil">
+							<div class="alert alert-danger" id="msg-error" hidden>								
+							</div>
+							<form class="form-horizontal" id="frmPerfil">								
 								<div class="form-group">
 									<label for="txtNombre" class="col-sm-2 control-label">Nombre</label>
 									<div class="col-sm-10">
@@ -128,6 +130,38 @@
 									</div>
 								</div>
 							</form>
+							<form action="" class="form-horizontal" id="frmCambiarContra" hidden="true">
+								<div class="form-group">
+									<label for="txtContra" class="col-sm-3">
+										Contraseña Actual:
+									</label>
+									<div class="col-sm-4">
+										<input type="password" class="form-control" name="txtContra" id="txtContra">
+									</div>
+									</div>
+								<div class="form-group">
+									<label for="txtConfirmar" class="col-sm-3">
+										Confirmar Contraseña:
+									</label>
+									<div class="col-sm-4">
+										<input type="password" class="form-control" id="txtConfirmar" name="txtConfirmar">
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="txtNuevaContra" class="col-sm-3">
+										Nueva Contraseña:
+									</label>
+									<div class="col-sm-4">
+										<input type="password" id="txtNuevaContra" name="txtNuevaContra" class="form-control">
+									</div>
+								</div>
+								<br><br>
+								<div class="form-group">
+									<button type="button" id="btn-cambiar-contra" class="btn btn-lg btn-primary pull-left">
+										Cambiar
+									</button>
+								</div>
+							</form>
 						</div>		
 					<?php endif; ?>
 				</div>		
@@ -139,5 +173,100 @@
 <script>
 	$(document).ready( function () {
 		$("#txtDescripcion").text($("#txtDescripcion").text().trim())
+
+		$("#btn-guardar").click(function () {
+				let nuevosDatos = {
+					nombre: $("#txtNombre").val(),
+					paterno: $("#txtAPaterno").val(),
+					materno: $("#txtAMaterno").val(),
+					correo: $("#txtCorreo").val(),
+					usuario: $("#txtUsuario").val(),
+					descripcion: $("#txtDescripcion").val()
+				}
+				$.ajax({
+					url: base_url +  "perfil/cambiar",
+					type: "POST",
+					data: nuevosDatos,
+					success: function (res) {
+						try {
+							res = parseInt(res)
+							if (!isNaN(res)) {
+								switch (res) {
+									case 0:
+										BootstrapDialog.alert({
+											title: "Error",
+											message: "Ocurrio un error desconocido",
+											type: BootstrapDialog.TYPE_DANGER,
+											size: BootstrapDialog.SIZE_SMALL
+										})
+										break;
+									default:
+										BootstrapDialog.show({
+											title: "Datos cambiados",
+											message: "Se cambio su información satisfactoriamente",
+											type: BootstrapDialog.TYPE_SUCCESS,
+											size: BootstrapDialog.SIZE_SMALL
+										});										
+										break;
+								}
+								$("#msg-error").html("");
+								$("#msg-error").hide();
+							}
+							else {
+								$("#msg-error").html(res);
+								$("#msg-error").show();
+							}
+						}
+						catch (e) {
+							console.error(e);
+						}
+					}
+				})
+		})
+		
+		$("#btn-cambiar").click( function () {
+			$("#frmPerfil").hide()
+			$("#frmCambiarContra").show()
+		})
+
+		$("#btn-cambiar-contra").click( function () {			
+			$.ajax({
+				url: base_url + "perfil/cambiar_contra",
+				data: {
+					contra: $("#txtContra").val(),
+					confirmar: $("#txtConfirmar").val(),
+					nueva: $("#txtNuevaContra").val(),
+					id: '<?php echo $usuario['id'] ?>'
+				},
+				type: "POST",
+				success: function (res) {
+					try {						
+						if (isNaN(parseInt(res))) {
+							$("#msg-error").html(res)
+							$("#msg-error").show()								
+						}
+						else {
+							if (parseInt(res) != 0)
+								BootstrapDialog.show({
+									title: "Datos cambiados",
+									message: "Se cambio la contraseña satisfactoriamente",
+									type: BootstrapDialog.TYPE_SUCCESS,
+									size: BootstrapDialog.SIZE_SMALL
+								})
+							else
+								BootstrapDialog.show({
+									title: "Error",
+									message: "Ocurrio un error desconocido",
+									type: BootstrapDialog.TYPE_DANGER,
+									size: BootstrapDialog.SIZE_SMALL
+								})
+						}
+					}
+					catch (e) {
+						console.error(e)
+					}
+				}
+			})			
+		})
 	})
 </script>

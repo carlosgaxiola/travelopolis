@@ -40,7 +40,7 @@
 		mes = mes < 10? "0" + mes: mes;				
 		return dia + "/" + mes + "/" + año;			
 	}
-
+	
 	$(document).ready( function () {
 		base_url = '<?php echo base_url() ?>';
 		tabla = $("table[data-table]").DataTable({
