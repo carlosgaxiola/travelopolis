@@ -56,7 +56,7 @@ class Inicio extends CI_Controller {
 						'per_status' => $persona['status'],
 						'telefono' => $persona['telefono'],						
 						'admin_active' => false,
-						'descripcion' => $descripcion,
+						'informacion' => $descripcion,
 						'login' => true
 					);
 					if ($usuario['id_perfil'] != 3) {
@@ -100,14 +100,14 @@ class Inicio extends CI_Controller {
 		if ($this->input->is_ajax_request()) {
 			$this->form_validation->set_rules("txtNombre", "Nombre", "required");
 			$this->form_validation->set_rules("txtUsuario", "Usuario", "required|is_unique[usuarios.usuario]");
-			$this->form_validation->set_rules("txtCorreo", "Correo", "required|valid_email|is_unique[viajeros.corre]");
+			$this->form_validation->set_rules("txtCorreo", "Correo", "required|valid_email|is_unique[viajeros.correo]");
 			$this->form_validation->set_rules("txtAPaterno", "Apellido Paterno", "required");
 			$this->form_validation->set_rules("txtAMaterno", "Apellido Materno", "required");
 			$this->form_validation->set_rules("txtTelefono", "Teléfono", "required|numeric");
 			$this->form_validation->set_rules("txtContra", "Contraseña", "required");
 			$this->form_validation->set_rules("txtConfirmar", "Confirmar Contraseña", "required|matches[txtContra]");
 			if ($this->form_validation->run()) {
-				$fecha = new datetime();
+				$fecha = DateTime::createFromFormat("d/m/Y", $this->input->post("fecha"));;
 				$usuarioData = array(
 					'usuario' => $this->input->post("txtUsuario"),
 					'contraseña' => sha1($this->input->post("txtContra")),
@@ -129,8 +129,10 @@ class Inicio extends CI_Controller {
 					);
 					$idViajero = $this->Modelo->insertar("viajeros", $viajeroData);
 					if ($idViajero != false) {						
-						$fullName = $nombre." ".$paterno." ".$materno;						
-						$this->autoLogin($idViajero, $idUsuario, $usuarioData, $viajeroData, $fullName);						
+						$viajeroData['completo'] = $viajeroData['nombre']." ".$viajeroData['a_paterno']." ".$viajeroData['a_materno'];
+						$viajeroData['token'] = $token = sha1("idViajero").sha1($idViajero).sha1("idUsuario").sha1($idUsuario);
+						$this->mandarConfirmacion($viajeroData, $token);
+						echo $idViajero;
 					}
 					else {						
 						$this->session->set_flashdata("error_crear", "No se pudo crear el usuario");
@@ -149,28 +151,30 @@ class Inicio extends CI_Controller {
 			show_404();		
 	}
 
-	private function mandarConfirmacion ($usuario, $correo, $token) {
+	private function mandarConfirmacion ($data, $token) {
 	    $this->load->library('email');
 	    $config = array(
-	    	'protocol' => 'stmp',
-       		'stmp_host' => 'stmp.gmail.com',
-       		'stmp_user' => 'cahernandezgaxiola@gmail.com',
-       		'stmp_pass' => 'breakingall',
-       		'stmp_port' => '587',
+	    	'protocol' => 'smtp',
+       		'smtp_host' => 'ssl://smtp.googlemail.com',
+       		'smtp_port' => 465,
+       		'smtp_user' => '2016030023@upsin.edu.mx',
+       		'smtp_pass' => 'upsF5664',
+       		'maintype' => 'html',
        		'charset' => 'utf-8',
        		'wordwrap' => true,
        		'validate' => true
 	    );
 		$this->email->initialize($config);      
 		$this->email->from('travelopolis.ddns.net', 'Travelopolis');
-		$this->email->to($correo, $usuario);              
+		$this->email->to($data['correo'], $data['completo']);
 		$this->email->subject("Confirmación de registro de cuenta");
+		$data['token'] = $token;
 		$this->email->message($this->load->view("global/formato_confrimacion_correo", $data ,true));
-		return $this->email->send();			 
+		return $this->email->send();
 	}
 
 	private function autoLogin ($idViajero, $idUsuario, $usuarioData, $viajeroData) {
-		$token = sha1("idViajero").$idViajero.sha1("idUsuario").$idUsuario;
+		$token = sha1("idViajero").sha1($idViajero).sha1("idUsuario").sha1($idUsuario);
 		$data = array(
 			'usuario' => $usuarioData["usuario"],
 			'id_usuario' => $idUsuario,
@@ -188,12 +192,12 @@ class Inicio extends CI_Controller {
 			'per_status' => $viajeroData['status'],
 			'telefono' => $viajeroData['telefono'],						
 			'admin_active' => false,
-			'login' => true
+			'login' => true			
 		);		
 		$this->session->set_userdata($data);
 		$this->session->set_flashdata("btn-reenviar", "<button id='btn-reenviar' type='button' class='btn btn-primary'>Reenviar/button>");
-		$this->session->set_flashdata("btn-cambiar-correo", "<button id='btn-cambiar-correo' type='button' class='btn btn-primary'>Cambiar correo</button>");
-		if ($this->mandarConfirmacion($data['completo'], $data['correo'], $token)) {
+		$this->session->set_flashdata("btn-cambiar-correo", "<button id='btn-cambiar-correo' type='button' class='btn btn-primary'>Cambiar correo</button>");		
+		if ($this->mandarConfirmacion($data, $token)) {
 			$this->session->set_flashdata("revisar_correo", "Bienvenido ".$data['completo']."<br>Hemos enviado a su correo un mensaje de verificacion, porfavor no haga caso omiso o su cuenta sera eliminada");
 		}
 		else {
