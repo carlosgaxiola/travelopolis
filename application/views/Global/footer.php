@@ -1,15 +1,3 @@
-	<?php 
-		$noMargin = "style='margin-left: 0px;'";		
-		if ($this->session->userdata("admin_active")) {		
-			$noMargin = "";
-		}
-	?>
-	<footer class="main-footer" <?php echo $noMargin ?>>
-	    <div class="pull-right hidden-xs">
-	      	<b>Version</b> 0.4
-	    </div>
-	    <strong>Copyright &copy; 2019 <a href="<?php echo base_url() ?>">Travelopolis</a>.</strong> All rights reserved.
-	</footer>
 </div>
 <!-- ./wrapper -->
 <!-- JQuery 3 -->
@@ -40,7 +28,7 @@
 		mes = mes < 10? "0" + mes: mes;				
 		return dia + "/" + mes + "/" + año;			
 	}
-	
+
 	$(document).ready( function () {
 		base_url = '<?php echo base_url() ?>';
 		tabla = $("table[data-table]").DataTable({
