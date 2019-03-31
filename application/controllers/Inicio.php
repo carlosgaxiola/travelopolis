@@ -22,7 +22,7 @@ class Inicio extends CI_Controller {
 		else {
 			$this->session->set_userdata("admin_active", false);
 		}
-		$data = array('viajes' => $this->Modelo->listar("viajes", null, 1));
+		$data = array('viajes' => $this->Modelo->listar("listar_viajes", null, 1));
 		$this->load->view("index", $data);
 	}
 

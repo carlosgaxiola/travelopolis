@@ -1,10 +1,24 @@
 <div class="box box-widget widget-user">
     <?php 
-        $imagen = '';
-        if (isset($viaje['imagen']) && !empty($viaje['imagen']))
-            $imagen = 'style="background: url('."'".base_url("assets/images/".$viaje['imagen'])."') center center;";
+        switch ($viaje['tipo_viaje']) {
+            case "Arqueologíco":
+                $imagen = "piramide_normal.jpg";
+                break;
+            case "Playero":
+                $imagen = "playa_normal.jpg";
+                break;
+            case "Natural":
+                $imagen = "bosque_normal.jpg";
+                break;
+            case "Pueblo":
+                $imagen = "pueblo_normal.jpg";
+                break;
+            case "Cabaña":
+                $imagen = "cabana_normal.jpg";
+                break;
+        }
     ?>
-    <div class="widget-user-header bg-blue" <?php echo $imagen ?>>
+    <div class="widget-user-header bg-blue" style="background: url('<?php echo base_url("assets/images/viajes/$imagen") ?>') center center;">
         <h3 class="widget-user-username"><?php echo $viaje['nombre'] ?></h3>
         <h5 class="widget-user-desc"><?php echo $viaje['descripcion'] ?></h5>
     </div>
