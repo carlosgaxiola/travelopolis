@@ -91,7 +91,7 @@ $(document).ready( function () {
 //Genericas
 function setFormLog (guia) {
 	if (guia != null && guia != undefined) {
-		$("#idGuia").val(guia.idGuia)		
+		$("#idGuia").val(guia.id)		
 		$("#txtNombre").val(guia.nombre)
 		$("#txtAMaterno").val(guia.aMaterno)
 		$("#txtAPaterno").val(guia.aPaterno)

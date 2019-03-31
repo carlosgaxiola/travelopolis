@@ -75,12 +75,13 @@ class Guias extends CI_Controller {
 	public function edit () {
 		if ($this->input->is_ajax_request()) {			
 			$idGuia = $this->input->post("idGuia");
-			$idUsaurio = $this->input->post("idUsuario");
-			if ($this->validacion($idGuia, $idUsuario)) {
-				$usuario = array(
-					'usuario' => $this->input->post("txtUsuario"),
-					'contraseña' => $this->input->post("txtContra")
-				);
+			$guia = $this->Modelo->buscar("empleados", $idGuia);
+			$usuario = $this->Modelo->buscar("usuarios", $guia['id_usuario']);
+			if ($this->validacion($idGuia, $usuario['id'])) {
+				$usuario['usuario'] = $this->input->post("txtUsuario");
+				if ($this->input->post("txtContra")) {
+					$usuario['contraseña'] = sha1($this->input->post("txtContra"));
+				}
 				$guia = array(
 					'nombre' => $this->input->post("txtNombre"),
 					'a_materno' => $this->input->post("txtAMaterno"),
@@ -90,9 +91,12 @@ class Guias extends CI_Controller {
 					'correo' => $this->input->post("txtCorreo"),
 					'telefono' => $this->input->post("txtTelefono")
 				);
-				$usuarioActualizado = $this->Modelo->actualizar($this->sndTable, $idUsaurio, $usuario);
-				$guiaActualizado = $this->Modelo->actualizar($this->tabla, $idGuia, $guia);			
-				echo ($usuarioActualizado || $guiaActualizado);
+				$usuarioActualizado = $this->Modelo->actualizar($this->sndTable, $usuario['id'], $usuario);
+				$guiaActualizado = $this->Modelo->actualizar($this->tabla, $idGuia, $guia);							
+				if ($usuarioActualizado || $guiaActualizado)
+					echo $idGuia;
+				else
+					echo "0";
 			}
 			else
 				echo validation_errors("<li>", "</li>");
@@ -114,7 +118,7 @@ class Guias extends CI_Controller {
 				$uTelefono = "";
 			if ($guia[$this->guia_rfc] == $this->input->post("txtRFC"))
 				$uRFC = "";
-			if ($guia[$this->guia_nss] == $this->input->pots("txtNSS"))
+			if ($guia[$this->guia_nss] == $this->input->post("txtNSS"))
 				$uNSS = "";
 			if ($guia[$this->guia_correo] == $this->input->post("txtCorreo"))
 				$uCorreo = "";
@@ -122,14 +126,16 @@ class Guias extends CI_Controller {
 
 		if ($idUsuario != 0) {
 			$usuario = $this->Modelo->buscar($this->sndTable, $idUsuario);
-			if ($usuario[$this->usu_nombre] == $this->post("txtUsuario"))
+			if ($usuario[$this->usu_nombre] == $this->input->post("txtUsuario"))
 				$uNombre = "";
+			$rContra = ($this->input->post("txtContra"))? "|required": '';
+			$rConfirm = ($this->input->post("txtConfirmar"))? "|required|matches[txtContra]": '';
 		}
 		
 		//Validaciones de usuario
 		$this->form_validation->set_rules("txtUsuario", "Usuario", "trim|required".$uNombre);
-		$this->form_validation->set_rules("txtContra", "Contraseña", "trim|required");
-		$this->form_validation->set_rules("txtConfirmar", "Confirmar Contraseña", "trim|required|matches[txtContra]");
+		$this->form_validation->set_rules("txtContra", "Contraseña", "trim".$rContra);
+		$this->form_validation->set_rules("txtConfirmar", "Confirmar Contraseña", "trim".$rConfirm);
 		
 		//Validaciones de empleado guia
 		$this->form_validation->set_rules("txtNombre", "Nombre", "trim|required");

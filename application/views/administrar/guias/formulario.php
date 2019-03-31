@@ -2,8 +2,7 @@
 	<button type="button" id="btn-close" class="btn btn-danger col-md-offset-11" title="Cerrar formulario"><i class="fas fa-times"></i></button>
 </div>
 <form id="frmGuia" class="form">	
-	<input type="hidden" name="idGuia" id="idGuia">
-	<input type="hidden" name="idUsuario" id="idUsuario">
+	<input type="hidden" name="idGuia" id="idGuia">	
 	<div class="container-fluid">
 		<div class="row">
 			<div class="form-group col-md-4">
