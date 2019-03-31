@@ -2,7 +2,7 @@
     <section class="sidebar">
         <div class="user-panel">
             <div class="pull-left image">            
-                <img src="<?php echo base_url("assets/images/logo.png") ?>" class="img-circle" alt="User Image">                <?php endif; ?>
+                <img src="<?php echo base_url("assets/images/logo.png") ?>" class="img-circle" alt="User Image"> 
             </div>
             <div class="pull-left info">
                 <p><?php echo $this->session->userdata("usuario") ?></p>
