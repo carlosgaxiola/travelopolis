@@ -195,6 +195,8 @@ function clearFormData () {
 	$("#txtContra").val("")
 	$("#txtConfirmar").val("")
 	$("#idGuia").val("")
+	$("#msg-error").hide()
+	$("#list-error").html()
 }
 
 function toggleLog (that) {
