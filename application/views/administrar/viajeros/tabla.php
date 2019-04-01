@@ -6,6 +6,7 @@
         <th>Edad</th>        
         <th>Teléfono</th>
         <th>Correo</th>
+        <th>Estado</th>
         <th>Opciones</th>
     </thead>
     <tbody id="contenidoTabla">        
@@ -13,13 +14,38 @@
     		<?php foreach ($registros as $index => $viajero): ?>
     			<tr>
                     <td><?php echo $index + 1 ?></td>
-    				<td><?php echo $viajero['nombre'] ?></td>
+    				<td><?php echo $viajero['nombre']." ".$viajero['paterno'] ?></td>
     				<td><?php echo $viajero['sexo'] ?></td>
                     <td><?php echo $viajero['edad'] ?></td>
-                    <th><?php echo $viajero['telefono'] ?></th>
-                    <th><?php echo $viajero['correo'] ?></th>
-    				<td>
-    					<button title="Editar viajero" type="button" class="btn-edit-log btn btn-warning" data-id="<?php echo $viajero['id'] ?>"><i class="fas fa-edit"></i></button>                        
+                    <td><?php echo $viajero['telefono'] ?></td>
+                    <td><?php echo $viajero['correo'] ?></td>
+                    <?php 
+                        if ($viajero['status'] == 2) {
+                            $title = "Dar de alta al viajero";
+                            $btnToggleClass = "btn-toggle-log btn-success";
+                            $iconClass = "fa-toggle-on";
+                            $labelClass = "label-danger";
+                            $labelText = "Inactivo";
+                        }
+                        else if ($viajero['status'] == 1) {
+                            $title = "Dar de baja al viajero";
+                            $btnToggleClass = "btn-toggle-log btn-danger";
+                            $iconClass = "fa-toggle-off";
+                            $labelClass = "label-success";
+                            $labelText = "Verificado";
+                        }
+                        else {
+                            $title = "Borrar viajero";
+                            $btnToggleClass = "btn-danger btn-borrar";
+                            $iconClass = "fa-times";
+                            $labelClass = "label-default";
+                            $labelText = "Sin verificar";
+                        }
+                    ?>
+                    <td><span class="label <?php echo $labelClass ?>"><?php echo $labelText ?></span></td>
+    				<td>                        
+    					<button title="Editar viajero" type="button" class="btn-edit-log btn btn-sm btn-warning" data-id="<?php echo $viajero['id'] ?>"><i class="fas fa-edit"></i></button>                        
+                        <button title="<?php echo $title ?>" class="btn btn-sm <?php echo $btnToggleClass ?>"><i class="fas <?php echo $iconClass ?>"></i></button>
     				</td>
     			</tr>
     		<?php endforeach; ?>

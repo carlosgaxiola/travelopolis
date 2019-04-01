@@ -5,7 +5,7 @@
 	<title>Registro</title>
 </head>
 <body>
-	Bienvenido <?php $completo ?>
-	Token de confirmación: <?php $token ?>
+	Bienvenido <?php echo $viajero['completo'] ?><br>
+	Enlace de verificación: <a href="<?php echo base_url("inicio/validar/").$viajero['token'] ?>"><?php echo base_url("inicio/validar/").$viajero['token'] ?></a>
 </body>
 </html>

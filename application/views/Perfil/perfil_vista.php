@@ -82,54 +82,11 @@
 						<div class="tab-pane" id="settings">
 							<div class="alert alert-danger" id="msg-error" hidden>								
 							</div>
-							<form class="form-horizontal" id="frmPerfil">								
-								<div class="form-group">
-									<label for="txtNombre" class="col-sm-2 control-label">Nombre</label>
-									<div class="col-sm-10">
-										<input type="text" class="form-control" id="txtNombre" value="<?php echo $persona['nombre'] ?>">
-									</div>
-								</div>
-								<div class="form-group">
-									<label for="txtAPaterno" class="col-sm-2 control-label">Apellido Paterno</label>
-									<div class="col-sm-10">
-										<input type="email" class="form-control" id="txtAPaterno" value="<?php echo $persona['a_paterno'] ?>">
-									</div>
-								</div>
-								<div class="form-group">
-									<label for="txtAMaterno" class="col-sm-2 control-label">Apellido Materno</label>
-									<div class="col-sm-10">
-										<input type="text" class="form-control" id="txtAMaterno" value="<?php echo $persona['a_materno'] ?>">
-									</div>
-								</div>
-								<div class="form-group">
-									<label for="txtCorreo" class="col-sm-2 control-label">Correo</label>
-									<div class="col-sm-10">
-										<input type="text" class="form-control" id="txtCorreo" value="<?php echo $persona['correo'] ?>">
-									</div>
-								</div>
-								<div class="form-group">
-									<label for="txtUsuario" class="col-sm-2 control-label">Usuario</label>
-									<div class="col-sm-10">
-										<input type="text" class="form-control" id="txtUsuario" value="<?php echo $usuario['usuario'] ?>">
-									</div>
-								</div>
-								<div class="form-group row">
-									<label for="txtDescripcion" class="col-sm-2" style="padding-left: 0px; margin-right: 0px; padding-right: 0px; width: 10%; margin-left: 6.5%;">Descripción</label>
-									<div class="col-sm-10">
-										<textarea style="resize: none;" type="text" name="txtDescripcion" class="form-control" id="txtDescripcion">
-											<?php echo $persona['informacion'] ?>
-										</textarea>
-									</div>
-								</div>
-								<div class="form-group row">
-									<div class="col-md-6 col-md-offset-2">
-										<button type="button" class="btn btn-primary" id="btn-guardar">Guardar cambios</button>
-									</div>
-									<div class="col-md-3" style="margin-left: 5%;">										
-										<button type="button" class="btn btn-default" id="btn-cambiar">Cambiar usuario y/o contraseña</button>
-									</div>
-								</div>
-							</form>
+							<?php if ($this->session->userdata("id_perfil") == 3): ?>
+								<?php $this->load->view("perfil/form_viajero", array("persona" => $persona, "usuarios" => $usuario)) ?>
+							<?php else: ?>	
+								<?php $this->load->view("perfil/form_empleado", array("persona" => $persona, "usuarios" => $usuario)) ?>
+							<?php endif; ?>
 							<form action="" class="form-horizontal" id="frmCambiarContra" hidden="true">
 								<div class="form-group">
 									<label for="txtContra" class="col-sm-3">
@@ -175,16 +132,35 @@
 		$("#txtDescripcion").text($("#txtDescripcion").text().trim())
 
 		$("#btn-guardar").click(function () {
-				let nuevosDatos = {
-					nombre: $("#txtNombre").val(),
-					paterno: $("#txtAPaterno").val(),
-					materno: $("#txtAMaterno").val(),
-					correo: $("#txtCorreo").val(),
-					usuario: $("#txtUsuario").val(),
-					descripcion: $("#txtDescripcion").val()
-				}
+				<?php if ($this->session->userdata("id_perfil") == 3): ?>
+					<?php $funcion = "editar_viajero" ?>
+					let nuevosDatos = {
+						nombre: $("#txtNombre").val(),
+						paterno: $("#txtAPaterno").val(),
+						materno: $("#txtAMaterno").val(),
+						correo: $("#txtCorreo").val(),
+						usuario: $("#txtUsuario").val(),
+						descripcion: $("#txtDescripcion").val(),
+						telefono: $("#txtTelefono").val(),
+						estado: $("#cmbEstado").val(),
+						sexo: $("#cmbSexo").val()
+					}
+				<?php else: ?>
+					<?php $funcion = "editar_empleado" ?>
+					let nuevosDatos = {
+						nombre: $("#txtNombre").val(),
+						paterno: $("#txtAPaterno").val(),
+						materno: $("#txtAMaterno").val(),
+						correo: $("#txtCorreo").val(),
+						usuario: $("#txtUsuario").val(),
+						descripcion: $("#txtDescripcion").val(),
+						nss: $("#txtNSS").val(),
+						rfc: $("#txtRFC").val(),
+						telefono: $("#txtTelefono").val()
+					}
+				<?php endif; ?>				
 				$.ajax({
-					url: base_url +  "perfil/cambiar",
+					url: base_url +  "perfil/<?php echo $funcion ?>",
 					type: "POST",
 					data: nuevosDatos,
 					success: function (res) {
@@ -229,7 +205,7 @@
 			$("#frmCambiarContra").show()
 		})
 
-		$("#btn-cambiar-contra").click( function () {			
+		$("#btn-cambiar-contra").click( function () {
 			$.ajax({
 				url: base_url + "perfil/cambiar_contra",
 				data: {

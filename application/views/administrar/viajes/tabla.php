@@ -85,10 +85,12 @@
         					<button title="Editar viaje" type="button" class="btn-edit-log btn btn-warning" data-id="<?php echo $viaje['id'] ?>">
                                 <i class="fas fa-edit"></i>
                             </button>
+                        <?php endif; ?>                        
+                        <?php if ($viaje['status'] != 3): ?>
+                            <button title="<?php echo $title ?>" type="button" class="btn <?php echo $btnToggleClass ?>" data-id="<?php echo $viaje['id'] ?>" data-status="<?php echo $viaje['status'] ?>">
+                                <i class="fas <?php echo $icon?>"></i>
+                            </button>
                         <?php endif; ?>
-                        <button title="<?php echo $title ?>" type="button" class="btn <?php echo $btnToggleClass ?>" data-id="<?php echo $viaje['id'] ?>" data-status="<?php echo $viaje['status'] ?>">
-                            <i class="fas <?php echo $icon?>"></i>
-                        </button>
     				</td>
     			</tr>
     		<?php endforeach; ?>

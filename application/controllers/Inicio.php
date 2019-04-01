@@ -45,8 +45,7 @@ class Inicio extends CI_Controller {
 						'id_perfil' => $usuario['id_perfil'],
 						'perfil' => $usuario['perfil'],
 						'usu_f_registro' => $usuario['f_registro'],
-						'usu_status' => $usuario['status'],
-						'url_foto_perfil' => $persona['url_foto'],
+						'usu_status' => $usuario['status'],						
 						'nombre' => $persona['nombre'],
 						'a_paterno' => $persona['a_paterno'],
 						'a_materno' => $persona['a_materno'],
@@ -113,25 +112,24 @@ class Inicio extends CI_Controller {
 					'contraseña' => sha1($this->input->post("txtContra")),
 					'id_perfil' => 3, //Perfil de viajero
 					'f_registro' => $fecha->format("Y-m-d"),
-					'status' => 2 //Usuario temporal por 1 semana
+					'status' => 1 
 				);
 				$idUsuario = $this->Modelo->insertar("usuarios", $usuarioData);
-				if ($idUsuario != false) {									
+				if ($idUsuario != false) {
 					$viajeroData = array(
 						'nombre' => $this->input->post("txtNombre"),
 						'a_paterno' => $this->input->post("txtAPaterno"),
-						'a_materno' => $this->input->post("txtAMaterno") ,
+						'a_materno' => $this->input->post("txtAMaterno"),
 						'telefono' => $this->input->post("txtTelefono"),
-						'correo' => $this->input->post("txtCorreo") ,
+						'correo' => $this->input->post("txtCorreo"),
 						'id_usuario' => $idUsuario,
 						'f_registro' => $fecha->format("Y-m-d"),
-						'status' => 2 //Usuario temporal por 1 semana
+						'status' => 1
 					);
 					$idViajero = $this->Modelo->insertar("viajeros", $viajeroData);
 					if ($idViajero != false) {						
-						$viajeroData['completo'] = $viajeroData['nombre']." ".$viajeroData['a_paterno']." ".$viajeroData['a_materno'];
-						$viajeroData['token'] = $token = sha1("idViajero").sha1($idViajero).sha1("idUsuario").sha1($idUsuario);
-						$this->mandarConfirmacion($viajeroData, $token);
+						$viajeroData['completo'] = $viajeroData['nombre']." ".$viajeroData['a_paterno']." ".$viajeroData['a_materno'];						
+						$this->mandarCorreo($viajeroData);
 						echo $idViajero;
 					}
 					else {						
@@ -151,25 +149,27 @@ class Inicio extends CI_Controller {
 			show_404();		
 	}
 
-	private function mandarConfirmacion ($data, $token) {
-	    $this->load->library('email');
+	private function mandarCorreo ($data_viajero) {
+		$completo = $data_viajero['nombre']." ".$data_viajero['a_paterno']." ".$data_viajero["a_materno"];
+		$data_viajero['completo'] = $completo;
+		$this->load->library('email');
 	    $config = array(
 	    	'protocol' => 'smtp',
-       		'smtp_host' => 'ssl://smtp.googlemail.com',
-       		'smtp_port' => 465,
-       		'smtp_user' => '2016030023@upsin.edu.mx',
-       		'smtp_pass' => 'upsF5664',
-       		'maintype' => 'html',
-       		'charset' => 'utf-8',
-       		'wordwrap' => true,
-       		'validate' => true
+     		'smtp_host' => 'ssl://smtp.googlemail.com',
+     		'smtp_port' => 465,
+     		'smtp_user' => 'almacenUPSIN.pruebas@gmail.com',
+     		'smtp_pass' => 'UPSINalmacen',
+     		'maintype' => 'html',
+     		'charset' => 'utf-8'
 	    );
-		$this->email->initialize($config);      
+		$this->email->initialize($config);
+		$this->email->set_mailtype("html");
+    	$this->email->set_newline("\r\n");
 		$this->email->from('travelopolis.ddns.net', 'Travelopolis');
-		$this->email->to($data['correo'], $data['completo']);
+		$this->email->to($data_viajero['correo'], $completo);
 		$this->email->subject("Confirmación de registro de cuenta");
-		$data['token'] = $token;
-		$this->email->message($this->load->view("global/formato_confrimacion_correo", $data ,true));
+		$this->email->message($this->load->view("global/formato_confrimacion_correo", array("viajero" => $data_viajero) ,true));
+				
 		return $this->email->send();
 	}
 
@@ -181,8 +181,7 @@ class Inicio extends CI_Controller {
 			'id_perfil' => 3, //Perfil de viajero
 			'perfil' => "Viajero",
 			'usu_f_registro' => $usuarioData['f_registro'],
-			'usu_status' => $usuarioData['status'],
-			'url_foto_perfil' => '',
+			'usu_status' => $usuarioData['status'],			
 			'nombre' => $viajeroData['nombre'],
 			'apaterno' => $viajeroData['a_paterno'],
 			'amaterno' => $viajeroData['a_materno'],
