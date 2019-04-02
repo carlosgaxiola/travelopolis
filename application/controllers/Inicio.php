@@ -157,8 +157,8 @@ class Inicio extends CI_Controller {
 	    	'protocol' => 'smtp',
      		'smtp_host' => 'ssl://smtp.googlemail.com',
      		'smtp_port' => 465,
-     		'smtp_user' => 'almacenUPSIN.pruebas@gmail.com',
-     		'smtp_pass' => 'UPSINalmacen',
+     		'smtp_user' => 'travelopolislacapitaldelviaje@gmail.com',
+     		'smtp_pass' => 'travelopoliscapital',
      		'maintype' => 'html',
      		'charset' => 'utf-8'
 	    );

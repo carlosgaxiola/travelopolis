@@ -116,7 +116,7 @@
 		<div class="clear">&nbsp;</div>
 		<div class="row">
 			<div class="col-md-3">
-				<div class="row">					
+				<div class="row" id="btnGroup">					
 					<button type="reset" id="btn-clear" class="btn btn-default btn-lg col-md-5"><i class="fas fa-broom"></i></button>					
 					<button type="button" id="btn-save" class="btn btn-success btn-lg col-md-5 col-md-offset-1"><i class="fas fa-save"></i></button>
 				</div>

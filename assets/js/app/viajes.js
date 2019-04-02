@@ -428,6 +428,21 @@ $(document).ready( function () {
 		}
 	})
 
+	$("#tblViajes").delegate(".btn-ver", "click", function () {		
+		let $btn = $(this),
+			$tr = $btn.parent().parent(),
+			viaje = $tr.data("viaje"),
+			dias = $tr.data("dias");
+		$("#btnGroup").hide()
+		viaje.diasDescripcion = dias;
+		setFormLog(viaje)
+		toggleMain()
+	})
+
+	$("#tblViajes").delegate(".btn-detalle", "click", function () {
+		window.location.href = base_url + "admin/viajes/ver?viaje=" + $(this).parent().parent().data("viaje").nombre.split(" ").join("+");
+	})
+
 	init()
 });
 
@@ -534,15 +549,14 @@ function clearFormData () {
 	let fechaHoy = moment(new Date());
 	$("#txtFecha").val(fechaHoy.format("DD/MM/YYY") + " - " + fechaHoy.format("DD/MM/YYYY"))
 	$("#tblDias tbody").empty()
-	$("#txtDescripcion").val("")
-	$("#txtImagen").val("")
-	$("#txtPreview").empty()
+	$("#txtDescripcion").val("")	
 	$("#txtDias").val("1")
 	$("#txtNoches").val("0")	
 	$("#idViaje").val("")
 	$("#cmbTipoViaje").val("0")
 	$("#txtNombreDia").val("")
 	$("#txtDescripcionDia").val("")
+	$("#btnGroup").show()
 }
 
 function setTableDias (viaje) {	

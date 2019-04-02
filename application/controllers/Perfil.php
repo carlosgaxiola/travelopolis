@@ -25,7 +25,8 @@ class Perfil extends CI_Controller {
 			$perfil = array(
 				'titulo' => 'Perfil',
 				'viajes' => $viajes,
-				'usuario' => $usuario
+				'usuario' => $usuario,
+				'estados' => $this->Modelo->listar("estados", null, 1)
 			);
 			$this->load->view("perfil/perfil_vista", $perfil);
 		}

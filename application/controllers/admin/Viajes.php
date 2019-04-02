@@ -8,6 +8,7 @@ class Viajes extends CI_Controller {
 	private $modulo;
 	private $tbl_tipos_viaje = "tipos_viaje";
 	private $tbl_dias_viaje = "dias_viajes";
+	private $listar_detalle_viaje = "listar_detalle_viaje";
 
 	private $ABRIR_REGITRO = 1;
 	private $CERRAR_REGISTRO = 2;
@@ -245,6 +246,26 @@ class Viajes extends CI_Controller {
 		if ($this->input->is_ajax_request()) {
 			$data = array("status" => $this->REALIZADO);
 			echo $this->Modelo->actualizar($this->tbl_viajes, $idViaje, $data);
+		}
+		else
+			show_404();
+	}
+
+	public function ver () {
+		$nombre_viaje = $this->input->get("viaje");
+		if ($nombre_viaje && !empty($nombre_viaje)) {
+			$viaje = $this->Modelo->buscar($this->tbl_viajes, $nombre_viaje, "nombre");
+			$detalles = $this->Modelo->buscar($this->listar_detalle_viaje, $nombre_viaje, "viaje");			
+			$this->modulo['nombre'] = "Detalle";
+			$this->modulo['nombre_personalizado'] = $nombre_viaje;
+			$this->modulo['listado_personalizado'] = "Viajeros en ".$nombre_viaje;
+			$this->modulo['descripcion'] = "Vizualizar los vijeros dentro del viaje";
+			$data = array(
+				'registros' => $detalles,
+				'viaje' => $viaje,
+				'modulo' => $this->modulo
+			);
+			$this->load->view("administrar/main_vista", $data);
 		}
 		else
 			show_404();

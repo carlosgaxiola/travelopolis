@@ -12,8 +12,7 @@ class Viajeros extends CI_Controller {
 	public function __construct () {
 		parent::__construct();
 		$this->load->model("Modelo");
-		$this->load->helper("global_functions_helper");
-		$this->load->library("MY_PHPMailer");
+		$this->load->helper("global_functions_helper");		
 		$this->modulo = $this->Modelo->buscar("modulos", $this->tbl_viajeros, "nombre");
 	}
 

@@ -1,6 +1,6 @@
 <?php 
 	$this->load->view("Global/header", array("titulo" => "Administrar"));
-	$this->load->view("Global/aside", array("actual" => $modulo));		
+	$this->load->view("Global/aside", array("actual" => $modulo));
 	if (strcmp($modulo['nombre'], "Inicio Administrador") != 0)
 		$nombre = $modulo['nombre'];
 ?>
@@ -13,14 +13,28 @@
 						<?php if (isset($allowAdd)): ?>
 							<button type="button" class="btn btn-primary pull-right" id="btn-add" title="Nuevo registro"><i class="fas fa-plus"></i></button> 								
 						<?php endif; ?>											
-						<h1 class="text-justify"><?php echo $nombre ?></h1>
+						<h1 class="text-justify">
+							<?php
+								if (isset($modulo['nombre_personalizado'])) 
+									echo $modulo['nombre_personalizado'];
+								else
+									echo $nombre;
+							?>
+						</h1>
 						<small><?php echo $modulo['descripcion'] ?></small>
 					</blockquote>
 				</div>
 				<div class="row">
 					<div class="box box-primary">
 		                <div class="box-header with-border">
-		                    <h3 class="box-title"><i class="fa fa-list"></i> Listado de <?php echo $nombre ?></h3>
+		                    <h3 class="box-title"><i class="fa fa-list"></i> 		                    	
+		                    	<?php 
+		                    		if (isset($modulo['listado_personalizado'])) 
+										echo $modulo['listado_personalizado'];
+									else
+										echo "Listado de ".$nombre;
+		                    	?>
+		                    </h3>
 		                    <div class="box-tools pull-right">
 		                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
 		                    </div>

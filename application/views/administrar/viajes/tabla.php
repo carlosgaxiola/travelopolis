@@ -50,6 +50,8 @@
                     <td>
                         <?php if ($viaje['status'] == 0): ?>
                             <?php
+                                $btnDetalle = "";
+                                $btnVer = "";
                                 $title = "Abrir registro";
                                 $icon = "fa-door-closed";
                                 $btnToggleClass = "btn-primary btn-abrir-registro";
@@ -57,6 +59,8 @@
                             <span class="label label-danger">Inactivo</span>
                         <?php elseif ($viaje['status'] == 1): ?>
                             <?php
+                                $btnDetalle = "<button title='Ver detalle del viaje' type='button' class='btn btn-ver btn-info' data-id='".$viaje['id']."'><i class='fas fa-eye'></i></button>&nbsp;";
+                                $btnVer = "<button title='Ver información del viaje' type='button' class='btn btn-primary btn-detalle' data-id='".$viaje['id']."'><i class='fas fa-bars'></i></button>";
                                 $title = "Cerrar registro";
                                 $icon = "fa-door-open";
                                 $btnToggleClass = "btn-success btn-cerrar-registro";
@@ -64,6 +68,8 @@
                             <span class="label label-primary">Abierto</span>
                         <?php elseif ($viaje['status'] == 2): ?>
                             <?php 
+                                $btnDetalle = "<button title='Ver detalle del viaje' type='button' class='btn btn-ver btn-info' data-id='".$viaje['id']."'><i class='fas fa-eye'></i></button>&nbsp;";
+                                $btnVer = "<button title='Ver información del viaje' type='button' class='btn btn-primary btn-detalle' data-id='".$viaje['id']."'><i class='fas fa-bars'></i></button>";
                                 $title = "Empezar";
                                 $icon = "fa-check";
                                 $btnToggleClass = "btn-default btn-empezar";
@@ -71,12 +77,18 @@
                             <span class="label label-success">Listo</span>
                         <?php elseif ($viaje['status'] == 4): ?>
                             <?php 
+                                $btnDetalle = "<button title='Ver detalle del viaje' type='button' class='btn btn-ver btn-info' data-id='".$viaje['id']."'><i class='fas fa-eye'></i></button>&nbsp;";
+                                $btnVer = "<button title='Ver información del viaje' type='button' class='btn btn-primary btn-detalle' data-id='".$viaje['id']."'><i class='fas fa-bars'></i></button>";
                                 $title = "Terminar";
                                 $icon = "fa-times";
                                 $btnToggleClass = "btn-default btn-terminar";
                             ?>
                             <span class="label label-primary">En curso</span>
                         <?php else: ?>
+                            <?php
+                                $btnDetalle = "<button title='Ver detalle del viaje' type='button' class='btn btn-ver btn-info' data-id='".$viaje['id']."'><i class='fas fa-eye'></i></button>&nbsp;";
+                                $btnVer = "<button title='Ver información del viaje' type='button' class='btn btn-primary btn-detalle' data-id='".$viaje['id']."'><i class='fas fa-bars'></i></button>";
+                            ?>
                             <span class="label label-success">Terminado</span>
                         <?php endif; ?>
                     </td>
@@ -91,6 +103,10 @@
                                 <i class="fas <?php echo $icon?>"></i>
                             </button>
                         <?php endif; ?>
+                        <?php
+                            echo $btnDetalle;
+                            echo $btnVer;
+                        ?>                        
     				</td>
     			</tr>
     		<?php endforeach; ?>
