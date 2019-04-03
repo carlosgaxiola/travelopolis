@@ -9,6 +9,8 @@ class Viajes extends CI_Controller {
 	private $tbl_tipos_viaje = "tipos_viaje";
 	private $tbl_dias_viaje = "dias_viajes";
 	private $listar_detalle_viaje = "listar_detalle_viaje";
+	private $tbl_detalle = "detalle_viajes";
+	private $tbl_viajero = "viajeros";
 
 	private $ABRIR_REGITRO = 1;
 	private $CERRAR_REGISTRO = 2;
@@ -259,6 +261,7 @@ class Viajes extends CI_Controller {
 			$this->modulo['nombre'] = "Detalle";
 			$this->modulo['nombre_personalizado'] = $nombre_viaje;
 			$this->modulo['listado_personalizado'] = "Viajeros en ".$nombre_viaje;
+			$this->modulo['id_viaje'] = $viaje['id'];
 			$this->modulo['descripcion'] = "Vizualizar los vijeros dentro del viaje";
 			$data = array(
 				'registros' => $detalles,
@@ -266,6 +269,101 @@ class Viajes extends CI_Controller {
 				'modulo' => $this->modulo
 			);
 			$this->load->view("administrar/main_vista", $data);
+		}
+		else
+			show_404();
+	}
+
+	public function detalle () {
+		if ($this->input->is_ajax_request()) {			
+			echo json_encode($this->Modelo->buscar($this->listar_detalle_viaje, $this->input->post("idViaje"), 'id_viaje'));
+		}
+		else
+			show_404();
+	}
+
+	public function abonar () {
+		if ($this->input->is_ajax_request()) {
+			if ($this->session->userdata("admin_active") && hasAccess($this->session->userdata("id_perfil"), $this->modulo['id'])) {
+				$idViaje = $this->input->post("idViaje");
+				$idUsuario = $this->input->post("idUsuario");
+				$cantidad = $this->input->post("cantidad");
+				$where = array("id_viaje" => $idViaje, "id" => $idUsuario);
+				$detalle = $this->Modelo->buscar($this->listar_detalle_viaje, $where);
+				if ($detalle) {
+					$this->form_validation->set_rules("cantidad", "Cantidad", "required|is_natural_no_zero|less_than_equal_to[".$detalle['resto']."]");
+					$this->form_validation->set_message("is_natural_no_zero", "El campo {field} debe ser un número válido");
+					$this->form_validation->set_message("less_than", "No puedes abonar más de {param}");
+					if ($this->form_validation->run()) {					
+						if ($this->ViajesModelo->abonar($cantidad, $idViaje, $idUsuario)) {
+							if (strcmp($cantidad, $detalle['resto']) == 0) {
+								$data = array("status" => 3); //Liquidado
+								$where = array("id_viajero" => $idUsuario, "id_viaje" => $idViaje);
+								$this->Modelo->actualizar($this->tbl_detalle, $where, $data);
+							}
+							echo $detalle['id'];
+						}
+						else 
+							echo "false";
+					}
+					else
+						echo validation_errors("<li>", "</li>");
+				}
+				else
+					show_404();
+			}
+			else
+				show_404();
+		}
+		else
+			show_404();
+	}
+
+	public function cancelar () {
+		if ($this->input->is_ajax_request()) {
+			if ($this->session->userdata("admin_active") && hasAccess($this->session->userdata("id_perfil"), $this->modulo['id'])) {
+				$idViaje = $this->input->post("idViaje");
+				$idViajero = $this->input->post("idViajero");
+				$motivo = $this->input->post("motivo");
+				$this->form_validation->set_rules("motivo", "Motivo", "required");				
+				if ($this->form_validation->run()) {
+					$data = array("status" => 0, 'resto' => 0);
+					$where = array("id_viajero" => $idViajero, "id_viaje" => $idViaje);
+					if ($this->Modelo->actualizar($this->tbl_detalle, $where, $data)) {
+						$this->load->library('email');
+					    $config = array(
+					    	'protocol' => 'smtp',
+				     		'smtp_host' => 'ssl://smtp.googlemail.com',
+				     		'smtp_port' => 465,
+				     		'smtp_user' => 'travelopolislacapitaldelviaje@gmail.com',
+				     		'smtp_pass' => 'travelopoliscapital',
+				     		'mailtype' => 'html',
+				     		'charset' => 'utf-8',
+				     		'wordwrap' => true,
+				     		'validate' => true
+					    );
+						$this->email->initialize($config);		
+						$this->email->set_mailtype("html");
+				    	$this->email->set_newline("\r\n");
+						$this->email->from('travelopolislacapitaldelviaje@gmail.com', 'Travelopolis');
+						$viajero = $this->Modelo->buscar($this->tbl_viajero, $idViajero);
+						$this->email->to($viajero['correo']);
+
+						$this->email->subject("Confirmación de registro de cuenta");
+						$this->email->message("Lamentablemete su viaje a sido cancelado por el siguiente motivo: ".$motivo);
+						echo $idViajero;
+						error_reporting(0);
+						$this->email->send();
+						error_reporting(-1);
+					}
+					else
+						echo "0";
+				}
+				else
+					echo validation_errors("<li>", "</li>");				
+			}
+			else
+				show_404();
 		}
 		else
 			show_404();

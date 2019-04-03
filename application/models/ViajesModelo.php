@@ -42,4 +42,12 @@ class ViajesModelo extends CI_Model {
 			return $viajes->result_array();
 		return false;
 	}
+
+	public function abonar ($cantidad, $idViaje, $idViajero) {
+		$this->db->where("id_viaje", $idViaje);
+		$this->db->where("id_viajero", $idViajero);
+		$this->db->set("resto", "resto - ".$cantidad, false);
+		$this->db->update("detalle_viajes");
+		return $this->db->affected_rows() > 0;
+	}
 }

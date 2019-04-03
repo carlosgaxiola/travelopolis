@@ -2,6 +2,8 @@
 <!-- ./wrapper -->
 <!-- JQuery 3 -->
 <script src="<?php echo base_url("assets/js/jquery-3.min.js")?>"></script>
+<!-- JQuery Templates -->
+<script src="<?php echo base_url("assets/js/jquery.tmpl.min.js") ?>"></script>
 <!-- Bootstrap -->
 <script src="<?php echo base_url("assets/js/bootstrap-3.min.js")?>"></script>
 <!-- AdminLTE -->
