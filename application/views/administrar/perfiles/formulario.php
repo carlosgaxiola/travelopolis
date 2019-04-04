@@ -1,4 +1,7 @@
-<form id="frmPerfil">
+<div class="row">
+	<button type="button" id="btn-close" class="btn btn-danger col-md-offset-11" title="Cerrar formulario"><i class="fas fa-times"></i></button>
+</div>
+<form id="frmPerfil" class="form">	
 	<input type="hidden" name="idPerfil" id="idPerfil">
 	<div class="container-fluid">
 		<div class="row">
@@ -12,22 +15,15 @@
 			</div>		
 		</div>
 		<div class="row">
-			<?php if (isset($modulos) && is_array($modulos)): ?>
-				<?php foreach ($modulos as $modulo): ?>
+			<?php if (isset($extras['modulos']) && is_array($extras['modulos'])): ?>
+				<?php foreach ($extras['modulos'] as $modulo): ?>
 					<div class="col-md-2">
-						<fieldset class="checkbox">
+						<div class="fieldset checkbox">
 							<input type="checkbox" class="checkbox required" id="cbx<?php echo $modulo['nombre'] ?>" name="cbx<?php echo $modulo['nombre'] ?>" value="<?php echo $modulo['id'] ?>">
 							<label for="cbx<?php echo $modulo['nombre'] ?>"><?php echo $modulo['nombre'] ?></label>
-						</fieldset>
+						</div>
 					</div>	
-				<?php endforeach; ?>
-			<?php elseif (isset($modulos)): ?>
-				<div class="col-md-2">
-					<fieldset class="checkbox">
-						<input type="checkbox" class="checkbox required" id="cbx<?php echo $modulo['nombre'] ?>" name="cbx<?php echo $modulo['nombre'] ?>" value="<?php echo $modulo['id'] ?>">
-						<label for="cbx<?php echo $modulo['nombre'] ?>"><?php echo $modulo['nombre'] ?></label>
-					</fieldset>
-				</div>
+				<?php endforeach; ?>			
 			<?php else: ?>
 				<div class="alert alert-danger">
 					No hay modulos disponibles

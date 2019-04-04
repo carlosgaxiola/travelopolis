@@ -11,8 +11,7 @@
     }    
 
     function validarRadios () {
-        let radios = $("input:radio"), res = false   
-        console.log(radios)     
+        let radios = $("input:radio"), res = false           
         if (radios.length > 0)
             for (let radio of radios)
                 if (res |= radio.checked)
@@ -34,15 +33,15 @@
             $(checkboxes).parent().removeClass("error")
         else
             $(checkboxes).parent().addClass("error")
+        return res;
     }   
 
     $("form").on("submit", function (e) {
-        e.preventDefault()
-        console.log(!validarInputs())   
-        console.log(!validarRadios())
+        console.log("sumbit")
         console.log(!validarCheckboxes())
-        if (!validarInputs() || !validarRadios() || !validarCheckboxes()) {
-            console.log("hola")
+        console.log(!validarRadios())
+        console.log(!validarInputs())
+        if (!validarInputs() || !validarRadios() || !validarCheckboxes()) {            
             e.preventDefault()
         }
     })
@@ -68,6 +67,7 @@
             case "text":
             case "email":
             case "password":
+            case "number":
                 $(input).focus(focusInput)
                 $(input).blur(blurInput)
                 break

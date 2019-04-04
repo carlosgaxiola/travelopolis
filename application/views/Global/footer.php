@@ -2,6 +2,8 @@
 <!-- ./wrapper -->
 <!-- JQuery 3 -->
 <script src="<?php echo base_url("assets/js/jquery-3.min.js")?>"></script>
+<!-- JQuery Templates -->
+<script src="<?php echo base_url("assets/js/jquery.tmpl.min.js") ?>"></script>
 <!-- Bootstrap -->
 <script src="<?php echo base_url("assets/js/bootstrap-3.min.js")?>"></script>
 <!-- AdminLTE -->
@@ -15,6 +17,10 @@
 <script>
 	var tabla, base_url;
 
+	function fechaJS($fecha) {
+		return $fecha.replace(/^(\d{4})-(\d{2})-(\d{2})$/g,'$3/$2/$1');
+	}
+		
 	function getDate () {
 		let fecha = new Date();				
 		dia = fecha.getDate();
@@ -25,14 +31,9 @@
 		return dia + "/" + mes + "/" + año;			
 	}
 
-	function logout () {
-		console.log("hola")
-		return false;
-	}
-
 	$(document).ready( function () {
 		base_url = '<?php echo base_url() ?>';
-		tabla = $(".table").DataTable({
+		tabla = $("table[data-table]").DataTable({
 		    'paging'			: true,
 		    'lengthChange' 		: false,
 		    'searching'    		: true,
@@ -76,15 +77,21 @@
 			})
 		})		
 	})
+	var tablaId = $(".table").prop("id");
 </script>
 <!-- App -->
-<?php if (isset($scripts)): ?>
-	<?php if (is_array($scripts)): ?>			
-		<?php foreach ($scripts as $script): ?>
-			<script src="<?php echo base_url("assets/js/".$script.".js") ?>"></script>
-		<?php endforeach; ?>
-	<?php else: ?>
-		<script src="<?php echo base_url("assets/js/".$scripts.".js") ?>"></script>
+<?php if ($this->session->userdata("admin_active")): ?>
+	<script src="<?php echo base_url("assets/js/app/listar.js") ?>"></script>
+<?php endif; ?>
+<?php if (isset($scripts) and is_array($scripts)): ?>
+	<?php foreach ($scripts as $script): ?>
+		<script src="<?php echo base_url("assets/js/".$script.".js") ?>"></script>
+	<?php endforeach; ?>
+<?php endif; ?>
+<?php if (isset($modulo)): ?>
+	<?php if (strcmp($modulo['nombre'], "Inicio Administrador") != 0): ?>
+		<script src="<?php echo base_url("assets/js/app/".lcfirst($modulo['nombre'])).".js" ?>"></script>
+		<script src="<?php echo base_url("assets/js/app/validaciones.js") ?>"></script>
 	<?php endif; ?>
 <?php endif; ?>
 </body>

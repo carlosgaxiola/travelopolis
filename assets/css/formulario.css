@@ -1,156 +1,160 @@
 .form-container {
-    width: 90%;
-    max-width: 500px;
-    padding: 2%;
-    margin: auto;      
-    background: #fff;
-    box-shadow: 0px 0px 3px grey;
-	font-family: "Roboto", Arial;
+    width: 90% !important;
+    max-width: 500px !important;
+    padding: 2% !important;
+    margin: auto !important;      
+    background: #fff !important;
+    box-shadow: 0% 0% 0.3% grey !important;
+	font-family: "Roboto", Arial !important;
 }
 
 form {
-    width: 100%;
-    color: #f2f2f2;
-    padding: 2%;
+    width: 100% !important;
+    color: black !important;
+    padding: 5% !important;
 }
 
-form fieldset {
-    position: relative;
-    margin-bottom: 1%;
-    width: 100%;
-    height: 8%;
+form .fieldset {
+    position: relative !important;
+    margin-bottom: 10% !important;
+    width: 100% !important;
+    height: 8% !important;
 }
 
-form fieldset input[type="text"],
-form fieldset input[type="email"],
-form fieldset input[type="password"] {
-    font-family: "Roboto", Arial;
-    font-size: 16px;
-    color: #black;
-    width: 100%;
-    outline: 0px solid black;
-    padding: 15px;
-    background: none;
-    border: none;
-    border-bottom: 2px solid #BBDEFB;
+form .fieldset input[type="text"],
+form .fieldset input[type="email"],
+form .fieldset input[type="number"],
+form .fieldset input[type="password"] {
+    font-family: "Roboto", Arial !important;
+    font-size: 130% !important;
+    color: #black !important !important;
+    width: 100% !important;
+    outline: 0px solid black !important;
+    padding: 2%px !important;
+    background: none !important;
+    border: none !important;
+    border-bottom: 2px solid #BBDEFB !important;
 }
 
-form fieldset input[type="text"]:focus, form fieldset input[type="text"]:active,
-form fieldset input[type="email"]:focus, form fieldset input[type="email"]:active,
-form fieldset input[type="password"]:focus, form fieldset input[type="password"]:active {
-    border: none;
-    outline: none;
-    box-shadow: none;
-    border-bottom: 2px solid #007bff;
-    color: black;
+form .fieldset input[type="text"]:focus, form .fieldset input[type="text"]:active,
+form .fieldset input[type="email"]:focus, form .fieldset input[type="email"]:active,
+form .fieldset input[type="number"]:focus, form .fieldset input[type="number"]:active,
+form .fieldset input[type="password"]:focus, form .fieldset input[type="password"]:active {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    border-bottom: 2px solid #007bff !important;
+    color: black !important !important;
 }
 
-form fieldset input[type="text"].error,
-form fieldset input[type="email"].error,
-form fieldset input[type="password"].error {
-    border-bottom: 2px solid #D32F2F;
+form .fieldset input[type="text"].error,
+form .fieldset input[type="email"].error,
+form .fieldset input[type="number"].error,
+form .fieldset input[type="password"].error {
+    border-bottom: 2px solid #D32F2F !important;
 }
 
-form fieldset input[type="text"].error + label,
-form fieldset input[type="email"].error + label,
-form fieldset input[type="password"].error + label {
-    color: #D32F2F;
+form .fieldset input[type="text"].error + label,
+form .fieldset input[type="email"].error + label,
+form .fieldset input[type="number"].error + label,
+form .fieldset input[type="password"].error + label {
+    color: #D32F2F !important;
 }
 
-form fieldset label {
-    color: rgba(132, 125, 125, 0.8);
-    -webkit-transition: all .3s ease;
-    -o-transition: all .3s ease;
-    transition: all .3s ease;
-    margin-left: 15px;
-    font-size: 16px;
-    line-height: 16px;
-    position: absolute;
-    top: 20px;
-    left: 0;
+form .fieldset label {
+    color: rgba(132, 125, 125, 0.8) !important;
+    -webkit-transition: all .3s ease !important;
+    -o-transition: all .3s ease !important;
+    transition: all .3s ease !important;
+    margin-left: 15px !important;
+    font-size: 16px !important;
+    line-height: 16px !important;
+    position: absolute !important;
+    top: 0% !important;
+    left: -1% !important;
 }
 
-form fieldset label.active {
-    top: -10px;
-    left: -10px;
-    font-size: 12px;
-    line-height: 16px;
-    color: #007bff;
+form .fieldset label.active {
+    top: -34% !important;
+    left: -5% !important;
+    font-size: 100% !important;
+    line-height: 0% !important;
+    color: #007bff !important;
 }
 
-form fieldset.checkbox label,
-form fieldset.radio label {
-    display: inline-block;
-    cursor: pointer;
-    color: #007bff;
-    position: relative;
-    padding: 5px 15px 5px 51px;
-    font-size: 1em;
-    border-radius: 3px;
-    -webkit-transition: all .3s ease;
-    -o-transition: all .3s ease;
-    transition: all .3s ease;
+form .fieldset.checkbox label,
+form .fieldset.radio label {
+    display: inline-block !important;
+    cursor: pointer !important;
+    color: #007bff !important;
+    position: relative !important;
+    padding: 5px 15px 5px 51px !important;
+    font-size: 1em !important;
+    border-radius: 3px !important;
+    -webkit-transition: all .3s ease !important;
+    -o-transition: all .3s ease !important;
+    transition: all .3s ease !important;
 }
 
-form fieldset.checkbox label:hover,
-form fieldset.radio label:hover {
-    background: #bbdefb;
+form .fieldset.checkbox label:hover,
+form .fieldset.radio label:hover {
+    background: #bbdefb !important;
 }
 
-form fieldset.checkbox label:before,
-form fieldset.radio label:before {
-    content: "";
-    display: inline-block;
-    width: 17px;
-    height: 17px;
-    position: absolute;
-    left: 15px;
-    border-radius: 50%;
-    background: none;
-    border: 2px solid #007bff;
+form .fieldset.checkbox label:before,
+form .fieldset.radio label:before {
+    content: "" !important;
+    display: inline-block !important;
+    width: 17px !important;
+    height: 17px !important;
+    position: absolute !important;
+    left: 15px !important;
+    border-radius: 50% !important;
+    background: none !important;
+    border: 2px solid #007bff !important;
 }
 
-form fieldset.error label {
-    color: #D32F2F;
+form .fieldset.error label {
+    color: #D32F2F !important;
 }
 
-form fieldset.error label:hover {
-    background: rgba(211, 47, 47, 0.2);
+form .fieldset.error label:hover {
+    background: rgba(211, 47, 47, 0.2) !important;
 }
 
-form fieldset.error label:before {
-    border: 2px solid #D32F2F;
+form .fieldset.error label:before {
+    border: 2px solid #D32F2F !important;
 }
 
-form fieldset.radio input[type="radio"] {
-    display: none;
+form .fieldset.radio input[type="radio"] {
+    display: none !important;
 }
 
-form fieldset.radio input[type="radio"]:checked + label:before {
-    display: none;
+form .fieldset.radio input[type="radio"]:checked + label:before {
+    display: none !important;
 }
 
-form fieldset.radio input[type="radio"]:checked + label {
-    padding: 5px 15px;
-    background: #007bff;
-    border-radius: 2px;
-    color: #f2f2f2;
+form .fieldset.radio input[type="radio"]:checked + label {
+    padding: 5px 15px !important;
+    background: #007bff !important;
+    border-radius: 2px !important;
+    color: #f2f2f2 !important;
 }
 
-form fieldset.checkbox label:before {
-    border-radius: 3px;
+form .fieldset.checkbox label:before {
+    border-radius: 3px !important;
 }
 
-form fieldset.checkbox input[type="checkbox"] {
-    display: none;
+form .fieldset.checkbox input[type="checkbox"] {
+    display: none !important;
 }
 
-form fieldset.checkbox input[type="checkbox"]:checked + label:before {
-    display: none;
+form .fieldset.checkbox input[type="checkbox"]:checked + label:before {
+    display: none !important;
 }
 
-form fieldset.checkbox input[type="checkbox"]:checked + label {
-    background: #007bff;
-    color: #f2f2f2;
-    padding: 5px 15px;
+form .fieldset.checkbox input[type="checkbox"]:checked + label {
+    background: #007bff !important;
+    color: #f2f2f2 !important;
+    padding: 5px 15px !important;
 }

@@ -5,7 +5,10 @@
 	color: rgba(60, 178, 247, 1);
 }
 .bg-gray-blue {
-	background-color: rgba(88, 114, 145, 1);
+	background-color: rgba(88, 114, 145, 1) !important;
+}
+.border-top-gray-blue {
+	border-top-color: rgba(88, 114, 145, 1);
 }
 .text-gray-blue {
 	color: rgba(88, 114, 145, 1);
@@ -17,7 +20,7 @@
 	color: rgba(47, 151, 193, 1);
 }
 .bg-muted-blue {
-	background-color: rgba(48, 102, 190, 1);
+	background-color: rgba(48, 102, 190, 1) !important;
 }
 .text-muted-blue {
 	color: rgba(48, 102, 190, 1);

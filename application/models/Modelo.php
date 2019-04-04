@@ -26,17 +26,27 @@ class Modelo extends CI_Model {
 		return false;
 	}
 
-	public function actualizar ($tabla, $id, $data) {
-		$this->db->where("id", $id);
+	public function actualizar ($tabla, $id, $data, $campo = 'id') {
+		if (is_array($id))
+			foreach ($id as $index => $value)
+				$this->db->where($index, $value);			
+		else
+			$this->db->where($campo, $id);
 		$this->db->update($tabla, $data);
 		return ($this->db->affected_rows() > 0);		
 	}
 
 	public function buscar ($tabla, $valor, $campo = 'id') {		
-		$this->db->where($campo, $valor);			
+		if (is_array($valor))
+			foreach ($valor as $index => $value)
+				$this->db->where($index, $value);
+		else
+			$this->db->where($campo, $valor);			
 		$res = $this->db->get($tabla);		
-		if ($res->num_rows() > 0)
+		if ($res->num_rows() == 1)
 			return $res->row_array();
+		else if ($res->num_rows() > 1)
+			return $res->result_array();
 		return false;
 	}
 
@@ -51,5 +61,11 @@ class Modelo extends CI_Model {
 		if ($tipo != 0)	$this->db->join($tabla, $join, $tipo);
 		else $this->db->join($tabla, $join);
 		return $this;
+	}
+
+	public function borrar ($tabla, $valor, $campo = 'id') {
+		$this->db->where($campo, $valor);
+		$this->db->delete($tabla);
+		return ($this->db->affected_rows() > 0);
 	}
 }

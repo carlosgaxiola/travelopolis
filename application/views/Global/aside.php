@@ -1,8 +1,8 @@
-<aside class="main-sidebar" style="background-color: #aaaaaa; margin-top: 9%;">
+<aside class="main-sidebar bg-white">
     <section class="sidebar">
         <div class="user-panel">
-            <div class="pull-left image">
-                <img src="<?php echo base_url("assets/images/logo.png") ?>" class="img-circle" alt="User Image">
+            <div class="pull-left image">            
+                <img src="<?php echo base_url("assets/images/logo.png") ?>" class="img-circle" alt="User Image"> 
             </div>
             <div class="pull-left info">
                 <p><?php echo $this->session->userdata("usuario") ?></p>
@@ -11,10 +11,10 @@
         </div>
         <ul class="sidebar-menu" data-widget="tree">
             <li class="header">Menu</li>
-            <?php
-                $idPerfil = $this->session->userdata("id_perfil");                
+            <?php                
+                $idPerfil = $this->session->userdata("id_perfil");
                 $modulos = modulos($idPerfil);
-                menu($modulos, $idModuloActual);
+                menu($modulos, $actual['id']);
             ?>
         </ul>
     </section>
