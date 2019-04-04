@@ -263,7 +263,7 @@ class Viajes extends CI_Controller {
 			$this->modulo['nombre_personalizado'] = $nombre_viaje;
 			$this->modulo['listado_personalizado'] = "Viajeros en ".$nombre_viaje;
 			$this->modulo['id_viaje'] = $viaje['id'];
-			$this->modulo['descripcion'] = "Vizualizar los vijeros dentro del viaje";
+			$this->modulo['descripcion'] = "Vizualizar los viajeros dentro del viaje";
 			$data = array(
 				'registros' => $detalles,
 				'viaje' => $viaje,
