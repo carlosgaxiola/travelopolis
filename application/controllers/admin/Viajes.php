@@ -238,8 +238,15 @@ class Viajes extends CI_Controller {
 
 	public function empezar ($idViaje) {
 		if ($this->input->is_ajax_request()) {
-			$data = array("status" => $this->EN_CURSO);
-			echo $this->Modelo->actualizar($this->tbl_viajes, $idViaje, $data);
+			if ($this->ViajesModelo->viajeTieneGuia($idViaje)) {
+				$data = array("status" => $this->EN_CURSO);
+				if ($this->Modelo->actualizar($this->tbl_viajes, $idViaje, $data)) 
+					echo json_encode(array("result" => "empezado"));
+				else
+					echo json_encode(array("result" => "error"));
+			}
+			else
+				echo json_encode(array("result" => "no tiene guia", "message" => "El viaje no puede empezar si no tiene asignado un guia"));
 		}
 		else
 			show_404();

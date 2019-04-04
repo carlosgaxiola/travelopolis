@@ -86,4 +86,10 @@ class ViajesModelo extends CI_Model {
 		$this->db->update("detalle_viajes");
 		return $this->db->affected_rows() > 0;
 	}
+
+	public function viajeTieneGuia ($idViaje) {
+		$this->db->where("id_viaje", $idViaje);
+		$res = $this->db->get("guias_viajes");
+		return $res->num_rows() > 0;
+	}
 }

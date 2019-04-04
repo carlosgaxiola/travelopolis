@@ -1,4 +1,4 @@
-$(document).ready( function () {				
+$(document).ready( function () {
 	var inicio, fin;
 	$("#txtFecha").daterangepicker({
 		locale: {
@@ -641,26 +641,38 @@ function empezar (viaje, btn, $tr) {
 		url: base_url + "admin/viajes/empezar/" + viaje.id,
 		success: function (res) {
 			try {
-				if (JSON.parse(res)) {
-					btn.removeClass("btn-empezar")
-						.addClass("btn-terminar")
-						.prop("title", "Terminar")
-						.find("i")
-							.removeClass("fa-check")
-							.addClass("fa-times")
-					$tr.find(".label")
-						.removeClass(".label-success")
-						.addClass(".label-primary")
-						.text("En curso");
-				}
-				else {
-					BootstrapDialog.alert({
-						title: "Error",
-						message: "No se pudo empezar",
-						type: BootstrapDialog.TYPE_DANGER,
-						size: BootstrapDialog.SIZE_SMALL,
-						btnOKLabel: "Aceptar"
-					})
+				res = JSON.parse(res)
+				switch (res.result) {
+					case "no tiene guia":
+						BootstrapDialog.alert({
+							title: "Error",
+							message: res.message,
+							type: BootstrapDialog.TYPE_DANGER,
+							size: BootstrapDialog.SIZE_SMALL,
+							btnOKLabel: "Aceptar"
+						})
+						break;
+					case "empezado":
+						btn.removeClass("btn-empezar")
+							.addClass("btn-terminar")
+							.prop("title", "Terminar")
+							.find("i")
+								.removeClass("fa-check")
+								.addClass("fa-times")
+						$tr.find(".label")
+							.removeClass(".label-success")
+							.addClass(".label-primary")
+							.text("En curso");
+						break;
+					case "error":
+						BootstrapDialog.alert({
+							title: "Error",
+							message: "No se pudo empezar",
+							type: BootstrapDialog.TYPE_DANGER,
+							size: BootstrapDialog.SIZE_SMALL,
+							btnOKLabel: "Aceptar"
+						})
+						break;
 				}
 			}
 			catch (e) {
