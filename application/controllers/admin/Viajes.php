@@ -11,6 +11,7 @@ class Viajes extends CI_Controller {
 	private $listar_detalle_viaje = "listar_detalle_viaje";
 	private $tbl_detalle = "detalle_viajes";
 	private $tbl_viajero = "viajeros";
+	private $tbl_familiares = "viajeros_familiares";
 
 	private $ABRIR_REGITRO = 1;
 	private $CERRAR_REGISTRO = 2;
@@ -295,16 +296,8 @@ class Viajes extends CI_Controller {
 					$this->form_validation->set_message("is_natural_no_zero", "El campo {field} debe ser un número válido");
 					$this->form_validation->set_message("less_than", "No puedes abonar más de {param}");
 					if ($this->form_validation->run()) {					
-						if ($this->ViajesModelo->abonar($cantidad, $idViaje, $idUsuario)) {
-							if (strcmp($cantidad, $detalle['resto']) == 0) {
-								$data = array("status" => 3); //Liquidado
-								$where = array("id_viajero" => $idUsuario, "id_viaje" => $idViaje);
-								$this->Modelo->actualizar($this->tbl_detalle, $where, $data);
-							}
-							echo $detalle['id'];
-						}
-						else 
-							echo "false";
+						$res = $this->ViajesModelo->abonar($cantidad, $idViaje, $idUsuario);
+						echo json_encode($res);
 					}
 					else
 						echo validation_errors("<li>", "</li>");
@@ -364,6 +357,58 @@ class Viajes extends CI_Controller {
 			}
 			else
 				show_404();
+		}
+		else
+			show_404();
+	}
+
+	public function familiares ($idViaje) {
+		if ($this->input->is_ajax_request()) {
+			$viajeros = $this->Modelo->buscar($this->tbl_detalle, $idViaje, "id_viaje");
+			if (is_array($viajeros))
+				foreach ($viajeros as &$viajero)
+					$viajero['familiares'] = $this->Modelo->buscar($this->tbl_familiares, $viajero['id_viajero'], 'id_viajero');
+			echo json_encode($viajeros);
+		}
+		else
+			show_404();
+	}
+
+	public function enviarCotizacion () {
+		if ($this->input->is_ajax_request()) {
+			$detalle = $this->input->post("detalle");
+			$where = array("id_viajero" => $detalle['id'], 'id_viaje' => $detalle['id_viaje']);
+			$data = array("status" => 1);
+			$this->load->library('email');
+		    $config = array(
+		    	'protocol' => 'smtp',
+	     		'smtp_host' => 'ssl://smtp.googlemail.com',
+	     		'smtp_port' => 465,
+	     		'smtp_user' => 'travelopolislacapitaldelviaje@gmail.com',
+	     		'smtp_pass' => 'travelopoliscapital',
+	     		'mailtype' => 'html',
+	     		'charset' => 'utf-8',
+	     		'wordwrap' => true,
+	     		'validate' => true
+		    );
+			$this->email->initialize($config);
+			$this->email->set_mailtype("html");
+	    	$this->email->set_newline("\r\n");
+			$this->email->from('travelopolislacapitaldelviaje@gmail.com', 'Travelopolis');
+			$this->email->to($detalle['correo']);
+
+			$this->email->subject("Confirmación de registro de cuenta");
+			$this->email->message($this->load->view("correos/correo_cotizacion", array("data" => $detalle), true));
+			$res['cotizacion'] = false;
+			$res['actualizado'] = false;
+			error_reporting(0);
+			if ($this->email->send()) {
+				$res['cotizacion'] = true;
+				if ($this->Modelo->actualizar($this->tbl_detalle, $where, $data))
+					$res['actualizado'] = true;
+			}
+			error_reporting(-1);			
+			echo json_encode($res);
 		}
 		else
 			show_404();

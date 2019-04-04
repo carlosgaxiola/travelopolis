@@ -3,6 +3,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class ViajesModelo extends CI_Model {
 
+	private $LIQUIDADO = 3;
+	private $ANTICIPADO = 2;
+
 	public function __construct () {
 		parent::__construct();
 	}
@@ -46,7 +49,40 @@ class ViajesModelo extends CI_Model {
 	public function abonar ($cantidad, $idViaje, $idViajero) {
 		$this->db->where("id_viaje", $idViaje);
 		$this->db->where("id_viajero", $idViajero);
-		$this->db->set("resto", "resto - ".$cantidad, false);
+		$detalle = $this->db->get("detalle_viajes");
+		if ($detalle->num_rows() > 0) {
+			$detalle = $detalle->row_array();
+			$respuesta = "abono";
+			if ($this->esLiquidacion($cantidad, $detalle)) {
+				$this->db->set("status", $this->LIQUIDADO);
+				$respuesta = "liquidado";
+			}
+			else if ($this->esAnticipo($cantidad, $detalle)) {
+				$this->db->set("status", $this->ANTICIPADO);
+				$respuesta = "anticipo";
+			}
+			$this->db->where("id_viaje", $idViaje);
+			$this->db->where("id_viajero", $idViajero);
+			$this->db->set("resto", "resto - ".$cantidad, false);
+			$this->db->update("detalle_viajes");
+			if ($this->db->affected_rows() > 0)
+				return $respuesta;
+		}
+		return "error";
+	}
+
+	private function esAnticipo ($cantidad, $detalle) {
+		return ($detalle['resto'] - $cantidad) <= $detalle['precio'] * 0.8;
+	}
+
+	private function esLiquidacion ($cantidad, $detalle) {
+		return ($detalle['resto'] - $cantidad) == 0;
+	}
+
+	public function cambiarStatus ($idViaje, $idViajero, $status) {
+		$this->db->where("id_viaje", $idViaje);
+		$this->db->where("id_viajero", $idViajero);
+		$this->db->set("status", $status);
 		$this->db->update("detalle_viajes");
 		return $this->db->affected_rows() > 0;
 	}

@@ -12,19 +12,25 @@ $(document).ready( function () {
 					label: "Abonar",
 					cssClass: "btn-primary",
 					action: function (dialog) {
-						let cantidad = $("#txtCantidad").val(),
+						let cantidad = $("#txtAbono").val(),
 							idViaje = $("#contenidoTabla").data("id-viaje"),
 							idUsuario = detalle.id;
 						abonar(cantidad, idViaje, idUsuario, 
-							function () {
-								detalle.resto -= cantidad
-								$tr.children("td:eq(5)").text(detalle.resto)
-								if (detalle.resto <= '0') {
-									$tr.children("td:eq(6)").empty()
-										.append("<span class='label label-success'>Pagado</span>")
-									$tr.find(".btn-abonar").remove()
-									$tr.find(".btn-cancelar").remove()
+							function (res) {
+								switch (JSON.parse(res)) {
+									case "liquidado":
+										$tr.children("td:eq(6)").html("<span class='label label-success'>Pagado</span>");
+										$tr.find(".btn-abonar").remove()
+										$tr.find(".btn-cancelar").remove()
+										detalle.status = '3';
+										break;
+									case "anticipo":
+										$tr.children("td:eq(6)").html("<span class='label label-primary'>Anticipo dado</span>");
+										detalle.status = '2';
+										break;
 								}
+								detalle.resto -= cantidad
+								$tr.children("td:eq(5)").text(detalle.resto)								
 								$tr.data("detalle", detalle)
 								dialog.close()
 							},
@@ -83,6 +89,33 @@ $(document).ready( function () {
 		})
 	})
 
+	$("#tblDetViaje").delegate(".btn-ver", "click", function () {
+		let $btn = $(this), 
+			$tr = $btn.parent().parent(), 
+			familiares = $tr.data("familiares"),
+			viajero = $tr.data("detalle");
+		if (!familiares)
+			$("#acompañantesGroup").hide()
+		else
+			loadAcompañantes(familiares);
+		setFormLog(viajero)
+		toggleMain();
+	})
+
+	$("#tblDetViaje").delegate(".btn-enviar-cotizacion", "click", function () {
+		let $tr = $(this).parent().parent(), detalle = $tr.data("detalle");		
+		enviarCotizacion(detalle, $tr);	
+	})
+
+	$("#btn-enviar-cotizacion").click( function () {
+		let detalle = $("#frmDatosViajero").data("detalle");
+		let filas = tabla.rows().nodes();
+		let $tr = $($(filas).find("[data-id='" + detalle.id + "']").parent());		
+		enviarCotizacion(detalle, $tr, function () {
+			toggleMain();
+		});	
+	})
+
 	init();	
 })
 
@@ -109,6 +142,15 @@ function init () {
 			}
 		}
 	})
+	$.ajax({
+		url: base_url + "admin/viajes/familiares/" + $("#contenidoTabla").data("id-viaje"),		
+		success: function (data) {
+			let filas = tabla.rows().nodes();
+			$.each(JSON.parse(data), function (index, value) {				
+				$(filas).find("[data-id='" + value.id_viajero + "']").parent().data("familiares", value.familiares);
+			})
+		}
+	})	
 }
 
 function errorDialog (msg = "Ocurrio un error desconocido") {
@@ -131,14 +173,18 @@ function abonar (cantidad, idViaje, idUsuario, resolve, reject) {
 		},
 		type: "POST",
 		success: function ( res ) {
-			try {				
-				if (isNaN(parseInt(res)))
-					reject(res)
-				else
-					resolve()
+			try {
+				switch (JSON.parse(res)) {
+					case "error":
+						errorDialog()
+						break;
+					default:
+						resolve(res)
+						break;
+				}
 			}
 			catch ( e ) {
-				console.error(e)
+				reject(res)
 			}
 		}
 	})
@@ -172,6 +218,105 @@ function cancelar (idViaje, idViajero, motivo, resolve, reject) {
 			catch (e) {
 				console.error(e)
 			}
+		}
+	})
+}
+
+function clearFormData () {
+	$("#txtNombre").val("")
+	$("#txtAPaterno").val("")
+	$("#txtAMaterno").val("")
+	$("#txtSexo").val("")
+	$("#txtEdad").val("")
+	$("#txtTelefono").val("")
+	$("#txtEstado").val("")
+	$("#txtViaje").val("")
+	$("#txtCantidad").val("")
+	$("#txtResto").val("")
+	$("#txtCompra").empty()
+	$("#tblAcompañantesBody").empty()
+	$("#acompañantesGroup").hide()
+}
+
+function loadAcompañantes (acomps) {
+	$("#acompañantesGroup").show()
+	$.each(acomps, function (index, acomp) {
+		$("#tblAcompañantesBody")
+			.append(
+				"<tr><td>" + (index + 1) + "</td>" +
+				"<td>" + acomp.nombre + "</td>" + 
+				"<td>" + acomp.apellido_p + "</td>" + 
+				"<td>" + acomp.apellido_m + "</td>" + 
+				"<td>" + acomp.edad + "</td>" +
+				"<td>" + acomp.telefono + "</td>" +
+				"<td>" + acomp.tipo_familiar + "</td></tr>"
+			)
+	})
+}
+
+function setFormLog (viajero) {
+	$("#frmDatosViajero").data("detalle", viajero)
+	$("#txtNombre").val(viajero.nombre)
+	$("#txtAPaterno").val(viajero.a_paterno)
+	$("#txtAMaterno").val(viajero.a_materno)
+	$("#txtSexo").val(viajero.sexo)
+	$("#txtEdad").val(viajero.edad)
+	$("#txtTelefono").val(viajero.telefono)
+	$("#txtCorreo").val(viajero.correo)
+	$("#txtViaje").val(viajero.viaje)
+	$("#txtCantidad").val(viajero.cantidad)
+	$("#txtResto").val(viajero.resto)
+	$("#txtEstado").val(viajero.estado)
+	switch (viajero.status) {
+		case '1':
+			$("#txtCompra").append("<span class='label label-warning'>Cotización enviada</span>");
+			break;
+		case '2':
+			$("#txtCompra").append("<span class='label label-primary'>Anticipo pagado</span>");
+			break;
+		case '3':
+			$("#txtCompra").append("<span class='label label-success'>Pagado</span>");
+			break;
+		case '4':
+			$("#txtCompra").append("<span class='label label-default'>Solicitado</span>");
+			$("#aceptarGroup").show();
+			break;
+		case '0':
+			$("#txtCompra").append("<span class='label label-danger'>Cancelado</span>");
+			break;
+	}
+}
+
+function enviarCotizacion (detalle, $tr, callback ) {
+	$.ajax({
+		url: base_url + "admin/viajes/enviarCotizacion",
+		data: { detalle: detalle },
+		type: "POST",
+		success: function ( res ) {
+			try {
+				res = JSON.parse(res);
+				if (res['cotizacion'] && res['actualizado']) {
+					detalle.status = '1';
+					$("td:eq(7)", $tr).append("<button type='button' class='btn btn-success btn-abonar' title='Abonar'><i class='fas fa-money-bill-wave'></i></button>");
+					$tr.find(".btn-enviar-cotizacion").remove();
+					$tr.find(".label").removeClass("label-default").addClass("label-warning").text("Cotización enviada");
+					BootstrapDialog.alert({
+						title: "Cotización envia",
+						message: "Se ha enviado por correo la cotización al viajero " + detalle.nombre,
+						btnOKLabel: "Aceptar"
+					})
+					if (callback)
+						callback();
+					$tr.data("detalle", detalle);
+				}
+				else {
+					errorDialog();
+				}
+
+			}
+			catch ( e ) {
+				console.error(e)
+			}			
 		}
 	})
 }
