@@ -20,32 +20,21 @@
                     <td><?php echo $viajero['telefono'] ?></td>
                     <td><?php echo $viajero['correo'] ?></td>
                     <?php 
-                        if ($viajero['status'] == 2) {
-                            $title = "Dar de alta al viajero";
-                            $btnToggleClass = "btn-toggle-log btn-success";
-                            $iconClass = "fa-toggle-on";
-                            $labelClass = "label-danger";
-                            $labelText = "Inactivo";
+                        if ($viajero['status'] == 0) {
+                            $label = "<span class='label label-danger'>Inactivo</span>";
+                            $btnStatus = "<button type='button' class='btn btn-sm btn-toggle-log btn-success' title='Dar de alta al viajero'><i class='fas fa-toggle-on'></i></button>";
                         }
                         else if ($viajero['status'] == 1) {
-                            $title = "Dar de baja al viajero";
-                            $btnToggleClass = "btn-toggle-log btn-danger";
-                            $iconClass = "fa-toggle-off";
-                            $labelClass = "label-success";
-                            $labelText = "Verificado";
-                        }
-                        else {
-                            $title = "Borrar viajero";
-                            $btnToggleClass = "btn-danger btn-borrar";
-                            $iconClass = "fa-times";
-                            $labelClass = "label-default";
-                            $labelText = "Sin verificar";
+                            $label = "<span class='label label-success'>Activo</span>";
+                            $btnStatus = "<button type='button' class='btn btn-sm btn-toggle-log btn-danger' title='Dar de baja al viajero'><i class='fas fa-toggle-off'></i></button>";
                         }
                     ?>
-                    <td><span class="label <?php echo $labelClass ?>"><?php echo $labelText ?></span></td>
+                    <td>
+                        <?php echo $label ?>
+                    </td>
     				<td>                        
     					<button title="Editar viajero" type="button" class="btn-edit-log btn btn-sm btn-warning" data-id="<?php echo $viajero['id'] ?>"><i class="fas fa-edit"></i></button>                        
-                        <button title="<?php echo $title ?>" class="btn btn-sm <?php echo $btnToggleClass ?>"><i class="fas <?php echo $iconClass ?>"></i></button>
+                        <?php echo $btnStatus ?>
     				</td>
     			</tr>
     		<?php endforeach; ?>

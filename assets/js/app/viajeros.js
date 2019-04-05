@@ -203,16 +203,18 @@ function init () {
 	})
 }
 
-function toggleLog (that) {
-	console.log($(that).parent().parent().data("viajero"))
+function toggleLog (that) {	
 	let $tr = $(that).parent().parent(),
 		nombre = $("td:eq(1)", $tr).text(),
 		idViajero = $tr.data("viajero").id,
-		status = $tr.data("viajero").status
+		status = $tr.data("viajero").status,
 		accion = 'dar de baja al viajero',
 		tipo = BootstrapDialog.TYPE_DANGER,
 		okClass = "btn-danger",
-		cancelClass = "btn-default";
+		cancelClass = "btn-default",
+		viajero = $tr.data("viajero");
+	console.log(status)
+	console.log(viajero)
 	if (status == 0) {
 		tipo = BootstrapDialog.TYPE_SUCCESS;
 		okClass = "btn-success";
@@ -239,28 +241,23 @@ function toggleLog (that) {
 					},
 					success: function (res) {						
 						try {
-							res = JSON.parse(res);
-							let iconClass = "fas fa-toggle-off",
-								labelClass = "label label-success",
-								labelText = "Activo",
-								btnTitle = "Baja al viajero";								
+							res = JSON.parse(res);							
 							if (res) {
-
+								let viajero = $tr.data("viajero");
+								viajero.status = 1;
+								let label = "<span class='label label-success'>Activo</span>",
+									btn = "<button type='button' class='btn btn-sm btn-danger btn-toggle-log' title='Dar de baja al viajero'><i class='fas fa-toggle-off'></i></button>";
 								if (status == 1) {
-									labelClass = "label label-danger";
-									labelText = "Inactivo";
-									iconClass = "fas fa-toggle-on";
-									btnTitle = "Alta al viajero";
-									btnClass = "btn-success";
-									$(".btn-toggle-log", $tr).removeClass("btn-danger").addClass("btn-success");
+									viajero.status = 0;
+									label = "<span class='label label-danger'>Inactivo</span>";
+									btn = "<button type='button' class='btn btn-sm btn-success btn-toggle-log' title='Dar de alta al viajero'><i class='fas fa-toggle-on'></i></button>";
 								}
-								else if (status == 0)
-									$(".btn-toggle-log", $tr).removeClass("btn-success").addClass("btn-danger");
-								$(that).data("status", status? 0 : 1);
-							}							
-							$(".btn-toggle-log", $tr).prop("title", btnTitle);
-							$("span", $tr).removeClass().addClass(labelClass).text(labelText);
-							$(".btn-toggle-log i", $tr).removeClass().addClass(iconClass);
+								$("td:eq(6)", $tr).html(label)
+								$("td:eq(7)", $tr).find(".btn-toggle-log").remove()
+								$("td:eq(7)", $tr).append(btn)
+								$tr.data("viajero", viajero)
+								console.log($tr.data("viajero"))
+							}
 						} catch (e) {
 							console.error(e);
 						}
