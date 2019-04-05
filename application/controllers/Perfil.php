@@ -21,7 +21,7 @@ class Perfil extends CI_Controller {
 			show_404();
 		else {			
 			$usuario = $this->ViajeroModelo->buscar($usuario);
-			$viajes = $this->ViajeroModelo->viajes($this->session->userdata("id_usuario"));
+			$viajes = $this->ViajeroModelo->viajes($this->session->userdata("id_persona"));			
 			$perfil = array(
 				'titulo' => 'Perfil',
 				'viajes' => $viajes,
@@ -97,7 +97,7 @@ class Perfil extends CI_Controller {
 				$this->form_validation->set_rules("nombre", "Nombre", "trim|required");
 				$this->form_validation->set_rules("paterno", "Apellido Paterno", "trim|required");
 				$this->form_validation->set_rules("materno", "Apellido Materno", "trim|required");
-				$this->form_validation->set_rules("estado", "Estado", "trim|alpha");
+				$this->form_validation->set_rules("estado", "Estado", "trim");
 				$this->form_validation->set_rules("sexo", "Sexo", "trim|alpha");
 				$this->form_validation->set_rules("tel", "Teléfono", "trim|numeric");
 				$this->form_validation->set_rules("correo", "Correo", "trim|required".$uCorreo);
