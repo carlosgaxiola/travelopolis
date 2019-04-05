@@ -92,7 +92,6 @@ function asignar (idGuia, viaje, $tr, callback) {
 						$("#error-asignar").html(response.message).show()
 						break;
 					case "asignado":
-						console.log("asignado")
 						$tr.find(".btn-asignar").remove()
 						$("td:eq(6)", $tr).append("<button type='button' title='Cambiar guia' class='btn btn-sm btn-warning btn-cambiar'>Cambiar guia</button>")
 						$tr.find(".label").removeClass("label-defualt").addClass("label-primary").text("Asignado")
@@ -102,8 +101,6 @@ function asignar (idGuia, viaje, $tr, callback) {
 				}
 			}
 			catch ( e ) {
-				console.log(e)
-				console.log("catch")
 				$("#error-asignar").html(response).show()
 			}
 		}
@@ -120,11 +117,12 @@ function cambiar (idGuia, viaje, $tr, callback) {
 		type: "POST",
 		success: function (response) {
 			try {
-				switch (JSON.parse(response.result)) {						
+				response = JSON.parse(response);
+				switch (response.result) {						
 					case "error":
 						errorDialog()
 						break;
-					case "no disponible":
+					case "no disponible":						
 						$("#error-asignar").html(response.message).show()
 						break;
 					case "cambiado":
@@ -134,6 +132,7 @@ function cambiar (idGuia, viaje, $tr, callback) {
 				}
 			}
 			catch ( e ) {
+				console.error(e)
 				$("#error-asignar").html(response).show()
 			}
 		}

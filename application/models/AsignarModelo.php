@@ -10,7 +10,7 @@ class AsignarModelo extends CI_Model {
 	public function cambiar ($idViaje, $idGuia) {		
 		$this->db->where("id_viaje", $idViaje);
 		$this->db->set("id_guia", $idGuia);
-		$this->db->update("guais_viajes");
+		$this->db->update("guias_viajes");
 		if ($this->db->affected_rows() > 0)
 			return array("result" => "asigando");
 		return array("result" => "no cambiado");
@@ -22,7 +22,7 @@ class AsignarModelo extends CI_Model {
 		$this->db->where("f_inicio", $viaje['f_inicio']);
 		$this->db->where("f_fin", $viaje['f_fin']);
 		$res = $this->db->get("listar_viajes_guias");
-		return $res->num_rows() == 0;
+		return $res->num_rows() == 0 || $res->num_rows() == 1;
 	}
 
 	public function asignar ($idViaje, $idGuia) {
