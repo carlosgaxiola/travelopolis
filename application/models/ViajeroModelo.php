@@ -15,11 +15,11 @@ class ViajeroModelo extends CI_Model {
 		$this->db->select("via.*");
 		$this->db->join("detalle_viajes det", "det.id_viaje = via.id");
 		$this->db->where("det.id_viajero", $idUsuario);
-		$viajes = $this->db->get("viajes via");
+		$viajes = $this->db->get("listar_viajes via");
 		$total = $viajes->num_rows();
 		if ($total > 0) {
 			$viajes = $viajes->result_array();
-			$viajes['total'] = $total;
+			$viajes['total'] = $total;			
 			return $viajes;
 		}
 		return false;
