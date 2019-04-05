@@ -19,9 +19,8 @@ $(document).ready( function () {
 				type: "POST",
 				data: $("#frmRegistro").serialize() + "&fecha=" + getDate(),
 				success: function (res) {
-					try {
-						res = parseInt(res);
-						if (!isNaN(res)) {
+					try {						
+						if (!isNaN(parseInt(res))) {
 							switch (res) {
 								case 0:
 									BootstrapDialog.alert({
@@ -32,10 +31,11 @@ $(document).ready( function () {
 										size: BootstrapDialog.SIZE_SMALL
 									});
 									break;
-								case 0:
+								default:
 									BootstrapDialog.show({
 										title: "Registro completado",
-										message: "Hemos mandado un correo de confirmación, favor de verificarlo antes de una semana o su usuario sera eliminado",
+										message: "Ya ha sido registrado como viajero en Tavelopolis" +
+											"<br>Ya puede iniciar sesión con los datos que ingreso en su registro",
 										type: BootstrapDialog.TYPE_SUCCESS,
 										buttons: [
 											{
@@ -51,7 +51,7 @@ $(document).ready( function () {
 							}
 						}
 						else 
-							console.log(res);
+							$("#msg-error").html(res).show()
 					}
 					catch (e) {
 						console.log(e)
