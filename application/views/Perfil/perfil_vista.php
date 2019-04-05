@@ -13,13 +13,13 @@
 					<img class="profile-user-img img-responsive img-circle" src="<?php echo base_url("assets/images/users/default.png") ?>" alt="Foto de perfil">					
 					<h3 class="profile-username text-center"><?php echo $persona["nombre"]." ".$persona['a_paterno']." ".$persona['a_materno'] ?></h3>
 					<p class="text-muted text-center"><?php echo $usuario["perfil"] ?></p>
-					<ul class="list-group list-group-unbordered">
+					<ul class="list-group list-group-unbordered">						
 						<li class="list-group-item">
 							<b>Viajes realizados</b> <a class="pull-right"><?php echo isset($viajes['total'])? $viajes["total"]: '0'?></a>
 						</li>
-						<li class="list-group-item">
+						<!-- <li class="list-group-item">
 							<b>Viajes deseados</b> <a class="pull-right"><?php echo isset($viaje['me_gustan'])? $viaje['me_gustan']: '0' ?></a>
-						</li>
+						</li> -->
 					</ul>					
 				</div>
 			</div>
@@ -48,12 +48,14 @@
 							<?php if (isset($viajes) and is_array($viajes)): ?>
 								<?php if ($viajes['total'] > 1): ?>
 									<?php foreach ($viajes as $viaje): ?>
-										<li>
-											<i class="fa fa-calendar bg-blue"></i>
-											<div class="timeline-item">
-												<?php $this->load->view("Viajes/viaje_card_horizontal", array("viaje" => $viaje)) ?>
-											</div>
-										</li>
+										<?php if (!is_int($viaje)): ?>
+											<li>
+												<i class="fa fa-calendar bg-blue"></i>
+												<div class="timeline-item">
+													<?php $this->load->view("Viajes/viaje_card_horizontal", array("viaje" => $viaje)) ?>
+												</div>
+											</li>
+										<?php endif; ?>
 									<?php endforeach; ?>								
 								<?php else: ?>
 									<li>
