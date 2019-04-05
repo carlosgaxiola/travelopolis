@@ -52,7 +52,9 @@
 											<li>
 												<i class="fa fa-calendar bg-blue"></i>
 												<div class="timeline-item">
-													<?php $this->load->view("Viajes/viaje_card_horizontal", array("viaje" => $viaje)) ?>
+													<a href="<?php echo base_url("viajes?buscar=".$viaje['nombre'])?>" style="color: black">
+														<?php $this->load->view("Viajes/viaje_card_horizontal", array("viaje" => $viaje)) ?>
+													</a>
 												</div>
 											</li>
 										<?php endif; ?>
