@@ -40,6 +40,7 @@ class Inicio extends CI_Controller {
 						$persona = $this->Modelo->buscar("viajeros", $usuario['id'], 'id_usuario');
 					$descripcion = isset($persona['informacion'])? $persona['informacion']: '';	
 					$data = array(
+						'id_persona' => $persona['id'],						
 						'usuario' => $usuario["usuario"],
 						'id_usuario' => $usuario["id"],
 						'id_perfil' => $usuario['id_perfil'],
@@ -127,12 +128,10 @@ class Inicio extends CI_Controller {
 						'status' => 1
 					);
 					$idViajero = $this->Modelo->insertar("viajeros", $viajeroData);
-					if ($idViajero != false) {						
-						$viajeroData['completo'] = $viajeroData['nombre']." ".$viajeroData['a_paterno']." ".$viajeroData['a_materno'];						
-						$this->mandarCorreo($viajeroData);
+					if ($idViajero != false) {
 						echo $idViajero;
 					}
-					else {						
+					else {
 						$this->session->set_flashdata("error_crear", "No se pudo crear el usuario");
 						redirect(base_url());
 					}
