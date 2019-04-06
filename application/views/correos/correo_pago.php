@@ -25,7 +25,7 @@
 			<p style="text-align: center;color: #2196f3;
 		margin-top: 1.5%;">Estos son los datos del Viaje:  <b> <?php echo $data['viaje'] ?></b>   </p>
 			<p style="text-align: center;color: #2196f3;
-		margin-top: 1.5%;">Referencia: <b><?php echo $data['id_viaje'].$data["id_viajero"] ?></b></p>
+		margin-top: 1.5%;">Referencia: <b><?php echo $data['id_viaje'].$data["id"] ?></b></p>
 			<p style="text-align: center;color: #2196f3;
 		margin-top: 1.5%;">Cuenta Bancaria: <b>5501-2585-5225-2548</b></p>
 		<p style="text-align: center;color: #2196f3;

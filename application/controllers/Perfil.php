@@ -16,6 +16,7 @@ class Perfil extends CI_Controller {
 	}	
 
 	public function index () {
+        error_reporting(0);
 		$usuario = $this->input->get("usuario");		
 		if (empty($usuario))
 			show_404();
@@ -28,6 +29,7 @@ class Perfil extends CI_Controller {
 				'usuario' => $usuario,
 				'estados' => $this->Modelo->listar("estados", null, 1)
 			);
+            //var_dump($viajes);
 			$this->load->view("perfil/perfil_vista", $perfil);
 		}
 	}

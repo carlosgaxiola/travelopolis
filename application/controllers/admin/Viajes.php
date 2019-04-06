@@ -276,6 +276,7 @@ class Viajes extends CI_Controller {
 				'viaje' => $viaje,
 				'modulo' => $this->modulo
 			);
+           // var_dump($detalles);
 			$this->load->view("administrar/main_vista", $data);
 		}
 		else
@@ -404,8 +405,8 @@ class Viajes extends CI_Controller {
 			$this->email->from('travelopolislacapitaldelviaje@gmail.com', 'Travelopolis');
 			$this->email->to($detalle['correo']);
 
-			$this->email->subject("Confirmación de registro de cuenta");
-			$this->email->message($this->load->view("correos/correo_cotizacion", array("data" => $detalle), true));
+			$this->email->subject("Datos del viaje");
+			$this->email->message($this->load->view("correos/correo_pago", array("data" => $detalle), true));
 			$res['cotizacion'] = false;
 			$res['actualizado'] = false;
 			error_reporting(0);

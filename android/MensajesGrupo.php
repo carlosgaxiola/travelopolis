@@ -95,7 +95,7 @@
         }
         
         public static function ObtenerTodosLosUsuariosDeUnViaje($id_viaje){
-            $consultar = "SELECT usuarios.id as id, viajeros.id as viajeroID, viajeros.nombre as nombre, viajeros.a_paterno as ap, viajeros.a_materno as am, viajeros.telefono as telefono, viajeros.correo as correo, usuarios.usuario as usuario, usuarios.contraseña as contraseña, usuarios.id_perfil as tipoUsuario, viajeros.edad as edad, viajeros.informacion as informacion, viajeros.sexo as sexo, viajeros.estado as estado FROM viajeros INNER JOIN usuarios ON viajeros.id_usuario = usuarios.id INNER JOIN detalle_viajes WHERE detalle_viajes.id_viajero = viajeros.id AND detalle_viajes.id_viaje = ?";
+            $consultar = "SELECT usuarios.id as id, viajeros.id as viajeroID, viajeros.nombre as nombre, viajeros.a_paterno as ap, viajeros.a_materno as am, viajeros.telefono as telefono, viajeros.correo as correo, usuarios.usuario as usuario, usuarios.contraseña as contraseña, usuarios.id_perfil as tipoUsuario, viajeros.edad as edad, viajeros.informacion as informacion, viajeros.sexo as sexo, viajeros.estado as estado, detalle_viajes.cantidad as cantidad FROM viajeros INNER JOIN usuarios ON viajeros.id_usuario = usuarios.id INNER JOIN detalle_viajes WHERE detalle_viajes.id_viajero = viajeros.id AND detalle_viajes.id_viaje = ?";
             
             $resultado = Database::getInstance()->getDb()->prepare($consultar);
 			$resultado->execute(array($id_viaje));

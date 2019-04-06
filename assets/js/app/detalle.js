@@ -134,7 +134,7 @@ function init () {
 					})
 				}
 				else {
-					errorDialog()
+					//errorDialog()
 				}
 			}
 			catch (e) {

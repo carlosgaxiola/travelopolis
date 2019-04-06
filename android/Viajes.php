@@ -81,6 +81,19 @@
             
         }
         
+        public static function ObtenerInformacionPorGuia($id){
+            $consultar = "SELECT viajes.id as id, viajes.nombre as nombre, viajes.descripcion as descripcion, viajes.minimo as minimo, viajes.maximo as maximo, viajes.precio as precio, viajes.dias_duracion as dias_duracion, viajes.noches_duracion as noches_duracion, viajes.dias_espera_devolucion as dias_espera_devolucion, viajes.f_inicio as f_inicio, viajes.f_fin as f_fin, viajes.id_tipo_viaje as id_tipo_viaje, viajes.f_registro as f_registro, viajes.status as status FROM viajes INNER JOIN guias_viajes WHERE guias_viajes.id_viaje = viajes.id AND viajes.status > 0 AND guias_viajes.id_guia = ?";
+            
+            $resultado = Database::getInstance()->getDb()->prepare($consultar);
+
+			$resultado->execute(array($id));
+
+			$tabla = $resultado->fetchAll(PDO::FETCH_ASSOC);
+
+			return ($tabla);
+            
+        }
+        
         public static function InsertarNuevoDato($usuario,$password){
             $consultar = "INSERT INTO usuarios(usuario,contraseña) VALUES(?,?)";
             try{
@@ -111,7 +124,21 @@
             }catch(PDOException $e){
                 return false;
             }
-            
+        }
+        
+        public static function SeleccionarResto($id_viaje,$id_viajero){
+            $consultar = "SELECT cantidad, resto, precio FROM detalle_viajes WHERE id_viaje = ? AND id_viajero = ?";
+            try{
+                $resultado = Database::getInstance()->getDb()->prepare($consultar);
+                
+                $resultado->execute(array($id_viaje,$id_viajero));
+                
+                $tabla = $resultado->fetch(PDO::FETCH_ASSOC);
+                
+                return ($tabla);
+            }catch(PDOException $e){
+                return false;
+            }
         }
         
         public static function ObtenerViaje($id_viaje,$usuario){
