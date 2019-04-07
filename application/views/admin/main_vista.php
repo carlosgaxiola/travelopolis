@@ -41,7 +41,7 @@
 		                </div>
 		                <div class="box-body">
 		                	<div class="table-responsive">
-		                		<?php $this->load->view("administrar/".lcfirst($nombre)."/tabla", $registros) ?>
+		                		<?php $this->load->view("admin/".lcfirst($nombre)."/tabla", $registros) ?>
 		                	</div>
 		                </div>                
 					</div>
@@ -51,9 +51,9 @@
 		<div class="content" id="formulario" hidden>
 			<?php 
 				if (isset($extras))
-					$this->load->view("administrar/".lcfirst($nombre)."/formulario", $extras);
+					$this->load->view("admin/".lcfirst($nombre)."/form", $extras);
 				else
-					$this->load->view("administrar/".lcfirst($nombre)."/formulario");
+					$this->load->view("admin/".lcfirst($nombre)."/form");
 				
 			?>
 		</div>
