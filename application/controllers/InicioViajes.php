@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Viajes extends CI_Controller {	
+class InicioViajes extends CI_Controller {	
 
 	private $modulo = "viajes";
 	private $secundario = 'dias_viajes';
