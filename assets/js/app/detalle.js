@@ -129,9 +129,12 @@ function init () {
 				data = JSON.parse(data)
 				if (data) {
 					let filas = tabla.rows().nodes();
-					$.each( data, function (index, detalle) {
-						$(filas).find("[data-id='" + detalle.id + "']").parent().data("detalle", detalle);
-					})
+					if (data.id)
+						$(filas).find("[data-id='" + data.id + "']").parent().data("detalle", data);
+					else
+						$.each( data, function (index, detalle) {						
+							$(filas).find("[data-id='" + detalle.id + "']").parent().data("detalle", detalle);
+						})
 				}
 				else {
 					//errorDialog()
@@ -144,13 +147,15 @@ function init () {
 	})
 	$.ajax({
 		url: base_url + "admin/viajes/familiares/" + $("#contenidoTabla").data("id-viaje"),		
-		success: function (data) {
-			console.log(data)
+		success: function (data) {			
 			if (data != false) {
 				let filas = tabla.rows().nodes();
-				$.each(JSON.parse(data), function (index, value) {				
-					$(filas).find("[data-id='" + value.id_viajero + "']").parent().data("familiares", value.familiares);
-				})
+				if (JSON.parse(data).id_viajero)
+					$(filas).find("[data-id='" + data.id_viajero + "']").parent().data("familiares", JSON.parse(data).familiares);
+				else
+					$.each(JSON.parse(data), function (index, value) {
+						$(filas).find("[data-id='" + value.id_viajero + "']").parent().data("familiares", value.familiares);
+					})
 			}
 			else
 				console.log("hola")
