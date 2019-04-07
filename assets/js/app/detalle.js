@@ -145,10 +145,15 @@ function init () {
 	$.ajax({
 		url: base_url + "admin/viajes/familiares/" + $("#contenidoTabla").data("id-viaje"),		
 		success: function (data) {
-			let filas = tabla.rows().nodes();
-			$.each(JSON.parse(data), function (index, value) {				
-				$(filas).find("[data-id='" + value.id_viajero + "']").parent().data("familiares", value.familiares);
-			})
+			console.log(data)
+			if (data != false) {
+				let filas = tabla.rows().nodes();
+				$.each(JSON.parse(data), function (index, value) {				
+					$(filas).find("[data-id='" + value.id_viajero + "']").parent().data("familiares", value.familiares);
+				})
+			}
+			else
+				console.log("hola")
 		}
 	})	
 }
