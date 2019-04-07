@@ -5,7 +5,7 @@ class Inicio extends CI_Controller {
 	
 	private $nombre = "inicio";
 	private $modulo;
-	
+		
 	public function __construct () {
 		parent::__construct();
 		$this->load->helper("global_functions_helper");
@@ -24,7 +24,7 @@ class Inicio extends CI_Controller {
 		}
 		$data = array('viajes' => $this->Modelo->listar("listar_viajes", null, 1));
 		$this->load->view("index", $data);
-	}
+	}	
 
 	public function login () {
 		if ($this->input->is_ajax_request()) {
@@ -146,61 +146,5 @@ class Inicio extends CI_Controller {
 		}
 		else
 			show_404();		
-	}
-
-	private function mandarCorreo ($data_viajero) {
-		$completo = $data_viajero['nombre']." ".$data_viajero['a_paterno']." ".$data_viajero["a_materno"];
-		$data_viajero['completo'] = $completo;
-		$this->load->library('email');
-	    $config = array(
-	    	'protocol' => 'smtp',
-     		'smtp_host' => 'ssl://smtp.googlemail.com',
-     		'smtp_port' => 465,
-     		'smtp_user' => 'travelopolislacapitaldelviaje@gmail.com',
-     		'smtp_pass' => 'travelopoliscapital',
-     		'maintype' => 'html',
-     		'charset' => 'utf-8'
-	    );
-		$this->email->initialize($config);
-		$this->email->set_mailtype("html");
-    	$this->email->set_newline("\r\n");
-		$this->email->from('travelopolis.ddns.net', 'Travelopolis');
-		$this->email->to($data_viajero['correo'], $completo);
-		$this->email->subject("Confirmación de registro de cuenta");
-		$this->email->message($this->load->view("global/formato_confrimacion_correo", array("viajero" => $data_viajero) ,true));
-				
-		return $this->email->send();
-	}
-
-	private function autoLogin ($idViajero, $idUsuario, $usuarioData, $viajeroData) {
-		$token = sha1("idViajero").sha1($idViajero).sha1("idUsuario").sha1($idUsuario);
-		$data = array(
-			'usuario' => $usuarioData["usuario"],
-			'id_usuario' => $idUsuario,
-			'id_perfil' => 3, //Perfil de viajero
-			'perfil' => "Viajero",
-			'usu_f_registro' => $usuarioData['f_registro'],
-			'usu_status' => $usuarioData['status'],			
-			'nombre' => $viajeroData['nombre'],
-			'apaterno' => $viajeroData['a_paterno'],
-			'amaterno' => $viajeroData['a_materno'],
-			'completo' => $viajeroData['nombre']." ".$viajeroData['a_paterno']." ".$viajeroData['a_materno'],
-			'correo' => $viajeroData['correo'],
-			'per_f_registro' => $viajeroData['f_registro'],
-			'per_status' => $viajeroData['status'],
-			'telefono' => $viajeroData['telefono'],						
-			'admin_active' => false,
-			'login' => true			
-		);		
-		$this->session->set_userdata($data);
-		$this->session->set_flashdata("btn-reenviar", "<button id='btn-reenviar' type='button' class='btn btn-primary'>Reenviar/button>");
-		$this->session->set_flashdata("btn-cambiar-correo", "<button id='btn-cambiar-correo' type='button' class='btn btn-primary'>Cambiar correo</button>");		
-		if ($this->mandarConfirmacion($data, $token)) {
-			$this->session->set_flashdata("revisar_correo", "Bienvenido ".$data['completo']."<br>Hemos enviado a su correo un mensaje de verificacion, porfavor no haga caso omiso o su cuenta sera eliminada");
-		}
-		else {
-			$this->session->set_flashdata("reenviar_confirmacion", "Hola ".$data['completo']." al parecer hubo problemas al mandar el correo de confirmación<br>Hay dos acciones que puedes realizar:<br>");
-		}
-		redirect(base_url());
 	}
 }

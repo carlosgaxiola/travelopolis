@@ -7,7 +7,7 @@ class Modelo extends CI_Model {
 		parent::__construct();
 	}
 
-	public function listar ($tabla, $extras = null, $status = -1) {				
+	public function listar ($tabla, $extras = null, $status = -1) {	
 		if ($extras != null)
 			$this->db->select(implode(",", $extras));
 		if ($status != -1)
@@ -36,7 +36,7 @@ class Modelo extends CI_Model {
 		return ($this->db->affected_rows() > 0);		
 	}
 
-	public function buscar ($tabla, $valor, $campo = 'id') {		
+	public function buscar ($tabla, $valor, $campo = 'id') {
 		if (is_array($valor))
 			foreach ($valor as $index => $value)
 				$this->db->where($index, $value);

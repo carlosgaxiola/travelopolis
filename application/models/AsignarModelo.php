@@ -7,7 +7,7 @@ class AsignarModelo extends CI_Model {
 		parent::__construct();
 	}
 
-	public function cambiar ($idViaje, $idGuia) {		
+	public function cambiar ($idViaje, $idGuia) {
 		$this->db->where("id_viaje", $idViaje);
 		$this->db->set("id_guia", $idGuia);
 		$this->db->update("guias_viajes");
