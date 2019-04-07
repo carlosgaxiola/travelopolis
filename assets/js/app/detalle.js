@@ -94,6 +94,7 @@ $(document).ready( function () {
 			$tr = $btn.parent().parent(), 
 			familiares = $tr.data("familiares"),
 			viajero = $tr.data("detalle");
+		console.log(familiares)
 		if (!familiares)
 			$("#acompañantesGroup").hide()
 		else
@@ -150,10 +151,11 @@ function init () {
 		success: function (data) {			
 			if (data != false) {
 				let filas = tabla.rows().nodes();
-				if (JSON.parse(data).id_viajero)
-					$(filas).find("[data-id='" + data.id_viajero + "']").parent().data("familiares", JSON.parse(data).familiares);
+				data = JSON.parse(data);
+				if (data.id_viajero)
+					$(filas).find("[data-id='" + data.id_viajero + "']").parent().data("familiares", data.familiares);
 				else
-					$.each(JSON.parse(data), function (index, value) {
+					$.each(data, function (index, value) {
 						$(filas).find("[data-id='" + value.id_viajero + "']").parent().data("familiares", value.familiares);
 					})
 			}
@@ -249,6 +251,7 @@ function clearFormData () {
 }
 
 function loadAcompañantes (acomps) {
+	console.log(acomps)
 	$("#acompañantesGroup").show()
 	$.each(acomps, function (index, acomp) {
 		$("#tblAcompañantesBody")
