@@ -6,12 +6,6 @@ class Viajes extends CI_Controller {
 	private $nombre = "Viajes";
 	private $tbl_viajes = "viajes";
 	private $modulo;
-	private $tbl_tipos_viaje = "tipos_viaje";
-	private $tbl_dias_viaje = "dias_viajes";
-	private $listar_detalle_viaje = "listar_detalle_viaje";
-	private $tbl_detalle = "detalle_viajes";
-	private $tbl_viajero = "viajeros";
-	private $tbl_familiares = "viajeros_familiares";
 
 	private $ABRIR_REGITRO = 1;
 	private $CERRAR_REGISTRO = 2;
@@ -29,7 +23,7 @@ class Viajes extends CI_Controller {
 
 	public function index () {
 		if ($this->session->userdata("admin_active") && hasAccess($this->session->userdata("id_perfil"), $this->modulo['id'])) {
-			$tiposViaje = $this->Modelo->listar($this->tbl_tipos_viaje);
+			$tiposViaje = $this->Modelo->listar("tipos_viaje");
 			$data = array(
 				'allowAdd' => true,
 				'modulo' => $this->modulo,
@@ -38,7 +32,7 @@ class Viajes extends CI_Controller {
 				'scripts' => array("moment", "daterangepicker"),
 				'extras' => array('tiposViaje' => $tiposViaje)
 			);
-			$this->load->view("administrar/main_vista", $data);
+			$this->load->view("admin/main_vista", $data);
 		}
 		else
 			show_404();
@@ -77,7 +71,7 @@ class Viajes extends CI_Controller {
 							'f_registro' => $fecha->format("Y-m-d"),
 							'indice' => "dia".$index."viaje".$idViaje
 						);
-						$this->Modelo->insertar($this->tbl_dias_viaje, $dia_data);
+						$this->Modelo->insertar("dias_viajes", $dia_data);
 					}
 					echo $idViaje;
 				}					
@@ -112,7 +106,7 @@ class Viajes extends CI_Controller {
 				$dias = $this->input->post("dias");
 				if (is_array($dias) and !empty($dias)) {
 					$this->Modelo->actualizar($this->tbl_viajes, $idViaje, $viaje);
-					$this->Modelo->borrar($this->tbl_dias_viaje, "id_viaje", $idViaje);
+					$this->Modelo->borrar("dias_viajes", "id_viaje", $idViaje);
 					foreach ($dias as $index => $dia) {
 						$fechaDia = DateTime::createFromFormat('d/m/Y', $dia['fecha']);
 						$dataDia = array(
@@ -122,7 +116,7 @@ class Viajes extends CI_Controller {
 							'f_dia' => $fechaDia->format("Y-m-d"),
 							'indice' => 'dia'.($index + 1).'viaje'.$idViaje
 						);
-						$this->Modelo->insertar($this->tbl_dias_viaje, $dataDia);
+						$this->Modelo->insertar("dias_viajes", $dataDia);
 					}
 					echo $idViaje;					
 				}
@@ -181,7 +175,7 @@ class Viajes extends CI_Controller {
 			$dias = $this->input->post("dias");
 			$idViaje = $this->input->post("idViaje");
 			if (is_array($dias) and !empty($dias)) {
-				$this->Modelo->borrar($this->tbl_dias_viaje, "id_viaje", $idViaje);
+				$this->Modelo->borrar("dias_viajes", "id_viaje", $idViaje);
 				$diasActualizados = true;
 				foreach ($dias as $index => $dia) {
 					$dataDia = array(
@@ -191,7 +185,7 @@ class Viajes extends CI_Controller {
 						'f_dia' => $dia['fecha'],
 						'indice' => 'dia'.($index + 1).'viaje'.$idViaje
 					);
-					$diasActualizados &= $this->Modelo->insertar($this->tbl_dias_viaje, $data);
+					$diasActualizados &= $this->Modelo->insertar("dias_viajes", $data);
 				}
 				echo $diasActualizados;
 			}
@@ -265,7 +259,7 @@ class Viajes extends CI_Controller {
 		$nombre_viaje = $this->input->get("viaje");
 		if ($nombre_viaje && !empty($nombre_viaje)) {
 			$viaje = $this->Modelo->buscar($this->tbl_viajes, $nombre_viaje, "nombre");
-			$detalles = $this->Modelo->buscar($this->listar_detalle_viaje, $nombre_viaje, "viaje");			
+			$detalles = $this->Modelo->buscar("listar_detalle_viaje", $nombre_viaje, "viaje");			
 			$this->modulo['nombre'] = "Detalle";
 			$this->modulo['nombre_personalizado'] = $nombre_viaje;
 			$this->modulo['listado_personalizado'] = "Viajeros en ".$nombre_viaje;
@@ -277,7 +271,7 @@ class Viajes extends CI_Controller {
 				'modulo' => $this->modulo
 			);
            // var_dump($detalles);
-			$this->load->view("administrar/main_vista", $data);
+			$this->load->view("admin/main_vista", $data);
 		}
 		else
 			show_404();
@@ -285,7 +279,7 @@ class Viajes extends CI_Controller {
 
 	public function detalle () {
 		if ($this->input->is_ajax_request()) {			
-			echo json_encode($this->Modelo->buscar($this->listar_detalle_viaje, $this->input->post("idViaje"), 'id_viaje'));
+			echo json_encode($this->Modelo->buscar("listar_detalle_viaje", $this->input->post("idViaje"), 'id_viaje'));
 		}
 		else
 			show_404();
@@ -298,7 +292,7 @@ class Viajes extends CI_Controller {
 				$idUsuario = $this->input->post("idUsuario");
 				$cantidad = $this->input->post("cantidad");
 				$where = array("id_viaje" => $idViaje, "id" => $idUsuario);
-				$detalle = $this->Modelo->buscar($this->listar_detalle_viaje, $where);
+				$detalle = $this->Modelo->buscar("listar_detalle_viaje", $where);
 				if ($detalle) {
 					$this->form_validation->set_rules("cantidad", "Cantidad", "required|is_natural_no_zero|less_than_equal_to[".$detalle['resto']."]");
 					$this->form_validation->set_message("is_natural_no_zero", "El campo {field} debe ser un número válido");
@@ -330,7 +324,7 @@ class Viajes extends CI_Controller {
 				if ($this->form_validation->run()) {
 					$data = array("status" => 0, 'resto' => 0);
 					$where = array("id_viajero" => $idViajero, "id_viaje" => $idViaje);
-					if ($this->Modelo->actualizar($this->tbl_detalle, $where, $data)) {
+					if ($this->Modelo->actualizar("detalle_viajes", $where, $data)) {
 						$this->load->library('email');
 					    $config = array(
 					    	'protocol' => 'smtp',
@@ -347,10 +341,10 @@ class Viajes extends CI_Controller {
 						$this->email->set_mailtype("html");
 				    	$this->email->set_newline("\r\n");
 						$this->email->from('travelopolislacapitaldelviaje@gmail.com', 'Travelopolis');
-						$viajero = $this->Modelo->buscar($this->tbl_viajero, $idViajero);
+						$viajero = $this->Modelo->buscar("viajeros", $idViajero);
 						$this->email->to($viajero['correo']);
 
-						$this->email->subject("Confirmación de registro de cuenta");
+						$this->email->subject("Cancelación de su compra");
 						$this->email->message("Lamentablemete su viaje a sido cancelado por el siguiente motivo: ".$motivo);
 						echo $idViajero;
 						error_reporting(0);
@@ -372,11 +366,11 @@ class Viajes extends CI_Controller {
 
 	public function familiares ($idViaje) {
 		if ($this->input->is_ajax_request()) {
-			$viajeros = $this->Modelo->buscar($this->tbl_detalle, $idViaje, "id_viaje");
+			$viajeros = $this->Modelo->buscar("detalle_viajes", $idViaje, "id_viaje");
 			if (is_array($viajeros))
 				foreach ($viajeros as &$viajero)
-					$viajero['familiares'] = $this->Modelo->buscar($this->tbl_familiares, $viajero['id_viajero'], 'id_viajero');
-			echo json_encode($viajeros);
+					$viajero['familiares'] = $this->Modelo->buscar("viajeros_familiares", $viajero['id_viajero'], 'id_viajero');
+			echo json_encode($viajeros);	
 		}
 		else
 			show_404();
@@ -412,7 +406,7 @@ class Viajes extends CI_Controller {
 			error_reporting(0);
 			if ($this->email->send()) {
 				$res['cotizacion'] = true;
-				if ($this->Modelo->actualizar($this->tbl_detalle, $where, $data))
+				if ($this->Modelo->actualizar("detalle_viajes", $where, $data))
 					$res['actualizado'] = true;
 			}
 			error_reporting(-1);			

@@ -26,7 +26,7 @@ class Asignar extends CI_Controller {
 				'scripts' => array("moment"),
 				'guias' => $this->Modelo->listar("listar_guias")
 			);
-			$this->load->view("administrar/main_vista", $data);
+			$this->load->view("admin/main_vista", $data);
 		}
 		else
 			show_404();

@@ -25,7 +25,7 @@ class Viajeros extends CI_Controller {
 				'scripts' => array("moment", "sha1"),
 				'estados' => $this->Modelo->listar("estados")
 			);
-			$this->load->view("administrar/main_vista", $data);
+			$this->load->view("admin/main_vista", $data);
 		}
 		else
 			show_404();
@@ -144,29 +144,5 @@ class Viajeros extends CI_Controller {
 		}	
 		else
 			show_404();
-	}
-	
-	private function mandarCorreo ($data_viajero) {
-		$completo = $data_viajero['nombre']." ".$data_viajero['a_paterno']." ".$data_viajero["a_materno"];
-		$data_viajero['completo'] = $completo;
-		$this->load->library('email');
-	    $config = array(
-	    	'protocol' => 'smtp',
-     		'smtp_host' => 'ssl://smtp.googlemail.com',
-     		'smtp_port' => 465,
-     		'smtp_user' => 'almacenUPSIN.pruebas@gmail.com',
-     		'smtp_pass' => 'UPSINalmacen',
-     		'maintype' => 'html',
-     		'charset' => 'utf-8'
-	    );
-		$this->email->initialize($config);		
-		$this->email->set_mailtype("html");
-    	$this->email->set_newline("\r\n");
-		$this->email->from('travelopolis.ddns.net', 'Travelopolis');
-		$this->email->to($data_viajero['correo'], $completo);
-		$this->email->subject("Confirmación de registro de cuenta");
-		$this->email->message($this->load->view("global/formato_confrimacion_correo", array("viajero" => $data_viajero) ,true));
-				
-		return $this->email->send();
 	}
 }

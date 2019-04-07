@@ -6,7 +6,7 @@ class Perfiles extends CI_Controller {
 	private $nombre = "perfiles";
 	private $modulo;
 
-	public function __construct () {		
+	public function __construct () {
 		parent::__construct();
 		$this->load->helper("global_functions_helper");
 		$this->load->model("PerfilesModulosModelo");
@@ -23,7 +23,7 @@ class Perfiles extends CI_Controller {
 					'modulos' => $this->Modelo->listar("modulos")
 				)
 			);
-			$this->load->view("administrar/main_vista", $data);
+			$this->load->view("admin/main_vista", $data);
 		}
 		else
 			show_404();		

@@ -13,13 +13,13 @@ class Administrar extends CI_Controller {
 		$this->modulo = $this->Modelo->buscar("modulos", $this->nombre, "nombre");
 	}
 
-	public function index () {		
+	public function index () {
 		if (hasAccess($this->session->userdata("id_perfil"), $this->modulo['id'])) {
 			$this->session->set_userdata("admin_active", true);
 			$data = array(
 				'modulo' => $this->modulo
 			);
-			$this->load->view("administrar/main_vista", $data);
+			$this->load->view("admin/main_vista", $data);
 		}
 		else
 			show_404();		

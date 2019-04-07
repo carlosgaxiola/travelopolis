@@ -6,12 +6,7 @@ class Guias extends CI_Controller {
 	private $nombre = "guias";
 	private $tabla = "empleados";
 	private $modulo;
-	private $idPerfilGuia;
-	private $guia_nss = "nss";
-	private $guia_rfc = "rfc";
-	private $guia_correo = "correo";
-	private $guia_telefono = "telefono";
-	private $usu_nombre = "usuario";
+	private $idPerfilGuia;	
 	private $sndTable = "usuarios";
 
 	public function __construct () {
@@ -30,7 +25,7 @@ class Guias extends CI_Controller {
 				'modulo' => $this->modulo,
 				'registros' => $this->EmpleadosModelo->listarGuias()
 			);
-			$this->load->view("administrar/main_vista", $data);
+			$this->load->view("admin/main_vista", $data);
 		}
 		else
 			show_404();
@@ -63,7 +58,7 @@ class Guias extends CI_Controller {
 					);
 					echo $this->Modelo->insertar($this->tabla, $guia);					
 				}
-
+				echo json_encode(false);
 			}
 			else
 				echo validation_errors("<li>", "</li>");
@@ -106,23 +101,23 @@ class Guias extends CI_Controller {
 	}
 
 	private function validacion ($idGuia = 0, $idUsuario = 0) {
-		$uTelefono = "|is_unique[".$this->tabla.".".$this->guia_telefono."]";
-		$uRFC = "|is_unique[".$this->tabla.".".$this->guia_rfc."]";
-		$uNSS = "|is_unique[".$this->tabla.".".$this->guia_nss."]";
-		$uCorreo = "|is_unique[".$this->tabla.".".$this->guia_correo."]";
-		$uNombre = "|is_unique[".$this->sndTable.".".$this->usu_nombre."]";
+		$uTelefono = "|is_unique[".$this->tabla.".telefono]";
+		$uRFC = "|is_unique[".$this->tabla.".rfc]";
+		$uNSS = "|is_unique[".$this->tabla."nss]";
+		$uCorreo = "|is_unique[".$this->tabla.".correo]";
+		$uNombre = "|is_unique[".$this->sndTable.".usuario]";
 		$rContra = ($this->input->post("txtContra"))? "|required": '';
 		$rConfirm = ($this->input->post("txtConfirmar"))? "|required|matches[txtContra]": '';
 		
 		if ($idGuia != 0) {					
 			$guia = $this->Modelo->buscar($this->tabla, $idGuia);
-			if ($guia[$this->guia_telefono] == $this->input->post("txtTelefono"))
+			if ($guia["telefono"] == $this->input->post("txtTelefono"))
 				$uTelefono = "";
-			if ($guia[$this->guia_rfc] == $this->input->post("txtRFC"))
+			if ($guia["rfc"] == $this->input->post("txtRFC"))
 				$uRFC = "";
-			if ($guia[$this->guia_nss] == $this->input->post("txtNSS"))
+			if ($guia["nss"] == $this->input->post("txtNSS"))
 				$uNSS = "";
-			if ($guia[$this->guia_correo] == $this->input->post("txtCorreo"))
+			if ($guia["correo"] == $this->input->post("txtCorreo"))
 				$uCorreo = "";
 		}
 
@@ -161,5 +156,4 @@ class Guias extends CI_Controller {
 		else
 			show_404();
 	}
-
 }

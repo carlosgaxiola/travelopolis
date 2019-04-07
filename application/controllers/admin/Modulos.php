@@ -19,7 +19,7 @@ class Modulos extends CI_Controller {
 				'modulo' => $this->modulo,
 				'registros' => $this->Modelo->listar($this->nombre)				
 			);
-			$this->load->view("administrar/main_vista", $data);
+			$this->load->view("admin/main_vista", $data);
 		}
 		else
 			show_404();	
