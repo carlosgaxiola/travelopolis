@@ -55,8 +55,19 @@ class Guias extends CI_Controller {
 						'id_usuario' => $idUsuario,
 						'f_registro' => $fecha->format("Y-m-d"),
 						'status' => 1
+					);				
+					$idGuia = $this->Modelo->insertar($this->tabla, $guia);
+					$data_guia_viajero = array(
+						'nombre' => $this->input->post("txtNombre"),
+						'a_paterno' => $this->input->post("txtAPaterno"),
+						'a_materno' => $this->input->post("txtAMaterno"),
+						'telefono' => $this->input->post("txtTelefono"),
+						'correo' => $this->input->post("txtCorreo"),
+						'f_registro' => $fecha->format("Y-m-d"),
+						'status' => 1
 					);
-					echo $this->Modelo->insertar($this->tabla, $guia);					
+					$this->Modelo->insertar("viajeros", $data_guia_viajero);
+					echo $idGuia;
 				}
 				echo json_encode(false);
 			}
@@ -87,7 +98,10 @@ class Guias extends CI_Controller {
 					'telefono' => $this->input->post("txtTelefono")
 				);
 				$usuarioActualizado = $this->Modelo->actualizar($this->sndTable, $usuario['id'], $usuario);
-				$guiaActualizado = $this->Modelo->actualizar($this->tabla, $idGuia, $guia);							
+				$guiaActualizado = $this->Modelo->actualizar($this->tabla, $idGuia, $guia);
+				unset($guia['nss']);
+				unset($guia['rfc']);
+				$this->Modelo->actualizar("viajeros", $usuairo['id'], $guia, 'id_usuario');
 				if ($usuarioActualizado || $guiaActualizado)
 					echo $idGuia;
 				else
