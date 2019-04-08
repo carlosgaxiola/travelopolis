@@ -49,18 +49,16 @@ class Modulos extends CI_Controller {
 
 	private function validacion ($idModulo = 0) {
 		$uNombre = "|is_unique[$this->nombre.nombre]";
-		$uRuta = "|is_unique[$this->nombre.ruta]";		
-		if ($idModulo != 0) {			
-			$modulo = $this->Modelo->buscar($this->nombre, $idModulo);			
+		if ($idModulo != 0) {
+			$modulo = $this->Modelo->buscar($this->nombre, $idModulo);
 			if ($modulo['nombre'] == $this->input->post("txtNombre"))
 				$uNombre = "";
 			if ($modulo['ruta'] == $this->input->post("txtRuta"))
 				$uRuta = "";
-		}		
+		}
 		$this->form_validation->set_rules("txtNombre", "Nombre", "trim|required".$uNombre);
-		$this->form_validation->set_rules("txtRuta", "Ruta", "trim|required".$uRuta);		
 		$this->form_validation->set_rules("txtDescripcion", "Descripcion", "trim|required");
-		$this->form_validation->set_message("less_than", "El campo %s debe ser menor a 100");		
+		$this->form_validation->set_message("less_than", "El campo %s debe ser menor a 100");
 		$this->form_validation->set_message("required", "El campo %s es obligatorio");
 		$this->form_validation->set_message("is_unique", "El campo %s ya existe");
 		return $this->form_validation->run();

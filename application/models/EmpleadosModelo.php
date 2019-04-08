@@ -12,7 +12,7 @@ class EmpleadosModelo extends CI_Model {
 
 	public function listarGuias () {
 		$this->db->select("emps.*, usus.usuario");
-		$this->db->join("usaurios usus", "usus.id = emps.id_usuario");
+		$this->db->join("usuarios usus", "usus.id = emps.id_usuario");
 		$this->db->join("perfiles pers", "pers.id = usus.id_perfil");
 		$this->db->where("pers.nombre", $this->perfil_guia);
 		$guias = $this->db->get("empleados emps");

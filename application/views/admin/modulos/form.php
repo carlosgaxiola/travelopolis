@@ -9,10 +9,6 @@
 				<label for="txtNombre">Nombre:</label>
 				<input type="text" name="txtNombre" id="txtNombre" class="form-control">
 			</div>
-			<div class="form-group col-md-3">
-				<label for="txtRuta">Ruta:</label>
-				<input type="text" name="txtRuta" id="txtRuta" class="form-control">
-			</div>
 			<div class="form-group col-md-4">
 				<div class="row">
 					<div class="col-md-10">
