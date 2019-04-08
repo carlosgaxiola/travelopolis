@@ -105,11 +105,11 @@
             
         }
         
-        public static function InsertarNuevoDetalleViaje($id_viaje,$id_viajero,$cantidad,$resto,$f_registro){
-            $consultar = "INSERT INTO detalle_viajes(id, id_viaje, id_viajero, cantidad, resto,f_registro, status) VALUES (NULL,?,?,?,?,?,4)";
+        public static function InsertarNuevoDetalleViaje($id_viaje,$id_viajero,$cantidad,$resto,$precio,$f_registro){
+            $consultar = "INSERT INTO detalle_viajes(id, id_viaje, id_viajero, cantidad, resto, precio,f_registro, status) VALUES (NULL,?,?,?,?,?,?,4)";
             try{
                 $resultado = Database::getInstance()->getDb()->prepare($consultar);
-                return $resultado->execute(array($id_viaje,$id_viajero,$cantidad,$resto,$f_registro));
+                return $resultado->execute(array($id_viaje,$id_viajero,$cantidad,$resto,$precio,$f_registro));
             }catch(PDOException $e){
                 return false;
             }

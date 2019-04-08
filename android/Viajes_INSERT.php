@@ -11,7 +11,7 @@
         {
             echo json_encode(array('resultado' => 'Ya tienes Una Compra en Proceso'));
         }else{
-            $respuesta2 = Viajes::InsertarNuevoDetalleViaje($datos["id_viaje"],$datos["usuario"],$datos["cantidad"],$datos["resto"],$fecha_de_registro);
+            $respuesta2 = Viajes::InsertarNuevoDetalleViaje($datos["id_viaje"],$datos["usuario"],$datos["cantidad"],$datos["resto"],$datos["resto"],$fecha_de_registro);
             echo json_encode(array('resultado' => 'Solicitado'));
             
             }
