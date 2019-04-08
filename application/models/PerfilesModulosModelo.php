@@ -22,7 +22,7 @@ class PerfilesModulosModelo extends CI_Model {
 		return false;
 	}
 
-	public function add ($idPerfil, $idModulo) {		
+	public function add ($idPerfil, $idModulo) {
 		$this->db->set("id_modulo", $idModulo);
 		$this->db->set("id_perfil", $idPerfil);
 		$this->db->insert($this->union);		
@@ -35,15 +35,6 @@ class PerfilesModulosModelo extends CI_Model {
 		$this->db->where("id_perfil", $idPerfil);
 		$this->db->delete($this->union);		
 		return ($this->db->affected_rows() > 0);
-	}
-
-	public function moduloHijos ($idModulo)  {
-		$this->db->where("status", 1);
-		$this->db->where("id_padre", $idModulo);
-		$modulos = $this->db->get($this->modulos);
-		if ($modulos->num_rows() > 0)
-			return $modulos->result_array();
-		return false;
 	}
 
 	public function get ($idPerfil, $idModulo) {
