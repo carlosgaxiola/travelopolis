@@ -25,8 +25,7 @@ class ViajeroModelo extends CI_Model {
 		return false;
 	}
 
-
-	public function buscar ($usuario) {				
+	public function buscar ($usuario) {
 		$this->db->select("usuarios.*, perfiles.nombre as perfil");
 		if (is_string($usuario))
 			$this->db->where("usuario", $usuario);

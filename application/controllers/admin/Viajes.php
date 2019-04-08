@@ -367,11 +367,15 @@ class Viajes extends CI_Controller {
 	public function familiares ($idViaje) {
 		if ($this->input->is_ajax_request()) {
 			$viajeros = $this->Modelo->buscar("detalle_viajes", $idViaje, "id_viaje");
-			if (isset($viajeros['id']))
-				$viajeros['familiares'] = $this->Modelo->buscar("viajeros_familiares", $viajeros['id_viajero'], 'id_viajero');
+			if (isset($viajeros['id'])) {
+				$where = array("id_viajero" => $viajeros['id_viajero'], "id_viaje" => $idViaje);
+				$viajeros['familiares'] = $this->Modelo->buscar("viajeros_familiares", $where);
+			}
 			else if (is_array($viajeros))
-				foreach ($viajeros as &$viajero)
+				foreach ($viajeros as &$viajero){
+					$where = array("id_viajero" => $viajero['id_viajero'], "id_viaje" => $idViaje);
 					$viajero['familiares'] = $this->Modelo->buscar("viajeros_familiares", $viajero['id_viajero'], 'id_viajero');
+				}
 			echo json_encode($viajeros);	
 		}
 		else
