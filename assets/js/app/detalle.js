@@ -256,7 +256,7 @@ function loadAcompañantes (acomps) {
 	if (acomps.nombre) {
 		$("#tblAcompañantesBody")
 			.append(
-				"<tr><td>" + (index + 1) + "</td>" +
+				"<tr><td>" + 1 + "</td>" +
 				"<td>" + acomps.nombre + "</td>" + 
 				"<td>" + acomps.apellido_p + "</td>" + 
 				"<td>" + acomps.apellido_m + "</td>" + 
