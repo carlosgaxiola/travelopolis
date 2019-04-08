@@ -152,8 +152,9 @@ function init () {
 			if (data != false) {
 				let filas = tabla.rows().nodes();
 				data = JSON.parse(data);
-				if (data.id_viajero)
+				if (data.id_viajero) {					
 					$(filas).find("[data-id='" + data.id_viajero + "']").parent().data("familiares", data.familiares);
+				}
 				else
 					$.each(data, function (index, value) {
 						$(filas).find("[data-id='" + value.id_viajero + "']").parent().data("familiares", value.familiares);
@@ -250,21 +251,34 @@ function clearFormData () {
 	$("#acompañantesGroup").hide()
 }
 
-function loadAcompañantes (acomps) {
-	console.log(acomps)
+function loadAcompañantes (acomps) {	
 	$("#acompañantesGroup").show()
-	$.each(acomps, function (index, acomp) {
+	if (acomps.nombre) {
 		$("#tblAcompañantesBody")
 			.append(
 				"<tr><td>" + (index + 1) + "</td>" +
-				"<td>" + acomp.nombre + "</td>" + 
-				"<td>" + acomp.apellido_p + "</td>" + 
-				"<td>" + acomp.apellido_m + "</td>" + 
-				"<td>" + acomp.edad + "</td>" +
-				"<td>" + acomp.telefono + "</td>" +
-				"<td>" + acomp.tipo_familiar + "</td></tr>"
+				"<td>" + acomps.nombre + "</td>" + 
+				"<td>" + acomps.apellido_p + "</td>" + 
+				"<td>" + acomps.apellido_m + "</td>" + 
+				"<td>" + acomps.edad + "</td>" +
+				"<td>" + acomps.telefono + "</td>" +
+				"<td>" + acomps.tipo_familiar + "</td></tr>"
 			)
-	})
+	}
+	else {
+		$.each(acomps, function (index, acomp) {
+			$("#tblAcompañantesBody")
+				.append(
+					"<tr><td>" + (index + 1) + "</td>" +
+					"<td>" + acomp.nombre + "</td>" + 
+					"<td>" + acomp.apellido_p + "</td>" + 
+					"<td>" + acomp.apellido_m + "</td>" + 
+					"<td>" + acomp.edad + "</td>" +
+					"<td>" + acomp.telefono + "</td>" +
+					"<td>" + acomp.tipo_familiar + "</td></tr>"
+				)
+		})
+	}	
 }
 
 function setFormLog (viajero) {

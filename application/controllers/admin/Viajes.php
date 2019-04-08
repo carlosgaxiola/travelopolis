@@ -374,7 +374,7 @@ class Viajes extends CI_Controller {
 			else if (is_array($viajeros))
 				foreach ($viajeros as &$viajero){
 					$where = array("id_viajero" => $viajero['id_viajero'], "id_viaje" => $idViaje);
-					$viajero['familiares'] = $this->Modelo->buscar("viajeros_familiares", $viajero['id_viajero'], 'id_viajero');
+					$viajero['familiares'] = $this->Modelo->buscar("viajeros_familiares", $where);					
 				}
 			echo json_encode($viajeros);	
 		}
