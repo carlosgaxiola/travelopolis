@@ -129,8 +129,7 @@ switch (ENVIRONMENT)
  *
  * NO TRAILING SLASH!
  */
-	$view_folder = '';
-	echo 'Chtm Lora';
+	$view_folder = '';	
 
 
 /*
